@@ -1,0 +1,1061 @@
+Exprimental Configuration File: /home/wangyuancheng.p/zja/Amphion/egs/ttm/exp_config.json
+Exprimental Name: musicgen_test
+Start a new experiment...
+The following values were not passed to `accelerate launch` and had defaults used instead:
+	`--num_processes` was set to a value of `1`
+	`--num_machines` was set to a value of `1`
+	`--mixed_precision` was set to a value of `'no'`
+	`--dynamo_backend` was set to a value of `'no'`
+To avoid this warning pass in values for each of the problematic parameters or run `accelerate config`.
+/home/wangyuancheng.p/miniconda3/envs/amphion/bin/python: can't open file '/home/wangyuancheng.p/zja/bins/ttm/train.py': [Errno 2] No such file or directory
+Traceback (most recent call last):
+  File "/home/wangyuancheng.p/miniconda3/envs/amphion/bin/accelerate", line 8, in <module>
+    sys.exit(main())
+  File "/home/wangyuancheng.p/miniconda3/envs/amphion/lib/python3.9/site-packages/accelerate/commands/accelerate_cli.py", line 47, in main
+    args.func(args)
+  File "/home/wangyuancheng.p/miniconda3/envs/amphion/lib/python3.9/site-packages/accelerate/commands/launch.py", line 994, in launch_command
+    simple_launcher(args)
+  File "/home/wangyuancheng.p/miniconda3/envs/amphion/lib/python3.9/site-packages/accelerate/commands/launch.py", line 636, in simple_launcher
+    raise subprocess.CalledProcessError(returncode=process.returncode, cmd=cmd)
+subprocess.CalledProcessError: Command '['/home/wangyuancheng.p/miniconda3/envs/amphion/bin/python', '/home/wangyuancheng.p/zja/bins/ttm/train.py', '--config', '/home/wangyuancheng.p/zja/Amphion/egs/ttm/exp_config.json', '--exp_name', 'musicgen_test', '--log_level', 'info']' returned non-zero exit status 2.
+Exprimental Configuration File: /home/wangyuancheng.p/zja/Amphion/egs/ttm/musicgen/exp_config.json
+Exprimental Name: musicgen_test
+Start a new experiment...
+The following values were not passed to `accelerate launch` and had defaults used instead:
+	`--num_processes` was set to a value of `1`
+	`--num_machines` was set to a value of `1`
+	`--mixed_precision` was set to a value of `'no'`
+	`--dynamo_backend` was set to a value of `'no'`
+To avoid this warning pass in values for each of the problematic parameters or run `accelerate config`.
+Traceback (most recent call last):
+  File "/home/wangyuancheng.p/zja/Amphion/bins/ttm/train.py", line 10, in <module>
+    from models.ttm.musicgen.musicgen_trainer import MusicGenTrainer
+  File "/home/wangyuancheng.p/zja/Amphion/models/ttm/musicgen/musicgen_trainer.py", line 14, in <module>
+    import modules.audiocraft.solvers.builders as builders
+  File "/home/wangyuancheng.p/zja/Amphion/modules/audiocraft/__init__.py", line 24, in <module>
+    from . import data, modules, models
+  File "/home/wangyuancheng.p/zja/Amphion/modules/audiocraft/data/__init__.py", line 10, in <module>
+    from . import audio, audio_dataset, info_audio_dataset, music_dataset
+  File "/home/wangyuancheng.p/zja/Amphion/modules/audiocraft/data/info_audio_dataset.py", line 19, in <module>
+    from ..modules.conditioners import SegmentWithAttributes, ConditioningAttributes
+  File "/home/wangyuancheng.p/zja/Amphion/modules/audiocraft/modules/__init__.py", line 22, in <module>
+    from .transformer import StreamingTransformer
+  File "/home/wangyuancheng.p/zja/Amphion/modules/audiocraft/modules/transformer.py", line 23, in <module>
+    from xformers import ops
+ModuleNotFoundError: No module named 'xformers'
+Traceback (most recent call last):
+  File "/home/wangyuancheng.p/miniconda3/envs/amphion/bin/accelerate", line 8, in <module>
+    sys.exit(main())
+  File "/home/wangyuancheng.p/miniconda3/envs/amphion/lib/python3.9/site-packages/accelerate/commands/accelerate_cli.py", line 47, in main
+    args.func(args)
+  File "/home/wangyuancheng.p/miniconda3/envs/amphion/lib/python3.9/site-packages/accelerate/commands/launch.py", line 994, in launch_command
+    simple_launcher(args)
+  File "/home/wangyuancheng.p/miniconda3/envs/amphion/lib/python3.9/site-packages/accelerate/commands/launch.py", line 636, in simple_launcher
+    raise subprocess.CalledProcessError(returncode=process.returncode, cmd=cmd)
+subprocess.CalledProcessError: Command '['/home/wangyuancheng.p/miniconda3/envs/amphion/bin/python', '/home/wangyuancheng.p/zja/Amphion/bins/ttm/train.py', '--config', '/home/wangyuancheng.p/zja/Amphion/egs/ttm/musicgen/exp_config.json', '--exp_name', 'musicgen_test', '--log_level', 'info']' returned non-zero exit status 1.
+Exprimental Configuration File: /home/wangyuancheng.p/zja/Amphion/egs/ttm/musicgen/exp_config.json
+Exprimental Name: musicgen_test
+Start a new experiment...
+The following values were not passed to `accelerate launch` and had defaults used instead:
+	`--num_processes` was set to a value of `1`
+	`--num_machines` was set to a value of `1`
+	`--mixed_precision` was set to a value of `'no'`
+	`--dynamo_backend` was set to a value of `'no'`
+To avoid this warning pass in values for each of the problematic parameters or run `accelerate config`.
+Traceback (most recent call last):
+  File "/home/wangyuancheng.p/zja/Amphion/bins/ttm/train.py", line 10, in <module>
+    from models.ttm.musicgen.musicgen_trainer import MusicGenTrainer
+  File "/home/wangyuancheng.p/zja/Amphion/models/ttm/musicgen/musicgen_trainer.py", line 14, in <module>
+    import modules.audiocraft.solvers.builders as builders
+  File "/home/wangyuancheng.p/zja/Amphion/modules/audiocraft/__init__.py", line 24, in <module>
+    from . import data, modules, models
+  File "/home/wangyuancheng.p/zja/Amphion/modules/audiocraft/data/__init__.py", line 10, in <module>
+    from . import audio, audio_dataset, info_audio_dataset, music_dataset
+  File "/home/wangyuancheng.p/zja/Amphion/modules/audiocraft/data/info_audio_dataset.py", line 19, in <module>
+    from ..modules.conditioners import SegmentWithAttributes, ConditioningAttributes
+  File "/home/wangyuancheng.p/zja/Amphion/modules/audiocraft/modules/conditioners.py", line 20, in <module>
+    from num2words import num2words
+ModuleNotFoundError: No module named 'num2words'
+Traceback (most recent call last):
+  File "/home/wangyuancheng.p/miniconda3/envs/amphion/bin/accelerate", line 8, in <module>
+    sys.exit(main())
+  File "/home/wangyuancheng.p/miniconda3/envs/amphion/lib/python3.9/site-packages/accelerate/commands/accelerate_cli.py", line 47, in main
+    args.func(args)
+  File "/home/wangyuancheng.p/miniconda3/envs/amphion/lib/python3.9/site-packages/accelerate/commands/launch.py", line 994, in launch_command
+    simple_launcher(args)
+  File "/home/wangyuancheng.p/miniconda3/envs/amphion/lib/python3.9/site-packages/accelerate/commands/launch.py", line 636, in simple_launcher
+    raise subprocess.CalledProcessError(returncode=process.returncode, cmd=cmd)
+subprocess.CalledProcessError: Command '['/home/wangyuancheng.p/miniconda3/envs/amphion/bin/python', '/home/wangyuancheng.p/zja/Amphion/bins/ttm/train.py', '--config', '/home/wangyuancheng.p/zja/Amphion/egs/ttm/musicgen/exp_config.json', '--exp_name', 'musicgen_test', '--log_level', 'info']' returned non-zero exit status 1.
+Exprimental Configuration File: /home/wangyuancheng.p/zja/Amphion/egs/ttm/musicgen/exp_config.json
+Exprimental Name: musicgen_test
+Start a new experiment...
+The following values were not passed to `accelerate launch` and had defaults used instead:
+	`--num_processes` was set to a value of `1`
+	`--num_machines` was set to a value of `1`
+	`--mixed_precision` was set to a value of `'no'`
+	`--dynamo_backend` was set to a value of `'no'`
+To avoid this warning pass in values for each of the problematic parameters or run `accelerate config`.
+Traceback (most recent call last):
+  File "/home/wangyuancheng.p/zja/Amphion/bins/ttm/train.py", line 10, in <module>
+    from models.ttm.musicgen.musicgen_trainer import MusicGenTrainer
+  File "/home/wangyuancheng.p/zja/Amphion/models/ttm/musicgen/musicgen_trainer.py", line 14, in <module>
+    import modules.audiocraft.solvers.builders as builders
+  File "/home/wangyuancheng.p/zja/Amphion/modules/audiocraft/__init__.py", line 24, in <module>
+    from . import data, modules, models
+  File "/home/wangyuancheng.p/zja/Amphion/modules/audiocraft/data/__init__.py", line 10, in <module>
+    from . import audio, audio_dataset, info_audio_dataset, music_dataset
+  File "/home/wangyuancheng.p/zja/Amphion/modules/audiocraft/data/info_audio_dataset.py", line 19, in <module>
+    from ..modules.conditioners import SegmentWithAttributes, ConditioningAttributes
+  File "/home/wangyuancheng.p/zja/Amphion/modules/audiocraft/modules/conditioners.py", line 21, in <module>
+    import spacy
+ModuleNotFoundError: No module named 'spacy'
+Traceback (most recent call last):
+  File "/home/wangyuancheng.p/miniconda3/envs/amphion/bin/accelerate", line 8, in <module>
+    sys.exit(main())
+  File "/home/wangyuancheng.p/miniconda3/envs/amphion/lib/python3.9/site-packages/accelerate/commands/accelerate_cli.py", line 47, in main
+    args.func(args)
+  File "/home/wangyuancheng.p/miniconda3/envs/amphion/lib/python3.9/site-packages/accelerate/commands/launch.py", line 994, in launch_command
+    simple_launcher(args)
+  File "/home/wangyuancheng.p/miniconda3/envs/amphion/lib/python3.9/site-packages/accelerate/commands/launch.py", line 636, in simple_launcher
+    raise subprocess.CalledProcessError(returncode=process.returncode, cmd=cmd)
+subprocess.CalledProcessError: Command '['/home/wangyuancheng.p/miniconda3/envs/amphion/bin/python', '/home/wangyuancheng.p/zja/Amphion/bins/ttm/train.py', '--config', '/home/wangyuancheng.p/zja/Amphion/egs/ttm/musicgen/exp_config.json', '--exp_name', 'musicgen_test', '--log_level', 'info']' returned non-zero exit status 1.
+Exprimental Configuration File: /home/wangyuancheng.p/zja/Amphion/egs/ttm/musicgen/exp_config.json
+Exprimental Name: musicgen_test
+Start a new experiment...
+The following values were not passed to `accelerate launch` and had defaults used instead:
+	`--num_processes` was set to a value of `1`
+	`--num_machines` was set to a value of `1`
+	`--mixed_precision` was set to a value of `'no'`
+	`--dynamo_backend` was set to a value of `'no'`
+To avoid this warning pass in values for each of the problematic parameters or run `accelerate config`.
+Traceback (most recent call last):
+  File "/home/wangyuancheng.p/zja/Amphion/bins/ttm/train.py", line 10, in <module>
+    from models.ttm.musicgen.musicgen_trainer import MusicGenTrainer
+  File "/home/wangyuancheng.p/zja/Amphion/models/ttm/musicgen/musicgen_trainer.py", line 14, in <module>
+    import modules.audiocraft.solvers.builders as builders
+  File "/home/wangyuancheng.p/zja/Amphion/modules/audiocraft/__init__.py", line 24, in <module>
+    from . import data, modules, models
+  File "/home/wangyuancheng.p/zja/Amphion/modules/audiocraft/models/__init__.py", line 10, in <module>
+    from . import builders, loaders
+  File "/home/wangyuancheng.p/zja/Amphion/modules/audiocraft/models/builders.py", line 14, in <module>
+    import audiocraft
+ModuleNotFoundError: No module named 'audiocraft'
+Traceback (most recent call last):
+  File "/home/wangyuancheng.p/miniconda3/envs/amphion/bin/accelerate", line 8, in <module>
+    sys.exit(main())
+  File "/home/wangyuancheng.p/miniconda3/envs/amphion/lib/python3.9/site-packages/accelerate/commands/accelerate_cli.py", line 47, in main
+    args.func(args)
+  File "/home/wangyuancheng.p/miniconda3/envs/amphion/lib/python3.9/site-packages/accelerate/commands/launch.py", line 994, in launch_command
+    simple_launcher(args)
+  File "/home/wangyuancheng.p/miniconda3/envs/amphion/lib/python3.9/site-packages/accelerate/commands/launch.py", line 636, in simple_launcher
+    raise subprocess.CalledProcessError(returncode=process.returncode, cmd=cmd)
+subprocess.CalledProcessError: Command '['/home/wangyuancheng.p/miniconda3/envs/amphion/bin/python', '/home/wangyuancheng.p/zja/Amphion/bins/ttm/train.py', '--config', '/home/wangyuancheng.p/zja/Amphion/egs/ttm/musicgen/exp_config.json', '--exp_name', 'musicgen_test', '--log_level', 'info']' returned non-zero exit status 1.
+Exprimental Configuration File: /home/wangyuancheng.p/zja/Amphion/egs/ttm/musicgen/exp_config.json
+Exprimental Name: musicgen_test
+Start a new experiment...
+The following values were not passed to `accelerate launch` and had defaults used instead:
+	`--num_processes` was set to a value of `1`
+	`--num_machines` was set to a value of `1`
+	`--mixed_precision` was set to a value of `'no'`
+	`--dynamo_backend` was set to a value of `'no'`
+To avoid this warning pass in values for each of the problematic parameters or run `accelerate config`.
+Traceback (most recent call last):
+  File "/home/wangyuancheng.p/zja/Amphion/bins/ttm/train.py", line 10, in <module>
+    from models.ttm.musicgen.musicgen_trainer import MusicGenTrainer
+  File "/home/wangyuancheng.p/zja/Amphion/models/ttm/musicgen/musicgen_trainer.py", line 14, in <module>
+    import modules.audiocraft.solvers.builders as builders
+  File "/home/wangyuancheng.p/zja/Amphion/modules/audiocraft/__init__.py", line 24, in <module>
+    from . import data, modules, models
+  File "/home/wangyuancheng.p/zja/Amphion/modules/audiocraft/models/__init__.py", line 10, in <module>
+    from . import builders, loaders
+  File "/home/wangyuancheng.p/zja/Amphion/modules/audiocraft/models/builders.py", line 18, in <module>
+    from .encodec import CompressionModel, EncodecModel, InterleaveStereoCompressionModel
+  File "/home/wangyuancheng.p/zja/Amphion/modules/audiocraft/models/encodec.py", line 20, in <module>
+    from transformers import EncodecModel as HFEncodecModel
+ImportError: cannot import name 'EncodecModel' from 'transformers' (/home/wangyuancheng.p/miniconda3/envs/amphion/lib/python3.9/site-packages/transformers/__init__.py)
+Traceback (most recent call last):
+  File "/home/wangyuancheng.p/miniconda3/envs/amphion/bin/accelerate", line 8, in <module>
+    sys.exit(main())
+  File "/home/wangyuancheng.p/miniconda3/envs/amphion/lib/python3.9/site-packages/accelerate/commands/accelerate_cli.py", line 47, in main
+    args.func(args)
+  File "/home/wangyuancheng.p/miniconda3/envs/amphion/lib/python3.9/site-packages/accelerate/commands/launch.py", line 994, in launch_command
+    simple_launcher(args)
+  File "/home/wangyuancheng.p/miniconda3/envs/amphion/lib/python3.9/site-packages/accelerate/commands/launch.py", line 636, in simple_launcher
+    raise subprocess.CalledProcessError(returncode=process.returncode, cmd=cmd)
+subprocess.CalledProcessError: Command '['/home/wangyuancheng.p/miniconda3/envs/amphion/bin/python', '/home/wangyuancheng.p/zja/Amphion/bins/ttm/train.py', '--config', '/home/wangyuancheng.p/zja/Amphion/egs/ttm/musicgen/exp_config.json', '--exp_name', 'musicgen_test', '--log_level', 'info']' returned non-zero exit status 1.
+Exprimental Configuration File: /home/wangyuancheng.p/zja/Amphion/egs/ttm/musicgen/exp_config.json
+Exprimental Name: musicgen_test
+Start a new experiment...
+The following values were not passed to `accelerate launch` and had defaults used instead:
+	`--num_processes` was set to a value of `1`
+	`--num_machines` was set to a value of `1`
+	`--mixed_precision` was set to a value of `'no'`
+	`--dynamo_backend` was set to a value of `'no'`
+To avoid this warning pass in values for each of the problematic parameters or run `accelerate config`.
+Traceback (most recent call last):
+  File "/home/wangyuancheng.p/zja/Amphion/bins/ttm/train.py", line 10, in <module>
+    from models.ttm.musicgen.musicgen_trainer import MusicGenTrainer
+  File "/home/wangyuancheng.p/zja/Amphion/models/ttm/musicgen/musicgen_trainer.py", line 14, in <module>
+    import modules.audiocraft.solvers.builders as builders
+  File "/home/wangyuancheng.p/zja/Amphion/modules/audiocraft/__init__.py", line 24, in <module>
+    from . import data, modules, models
+  File "/home/wangyuancheng.p/zja/Amphion/modules/audiocraft/models/__init__.py", line 10, in <module>
+    from . import builders, loaders
+  File "/home/wangyuancheng.p/zja/Amphion/modules/audiocraft/models/loaders.py", line 30, in <module>
+    import audiocraft
+ModuleNotFoundError: No module named 'audiocraft'
+Traceback (most recent call last):
+  File "/home/wangyuancheng.p/miniconda3/envs/amphion/bin/accelerate", line 8, in <module>
+    sys.exit(main())
+  File "/home/wangyuancheng.p/miniconda3/envs/amphion/lib/python3.9/site-packages/accelerate/commands/accelerate_cli.py", line 47, in main
+    args.func(args)
+  File "/home/wangyuancheng.p/miniconda3/envs/amphion/lib/python3.9/site-packages/accelerate/commands/launch.py", line 994, in launch_command
+    simple_launcher(args)
+  File "/home/wangyuancheng.p/miniconda3/envs/amphion/lib/python3.9/site-packages/accelerate/commands/launch.py", line 636, in simple_launcher
+    raise subprocess.CalledProcessError(returncode=process.returncode, cmd=cmd)
+subprocess.CalledProcessError: Command '['/home/wangyuancheng.p/miniconda3/envs/amphion/bin/python', '/home/wangyuancheng.p/zja/Amphion/bins/ttm/train.py', '--config', '/home/wangyuancheng.p/zja/Amphion/egs/ttm/musicgen/exp_config.json', '--exp_name', 'musicgen_test', '--log_level', 'info']' returned non-zero exit status 1.
+Exprimental Configuration File: /home/wangyuancheng.p/zja/Amphion/egs/ttm/musicgen/exp_config.json
+Exprimental Name: musicgen_test
+Start a new experiment...
+The following values were not passed to `accelerate launch` and had defaults used instead:
+	`--num_processes` was set to a value of `1`
+	`--num_machines` was set to a value of `1`
+	`--mixed_precision` was set to a value of `'no'`
+	`--dynamo_backend` was set to a value of `'no'`
+To avoid this warning pass in values for each of the problematic parameters or run `accelerate config`.
+tokenizer_config.json:   0%|          | 0.00/25.0 [00:00<?, ?B/s]tokenizer_config.json: 100%|██████████| 25.0/25.0 [00:00<00:00, 4.58kB/s]
+Traceback (most recent call last):
+  File "/home/wangyuancheng.p/zja/Amphion/bins/ttm/train.py", line 10, in <module>
+    from models.ttm.musicgen.musicgen_trainer import MusicGenTrainer
+  File "/home/wangyuancheng.p/zja/Amphion/models/ttm/musicgen/musicgen_trainer.py", line 14, in <module>
+    import modules.audiocraft.solvers.builders as builders
+  File "/home/wangyuancheng.p/zja/Amphion/modules/audiocraft/solvers/__init__.py", line 13, in <module>
+    from .builders import get_solver
+  File "/home/wangyuancheng.p/zja/Amphion/modules/audiocraft/solvers/builders.py", line 29, in <module>
+    from .. import adversarial, data, losses, metrics, optim
+  File "/home/wangyuancheng.p/zja/Amphion/modules/audiocraft/metrics/__init__.py", line 11, in <module>
+    from .fad import FrechetAudioDistanceMetric
+  File "/home/wangyuancheng.p/zja/Amphion/modules/audiocraft/metrics/fad.py", line 14, in <module>
+    from audiocraft.data.audio import audio_write
+ModuleNotFoundError: No module named 'audiocraft'
+Traceback (most recent call last):
+  File "/home/wangyuancheng.p/miniconda3/envs/amphion/bin/accelerate", line 8, in <module>
+    sys.exit(main())
+  File "/home/wangyuancheng.p/miniconda3/envs/amphion/lib/python3.9/site-packages/accelerate/commands/accelerate_cli.py", line 47, in main
+    args.func(args)
+  File "/home/wangyuancheng.p/miniconda3/envs/amphion/lib/python3.9/site-packages/accelerate/commands/launch.py", line 994, in launch_command
+    simple_launcher(args)
+  File "/home/wangyuancheng.p/miniconda3/envs/amphion/lib/python3.9/site-packages/accelerate/commands/launch.py", line 636, in simple_launcher
+    raise subprocess.CalledProcessError(returncode=process.returncode, cmd=cmd)
+subprocess.CalledProcessError: Command '['/home/wangyuancheng.p/miniconda3/envs/amphion/bin/python', '/home/wangyuancheng.p/zja/Amphion/bins/ttm/train.py', '--config', '/home/wangyuancheng.p/zja/Amphion/egs/ttm/musicgen/exp_config.json', '--exp_name', 'musicgen_test', '--log_level', 'info']' returned non-zero exit status 1.
+Exprimental Configuration File: /home/wangyuancheng.p/zja/Amphion/egs/ttm/musicgen/exp_config.json
+Exprimental Name: musicgen_test
+Start a new experiment...
+The following values were not passed to `accelerate launch` and had defaults used instead:
+	`--num_processes` was set to a value of `1`
+	`--num_machines` was set to a value of `1`
+	`--mixed_precision` was set to a value of `'no'`
+	`--dynamo_backend` was set to a value of `'no'`
+To avoid this warning pass in values for each of the problematic parameters or run `accelerate config`.
+Traceback (most recent call last):
+  File "/home/wangyuancheng.p/zja/Amphion/bins/ttm/train.py", line 10, in <module>
+    from models.ttm.musicgen.musicgen_trainer import MusicGenTrainer
+  File "/home/wangyuancheng.p/zja/Amphion/models/ttm/musicgen/musicgen_trainer.py", line 12, in <module>
+    from models.base.new_trainer import BaseTrainer
+  File "/home/wangyuancheng.p/zja/Amphion/models/base/__init__.py", line 7, in <module>
+    from .new_inference import BaseInference
+  File "/home/wangyuancheng.p/zja/Amphion/models/base/new_inference.py", line 20, in <module>
+    from models.vocoders.vocoder_inference import synthesis
+  File "/home/wangyuancheng.p/zja/Amphion/models/vocoders/vocoder_inference.py", line 37, in <module>
+    from utils.io import save_audio
+  File "/home/wangyuancheng.p/zja/Amphion/utils/io.py", line 9, in <module>
+    import torchaudio
+  File "/home/wangyuancheng.p/miniconda3/envs/amphion/lib/python3.9/site-packages/torchaudio/__init__.py", line 1, in <module>
+    from . import (  # noqa: F401
+  File "/home/wangyuancheng.p/miniconda3/envs/amphion/lib/python3.9/site-packages/torchaudio/_extension/__init__.py", line 45, in <module>
+    _load_lib("libtorchaudio")
+  File "/home/wangyuancheng.p/miniconda3/envs/amphion/lib/python3.9/site-packages/torchaudio/_extension/utils.py", line 64, in _load_lib
+    torch.ops.load_library(path)
+  File "/home/wangyuancheng.p/miniconda3/envs/amphion/lib/python3.9/site-packages/torch/_ops.py", line 643, in load_library
+    ctypes.CDLL(path)
+  File "/home/wangyuancheng.p/miniconda3/envs/amphion/lib/python3.9/ctypes/__init__.py", line 382, in __init__
+    self._handle = _dlopen(self._name, mode)
+OSError: libcudart.so.12: cannot open shared object file: No such file or directory
+Traceback (most recent call last):
+  File "/home/wangyuancheng.p/miniconda3/envs/amphion/bin/accelerate", line 8, in <module>
+    sys.exit(main())
+  File "/home/wangyuancheng.p/miniconda3/envs/amphion/lib/python3.9/site-packages/accelerate/commands/accelerate_cli.py", line 47, in main
+    args.func(args)
+  File "/home/wangyuancheng.p/miniconda3/envs/amphion/lib/python3.9/site-packages/accelerate/commands/launch.py", line 994, in launch_command
+    simple_launcher(args)
+  File "/home/wangyuancheng.p/miniconda3/envs/amphion/lib/python3.9/site-packages/accelerate/commands/launch.py", line 636, in simple_launcher
+    raise subprocess.CalledProcessError(returncode=process.returncode, cmd=cmd)
+subprocess.CalledProcessError: Command '['/home/wangyuancheng.p/miniconda3/envs/amphion/bin/python', '/home/wangyuancheng.p/zja/Amphion/bins/ttm/train.py', '--config', '/home/wangyuancheng.p/zja/Amphion/egs/ttm/musicgen/exp_config.json', '--exp_name', 'musicgen_test', '--log_level', 'info']' returned non-zero exit status 1.
+Exprimental Configuration File: /home/wangyuancheng.p/zja/Amphion/egs/ttm/musicgen/exp_config.json
+Exprimental Name: musicgen_test
+Start a new experiment...
+The following values were not passed to `accelerate launch` and had defaults used instead:
+	`--num_processes` was set to a value of `1`
+	`--num_machines` was set to a value of `1`
+	`--mixed_precision` was set to a value of `'no'`
+	`--dynamo_backend` was set to a value of `'no'`
+To avoid this warning pass in values for each of the problematic parameters or run `accelerate config`.
+Traceback (most recent call last):
+  File "/home/wangyuancheng.p/zja/Amphion/bins/ttm/train.py", line 85, in <module>
+    main()
+  File "/home/wangyuancheng.p/zja/Amphion/bins/ttm/train.py", line 79, in main
+    trainer = build_trainer(args, cfg)
+  File "/home/wangyuancheng.p/zja/Amphion/bins/ttm/train.py", line 20, in build_trainer
+    trainer = trainer_class(args, cfg)
+  File "/home/wangyuancheng.p/zja/Amphion/models/ttm/musicgen/musicgen_trainer.py", line 28, in __init__
+    self._init_accelerator()
+  File "/home/wangyuancheng.p/zja/Amphion/models/base/new_trainer.py", line 686, in _init_accelerator
+    gradient_accumulation_steps=self.cfg.train.gradient_accumulation_step,
+AttributeError: 'JsonHParams' object has no attribute 'train'
+Traceback (most recent call last):
+  File "/home/wangyuancheng.p/miniconda3/envs/amphion/bin/accelerate", line 8, in <module>
+    sys.exit(main())
+  File "/home/wangyuancheng.p/miniconda3/envs/amphion/lib/python3.9/site-packages/accelerate/commands/accelerate_cli.py", line 47, in main
+    args.func(args)
+  File "/home/wangyuancheng.p/miniconda3/envs/amphion/lib/python3.9/site-packages/accelerate/commands/launch.py", line 994, in launch_command
+    simple_launcher(args)
+  File "/home/wangyuancheng.p/miniconda3/envs/amphion/lib/python3.9/site-packages/accelerate/commands/launch.py", line 636, in simple_launcher
+    raise subprocess.CalledProcessError(returncode=process.returncode, cmd=cmd)
+subprocess.CalledProcessError: Command '['/home/wangyuancheng.p/miniconda3/envs/amphion/bin/python', '/home/wangyuancheng.p/zja/Amphion/bins/ttm/train.py', '--config', '/home/wangyuancheng.p/zja/Amphion/egs/ttm/musicgen/exp_config.json', '--exp_name', 'musicgen_test', '--log_level', 'info']' returned non-zero exit status 1.
+Exprimental Configuration File: /home/wangyuancheng.p/zja/Amphion/egs/ttm/musicgen/exp_config.json
+Exprimental Name: musicgen_test
+Start a new experiment...
+The following values were not passed to `accelerate launch` and had defaults used instead:
+	`--num_processes` was set to a value of `1`
+	`--num_machines` was set to a value of `1`
+	`--mixed_precision` was set to a value of `'no'`
+	`--dynamo_backend` was set to a value of `'no'`
+To avoid this warning pass in values for each of the problematic parameters or run `accelerate config`.
+tokenizer_config.json:   0%|          | 0.00/48.0 [00:00<?, ?B/s]tokenizer_config.json: 100%|██████████| 48.0/48.0 [00:00<00:00, 9.14kB/s]
+Traceback (most recent call last):
+  File "/home/wangyuancheng.p/zja/Amphion/bins/ttm/train.py", line 85, in <module>
+    main()
+  File "/home/wangyuancheng.p/zja/Amphion/bins/ttm/train.py", line 73, in main
+    cfg = load_config(args.config)
+  File "/home/wangyuancheng.p/zja/Amphion/utils/util.py", line 456, in load_config
+    config_ = _load_config(config_fn, lowercase=lowercase)
+  File "/home/wangyuancheng.p/zja/Amphion/utils/util.py", line 439, in _load_config
+    config_ = override_config(p_config_, config_)
+  File "/home/wangyuancheng.p/zja/Amphion/utils/util.py", line 399, in override_config
+    base_config[k] = override_config(base_config[k], v)
+  File "/home/wangyuancheng.p/zja/Amphion/utils/util.py", line 401, in override_config
+    base_config[k] = v
+TypeError: list indices must be integers or slices, not str
+Traceback (most recent call last):
+  File "/home/wangyuancheng.p/miniconda3/envs/amphion/bin/accelerate", line 8, in <module>
+    sys.exit(main())
+  File "/home/wangyuancheng.p/miniconda3/envs/amphion/lib/python3.9/site-packages/accelerate/commands/accelerate_cli.py", line 47, in main
+    args.func(args)
+  File "/home/wangyuancheng.p/miniconda3/envs/amphion/lib/python3.9/site-packages/accelerate/commands/launch.py", line 994, in launch_command
+    simple_launcher(args)
+  File "/home/wangyuancheng.p/miniconda3/envs/amphion/lib/python3.9/site-packages/accelerate/commands/launch.py", line 636, in simple_launcher
+    raise subprocess.CalledProcessError(returncode=process.returncode, cmd=cmd)
+subprocess.CalledProcessError: Command '['/home/wangyuancheng.p/miniconda3/envs/amphion/bin/python', '/home/wangyuancheng.p/zja/Amphion/bins/ttm/train.py', '--config', '/home/wangyuancheng.p/zja/Amphion/egs/ttm/musicgen/exp_config.json', '--exp_name', 'musicgen_test', '--log_level', 'info']' returned non-zero exit status 1.
+Exprimental Configuration File: /home/wangyuancheng.p/zja/Amphion/egs/ttm/musicgen/exp_config.json
+Exprimental Name: musicgen_test
+Start a new experiment...
+The following values were not passed to `accelerate launch` and had defaults used instead:
+	`--num_processes` was set to a value of `1`
+	`--num_machines` was set to a value of `1`
+	`--mixed_precision` was set to a value of `'no'`
+	`--dynamo_backend` was set to a value of `'no'`
+To avoid this warning pass in values for each of the problematic parameters or run `accelerate config`.
+k:  logging
+k:  tensorboard
+k:  wandb
+k:  slurm
+k:  dora
+k:  datasource
+k:  fsdp
+k:  profiler
+k:  deadlock
+k:  dataset
+Traceback (most recent call last):
+  File "/home/wangyuancheng.p/zja/Amphion/bins/ttm/train.py", line 85, in <module>
+    main()
+  File "/home/wangyuancheng.p/zja/Amphion/bins/ttm/train.py", line 73, in main
+    cfg = load_config(args.config)
+  File "/home/wangyuancheng.p/zja/Amphion/utils/util.py", line 457, in load_config
+    config_ = _load_config(config_fn, lowercase=lowercase)
+  File "/home/wangyuancheng.p/zja/Amphion/utils/util.py", line 440, in _load_config
+    config_ = override_config(p_config_, config_)
+  File "/home/wangyuancheng.p/zja/Amphion/utils/util.py", line 400, in override_config
+    base_config[k] = override_config(base_config[k], v)
+  File "/home/wangyuancheng.p/zja/Amphion/utils/util.py", line 402, in override_config
+    base_config[k] = v
+TypeError: list indices must be integers or slices, not str
+Traceback (most recent call last):
+  File "/home/wangyuancheng.p/miniconda3/envs/amphion/bin/accelerate", line 8, in <module>
+    sys.exit(main())
+  File "/home/wangyuancheng.p/miniconda3/envs/amphion/lib/python3.9/site-packages/accelerate/commands/accelerate_cli.py", line 47, in main
+    args.func(args)
+  File "/home/wangyuancheng.p/miniconda3/envs/amphion/lib/python3.9/site-packages/accelerate/commands/launch.py", line 994, in launch_command
+    simple_launcher(args)
+  File "/home/wangyuancheng.p/miniconda3/envs/amphion/lib/python3.9/site-packages/accelerate/commands/launch.py", line 636, in simple_launcher
+    raise subprocess.CalledProcessError(returncode=process.returncode, cmd=cmd)
+subprocess.CalledProcessError: Command '['/home/wangyuancheng.p/miniconda3/envs/amphion/bin/python', '/home/wangyuancheng.p/zja/Amphion/bins/ttm/train.py', '--config', '/home/wangyuancheng.p/zja/Amphion/egs/ttm/musicgen/exp_config.json', '--exp_name', 'musicgen_test', '--log_level', 'info']' returned non-zero exit status 1.
+Exprimental Configuration File: /home/wangyuancheng.p/zja/Amphion/egs/ttm/musicgen/exp_config.json
+Exprimental Name: musicgen_test
+Start a new experiment...
+The following values were not passed to `accelerate launch` and had defaults used instead:
+	`--num_processes` was set to a value of `1`
+	`--num_machines` was set to a value of `1`
+	`--mixed_precision` was set to a value of `'no'`
+	`--dynamo_backend` was set to a value of `'no'`
+To avoid this warning pass in values for each of the problematic parameters or run `accelerate config`.
+Traceback (most recent call last):
+  File "/home/wangyuancheng.p/zja/Amphion/bins/ttm/train.py", line 85, in <module>
+    main()
+  File "/home/wangyuancheng.p/zja/Amphion/bins/ttm/train.py", line 73, in main
+    cfg = load_config(args.config)
+  File "/home/wangyuancheng.p/zja/Amphion/utils/util.py", line 456, in load_config
+    config_ = _load_config(config_fn, lowercase=lowercase)
+  File "/home/wangyuancheng.p/zja/Amphion/utils/util.py", line 434, in _load_config
+    config_ = json5.loads(data)
+  File "/home/wangyuancheng.p/miniconda3/envs/amphion/lib/python3.9/site-packages/json5/lib.py", line 81, in loads
+    raise ValueError(err)
+ValueError: <string>:11 Unexpected """ at column 9
+Traceback (most recent call last):
+  File "/home/wangyuancheng.p/miniconda3/envs/amphion/bin/accelerate", line 8, in <module>
+    sys.exit(main())
+  File "/home/wangyuancheng.p/miniconda3/envs/amphion/lib/python3.9/site-packages/accelerate/commands/accelerate_cli.py", line 47, in main
+    args.func(args)
+  File "/home/wangyuancheng.p/miniconda3/envs/amphion/lib/python3.9/site-packages/accelerate/commands/launch.py", line 994, in launch_command
+    simple_launcher(args)
+  File "/home/wangyuancheng.p/miniconda3/envs/amphion/lib/python3.9/site-packages/accelerate/commands/launch.py", line 636, in simple_launcher
+    raise subprocess.CalledProcessError(returncode=process.returncode, cmd=cmd)
+subprocess.CalledProcessError: Command '['/home/wangyuancheng.p/miniconda3/envs/amphion/bin/python', '/home/wangyuancheng.p/zja/Amphion/bins/ttm/train.py', '--config', '/home/wangyuancheng.p/zja/Amphion/egs/ttm/musicgen/exp_config.json', '--exp_name', 'musicgen_test', '--log_level', 'info']' returned non-zero exit status 1.
+Exprimental Configuration File: /home/wangyuancheng.p/zja/Amphion/egs/ttm/musicgen/exp_config.json
+Exprimental Name: musicgen_test
+Start a new experiment...
+The following values were not passed to `accelerate launch` and had defaults used instead:
+	`--num_processes` was set to a value of `1`
+	`--num_machines` was set to a value of `1`
+	`--mixed_precision` was set to a value of `'no'`
+	`--dynamo_backend` was set to a value of `'no'`
+To avoid this warning pass in values for each of the problematic parameters or run `accelerate config`.
+Traceback (most recent call last):
+  File "/home/wangyuancheng.p/zja/Amphion/bins/ttm/train.py", line 85, in <module>
+    main()
+  File "/home/wangyuancheng.p/zja/Amphion/bins/ttm/train.py", line 79, in main
+    trainer = build_trainer(args, cfg)
+  File "/home/wangyuancheng.p/zja/Amphion/bins/ttm/train.py", line 20, in build_trainer
+    trainer = trainer_class(args, cfg)
+  File "/home/wangyuancheng.p/zja/Amphion/models/ttm/musicgen/musicgen_trainer.py", line 28, in __init__
+    self._init_accelerator()
+  File "/home/wangyuancheng.p/zja/Amphion/models/base/new_trainer.py", line 687, in _init_accelerator
+    log_with=self.cfg.train.tracker,
+AttributeError: 'JsonHParams' object has no attribute 'tracker'
+Traceback (most recent call last):
+  File "/home/wangyuancheng.p/miniconda3/envs/amphion/bin/accelerate", line 8, in <module>
+    sys.exit(main())
+  File "/home/wangyuancheng.p/miniconda3/envs/amphion/lib/python3.9/site-packages/accelerate/commands/accelerate_cli.py", line 47, in main
+    args.func(args)
+  File "/home/wangyuancheng.p/miniconda3/envs/amphion/lib/python3.9/site-packages/accelerate/commands/launch.py", line 994, in launch_command
+    simple_launcher(args)
+  File "/home/wangyuancheng.p/miniconda3/envs/amphion/lib/python3.9/site-packages/accelerate/commands/launch.py", line 636, in simple_launcher
+    raise subprocess.CalledProcessError(returncode=process.returncode, cmd=cmd)
+subprocess.CalledProcessError: Command '['/home/wangyuancheng.p/miniconda3/envs/amphion/bin/python', '/home/wangyuancheng.p/zja/Amphion/bins/ttm/train.py', '--config', '/home/wangyuancheng.p/zja/Amphion/egs/ttm/musicgen/exp_config.json', '--exp_name', 'musicgen_test', '--log_level', 'info']' returned non-zero exit status 1.
+Exprimental Configuration File: /home/wangyuancheng.p/zja/Amphion/egs/ttm/musicgen/exp_config.json
+Exprimental Name: musicgen_test
+Start a new experiment...
+The following values were not passed to `accelerate launch` and had defaults used instead:
+	`--num_processes` was set to a value of `1`
+	`--num_machines` was set to a value of `1`
+	`--mixed_precision` was set to a value of `'no'`
+	`--dynamo_backend` was set to a value of `'no'`
+To avoid this warning pass in values for each of the problematic parameters or run `accelerate config`.
+Detected kernel version 3.10.0, which is below the recommended minimum of 5.5.0; this can cause the process to hang. It is recommended to upgrade the kernel to the minimum version or higher.
+Detected kernel version 3.10.0, which is below the recommended minimum of 5.5.0; this can cause the process to hang. It is recommended to upgrade the kernel to the minimum version or higher.
+Traceback (most recent call last):
+  File "/home/wangyuancheng.p/zja/Amphion/bins/ttm/train.py", line 85, in <module>
+    main()
+  File "/home/wangyuancheng.p/zja/Amphion/bins/ttm/train.py", line 79, in main
+    trainer = build_trainer(args, cfg)
+  File "/home/wangyuancheng.p/zja/Amphion/bins/ttm/train.py", line 20, in build_trainer
+    trainer = trainer_class(args, cfg)
+  File "/home/wangyuancheng.p/zja/Amphion/models/ttm/musicgen/musicgen_trainer.py", line 31, in __init__
+    BaseTrainer.__init__(self, args, cfg)
+  File "/home/wangyuancheng.p/zja/Amphion/models/base/new_trainer.py", line 64, in __init__
+    self.cfg.train.max_epoch if self.cfg.train.max_epoch > 0 else float("inf")
+AttributeError: 'JsonHParams' object has no attribute 'max_epoch'
+Traceback (most recent call last):
+  File "/home/wangyuancheng.p/miniconda3/envs/amphion/bin/accelerate", line 8, in <module>
+    sys.exit(main())
+  File "/home/wangyuancheng.p/miniconda3/envs/amphion/lib/python3.9/site-packages/accelerate/commands/accelerate_cli.py", line 47, in main
+    args.func(args)
+  File "/home/wangyuancheng.p/miniconda3/envs/amphion/lib/python3.9/site-packages/accelerate/commands/launch.py", line 994, in launch_command
+    simple_launcher(args)
+  File "/home/wangyuancheng.p/miniconda3/envs/amphion/lib/python3.9/site-packages/accelerate/commands/launch.py", line 636, in simple_launcher
+    raise subprocess.CalledProcessError(returncode=process.returncode, cmd=cmd)
+subprocess.CalledProcessError: Command '['/home/wangyuancheng.p/miniconda3/envs/amphion/bin/python', '/home/wangyuancheng.p/zja/Amphion/bins/ttm/train.py', '--config', '/home/wangyuancheng.p/zja/Amphion/egs/ttm/musicgen/exp_config.json', '--exp_name', 'musicgen_test', '--log_level', 'info']' returned non-zero exit status 1.
+Exprimental Configuration File: /home/wangyuancheng.p/zja/Amphion/egs/ttm/musicgen/exp_config.json
+Exprimental Name: musicgen_test
+Start a new experiment...
+The following values were not passed to `accelerate launch` and had defaults used instead:
+	`--num_processes` was set to a value of `1`
+	`--num_machines` was set to a value of `1`
+	`--mixed_precision` was set to a value of `'no'`
+	`--dynamo_backend` was set to a value of `'no'`
+To avoid this warning pass in values for each of the problematic parameters or run `accelerate config`.
+Detected kernel version 3.10.0, which is below the recommended minimum of 5.5.0; this can cause the process to hang. It is recommended to upgrade the kernel to the minimum version or higher.
+Detected kernel version 3.10.0, which is below the recommended minimum of 5.5.0; this can cause the process to hang. It is recommended to upgrade the kernel to the minimum version or higher.
+Traceback (most recent call last):
+  File "/home/wangyuancheng.p/zja/Amphion/bins/ttm/train.py", line 85, in <module>
+    main()
+  File "/home/wangyuancheng.p/zja/Amphion/bins/ttm/train.py", line 79, in main
+    trainer = build_trainer(args, cfg)
+  File "/home/wangyuancheng.p/zja/Amphion/bins/ttm/train.py", line 20, in build_trainer
+    trainer = trainer_class(args, cfg)
+  File "/home/wangyuancheng.p/zja/Amphion/models/ttm/musicgen/musicgen_trainer.py", line 31, in __init__
+    BaseTrainer.__init__(self, args, cfg)
+  File "/home/wangyuancheng.p/zja/Amphion/models/base/new_trainer.py", line 76, in __init__
+    self.save_checkpoint_stride = self.cfg.train.save_checkpoint_stride
+AttributeError: 'JsonHParams' object has no attribute 'save_checkpoint_stride'
+Traceback (most recent call last):
+  File "/home/wangyuancheng.p/miniconda3/envs/amphion/bin/accelerate", line 8, in <module>
+    sys.exit(main())
+  File "/home/wangyuancheng.p/miniconda3/envs/amphion/lib/python3.9/site-packages/accelerate/commands/accelerate_cli.py", line 47, in main
+    args.func(args)
+  File "/home/wangyuancheng.p/miniconda3/envs/amphion/lib/python3.9/site-packages/accelerate/commands/launch.py", line 994, in launch_command
+    simple_launcher(args)
+  File "/home/wangyuancheng.p/miniconda3/envs/amphion/lib/python3.9/site-packages/accelerate/commands/launch.py", line 636, in simple_launcher
+    raise subprocess.CalledProcessError(returncode=process.returncode, cmd=cmd)
+subprocess.CalledProcessError: Command '['/home/wangyuancheng.p/miniconda3/envs/amphion/bin/python', '/home/wangyuancheng.p/zja/Amphion/bins/ttm/train.py', '--config', '/home/wangyuancheng.p/zja/Amphion/egs/ttm/musicgen/exp_config.json', '--exp_name', 'musicgen_test', '--log_level', 'info']' returned non-zero exit status 1.
+Exprimental Configuration File: /home/wangyuancheng.p/zja/Amphion/egs/ttm/musicgen/exp_config.json
+Exprimental Name: musicgen_test
+Start a new experiment...
+The following values were not passed to `accelerate launch` and had defaults used instead:
+	`--num_processes` was set to a value of `1`
+	`--num_machines` was set to a value of `1`
+	`--mixed_precision` was set to a value of `'no'`
+	`--dynamo_backend` was set to a value of `'no'`
+To avoid this warning pass in values for each of the problematic parameters or run `accelerate config`.
+Detected kernel version 3.10.0, which is below the recommended minimum of 5.5.0; this can cause the process to hang. It is recommended to upgrade the kernel to the minimum version or higher.
+Detected kernel version 3.10.0, which is below the recommended minimum of 5.5.0; this can cause the process to hang. It is recommended to upgrade the kernel to the minimum version or higher.
+Traceback (most recent call last):
+  File "/home/wangyuancheng.p/zja/Amphion/bins/ttm/train.py", line 85, in <module>
+    main()
+  File "/home/wangyuancheng.p/zja/Amphion/bins/ttm/train.py", line 79, in main
+    trainer = build_trainer(args, cfg)
+  File "/home/wangyuancheng.p/zja/Amphion/bins/ttm/train.py", line 20, in build_trainer
+    trainer = trainer_class(args, cfg)
+  File "/home/wangyuancheng.p/zja/Amphion/models/ttm/musicgen/musicgen_trainer.py", line 31, in __init__
+    BaseTrainer.__init__(self, args, cfg)
+  File "/home/wangyuancheng.p/zja/Amphion/models/base/new_trainer.py", line 83, in __init__
+    self.run_eval = self.cfg.train.run_eval
+AttributeError: 'JsonHParams' object has no attribute 'run_eval'
+Traceback (most recent call last):
+  File "/home/wangyuancheng.p/miniconda3/envs/amphion/bin/accelerate", line 8, in <module>
+    sys.exit(main())
+  File "/home/wangyuancheng.p/miniconda3/envs/amphion/lib/python3.9/site-packages/accelerate/commands/accelerate_cli.py", line 47, in main
+    args.func(args)
+  File "/home/wangyuancheng.p/miniconda3/envs/amphion/lib/python3.9/site-packages/accelerate/commands/launch.py", line 994, in launch_command
+    simple_launcher(args)
+  File "/home/wangyuancheng.p/miniconda3/envs/amphion/lib/python3.9/site-packages/accelerate/commands/launch.py", line 636, in simple_launcher
+    raise subprocess.CalledProcessError(returncode=process.returncode, cmd=cmd)
+subprocess.CalledProcessError: Command '['/home/wangyuancheng.p/miniconda3/envs/amphion/bin/python', '/home/wangyuancheng.p/zja/Amphion/bins/ttm/train.py', '--config', '/home/wangyuancheng.p/zja/Amphion/egs/ttm/musicgen/exp_config.json', '--exp_name', 'musicgen_test', '--log_level', 'info']' returned non-zero exit status 1.
+Exprimental Configuration File: /home/wangyuancheng.p/zja/Amphion/egs/ttm/musicgen/exp_config.json
+Exprimental Name: musicgen_test
+Start a new experiment...
+The following values were not passed to `accelerate launch` and had defaults used instead:
+	`--num_processes` was set to a value of `1`
+	`--num_machines` was set to a value of `1`
+	`--mixed_precision` was set to a value of `'no'`
+	`--dynamo_backend` was set to a value of `'no'`
+To avoid this warning pass in values for each of the problematic parameters or run `accelerate config`.
+Detected kernel version 3.10.0, which is below the recommended minimum of 5.5.0; this can cause the process to hang. It is recommended to upgrade the kernel to the minimum version or higher.
+Detected kernel version 3.10.0, which is below the recommended minimum of 5.5.0; this can cause the process to hang. It is recommended to upgrade the kernel to the minimum version or higher.
+Traceback (most recent call last):
+  File "/home/wangyuancheng.p/zja/Amphion/bins/ttm/train.py", line 85, in <module>
+    main()
+  File "/home/wangyuancheng.p/zja/Amphion/bins/ttm/train.py", line 79, in main
+    trainer = build_trainer(args, cfg)
+  File "/home/wangyuancheng.p/zja/Amphion/bins/ttm/train.py", line 20, in build_trainer
+    trainer = trainer_class(args, cfg)
+  File "/home/wangyuancheng.p/zja/Amphion/models/ttm/musicgen/musicgen_trainer.py", line 31, in __init__
+    BaseTrainer.__init__(self, args, cfg)
+  File "/home/wangyuancheng.p/zja/Amphion/models/base/new_trainer.py", line 99, in __init__
+    self.train_dataloader, self.valid_dataloader = self._build_dataloader()
+  File "/home/wangyuancheng.p/zja/Amphion/models/ttm/musicgen/musicgen_trainer.py", line 44, in _build_dataloader
+    dataloader_dict = builders.get_audio_datasets(self.cfg, dataset_type=self.DATASET_TYPE)
+AttributeError: 'MusicGenTrainer' object has no attribute 'DATASET_TYPE'
+Traceback (most recent call last):
+  File "/home/wangyuancheng.p/miniconda3/envs/amphion/bin/accelerate", line 8, in <module>
+    sys.exit(main())
+  File "/home/wangyuancheng.p/miniconda3/envs/amphion/lib/python3.9/site-packages/accelerate/commands/accelerate_cli.py", line 47, in main
+    args.func(args)
+  File "/home/wangyuancheng.p/miniconda3/envs/amphion/lib/python3.9/site-packages/accelerate/commands/launch.py", line 994, in launch_command
+    simple_launcher(args)
+  File "/home/wangyuancheng.p/miniconda3/envs/amphion/lib/python3.9/site-packages/accelerate/commands/launch.py", line 636, in simple_launcher
+    raise subprocess.CalledProcessError(returncode=process.returncode, cmd=cmd)
+subprocess.CalledProcessError: Command '['/home/wangyuancheng.p/miniconda3/envs/amphion/bin/python', '/home/wangyuancheng.p/zja/Amphion/bins/ttm/train.py', '--config', '/home/wangyuancheng.p/zja/Amphion/egs/ttm/musicgen/exp_config.json', '--exp_name', 'musicgen_test', '--log_level', 'info']' returned non-zero exit status 1.
+Exprimental Configuration File: /home/wangyuancheng.p/zja/Amphion/egs/ttm/musicgen/exp_config.json
+Exprimental Name: musicgen_test
+Start a new experiment...
+The following values were not passed to `accelerate launch` and had defaults used instead:
+	`--num_processes` was set to a value of `1`
+	`--num_machines` was set to a value of `1`
+	`--mixed_precision` was set to a value of `'no'`
+	`--dynamo_backend` was set to a value of `'no'`
+To avoid this warning pass in values for each of the problematic parameters or run `accelerate config`.
+Detected kernel version 3.10.0, which is below the recommended minimum of 5.5.0; this can cause the process to hang. It is recommended to upgrade the kernel to the minimum version or higher.
+Detected kernel version 3.10.0, which is below the recommended minimum of 5.5.0; this can cause the process to hang. It is recommended to upgrade the kernel to the minimum version or higher.
+Traceback (most recent call last):
+  File "/home/wangyuancheng.p/zja/Amphion/bins/ttm/train.py", line 85, in <module>
+    main()
+  File "/home/wangyuancheng.p/zja/Amphion/bins/ttm/train.py", line 79, in main
+    trainer = build_trainer(args, cfg)
+  File "/home/wangyuancheng.p/zja/Amphion/bins/ttm/train.py", line 20, in build_trainer
+    trainer = trainer_class(args, cfg)
+  File "/home/wangyuancheng.p/zja/Amphion/models/ttm/musicgen/musicgen_trainer.py", line 33, in __init__
+    BaseTrainer.__init__(self, args, cfg)
+  File "/home/wangyuancheng.p/zja/Amphion/models/base/new_trainer.py", line 99, in __init__
+    self.train_dataloader, self.valid_dataloader = self._build_dataloader()
+  File "/home/wangyuancheng.p/zja/Amphion/models/ttm/musicgen/musicgen_trainer.py", line 45, in _build_dataloader
+    dataloader_dict = builders.get_audio_datasets(self.cfg, dataset_type=self.DATASET_TYPE)
+  File "/home/wangyuancheng.p/zja/Amphion/modules/audiocraft/solvers/builders.py", line 308, in get_audio_datasets
+    dataset_cfg = dict_from_config(cfg.dataset)
+  File "/home/wangyuancheng.p/zja/Amphion/modules/audiocraft/utils/utils.py", line 44, in dict_from_config
+    dct = omegaconf.OmegaConf.to_container(cfg, resolve=True)
+  File "/home/wangyuancheng.p/miniconda3/envs/amphion/lib/python3.9/site-packages/omegaconf/omegaconf.py", line 569, in to_container
+    raise ValueError(
+ValueError: Input cfg is not an OmegaConf config object (JsonHParams)
+Traceback (most recent call last):
+  File "/home/wangyuancheng.p/miniconda3/envs/amphion/bin/accelerate", line 8, in <module>
+    sys.exit(main())
+  File "/home/wangyuancheng.p/miniconda3/envs/amphion/lib/python3.9/site-packages/accelerate/commands/accelerate_cli.py", line 47, in main
+    args.func(args)
+  File "/home/wangyuancheng.p/miniconda3/envs/amphion/lib/python3.9/site-packages/accelerate/commands/launch.py", line 994, in launch_command
+    simple_launcher(args)
+  File "/home/wangyuancheng.p/miniconda3/envs/amphion/lib/python3.9/site-packages/accelerate/commands/launch.py", line 636, in simple_launcher
+    raise subprocess.CalledProcessError(returncode=process.returncode, cmd=cmd)
+subprocess.CalledProcessError: Command '['/home/wangyuancheng.p/miniconda3/envs/amphion/bin/python', '/home/wangyuancheng.p/zja/Amphion/bins/ttm/train.py', '--config', '/home/wangyuancheng.p/zja/Amphion/egs/ttm/musicgen/exp_config.json', '--exp_name', 'musicgen_test', '--log_level', 'info']' returned non-zero exit status 1.
+Exprimental Configuration File: /home/wangyuancheng.p/zja/Amphion/egs/ttm/musicgen/exp_config.json
+Exprimental Name: musicgen_test
+Start a new experiment...
+The following values were not passed to `accelerate launch` and had defaults used instead:
+	`--num_processes` was set to a value of `1`
+	`--num_machines` was set to a value of `1`
+	`--mixed_precision` was set to a value of `'no'`
+	`--dynamo_backend` was set to a value of `'no'`
+To avoid this warning pass in values for each of the problematic parameters or run `accelerate config`.
+Detected kernel version 3.10.0, which is below the recommended minimum of 5.5.0; this can cause the process to hang. It is recommended to upgrade the kernel to the minimum version or higher.
+Detected kernel version 3.10.0, which is below the recommended minimum of 5.5.0; this can cause the process to hang. It is recommended to upgrade the kernel to the minimum version or higher.
+Traceback (most recent call last):
+  File "/home/wangyuancheng.p/zja/Amphion/bins/ttm/train.py", line 85, in <module>
+    main()
+  File "/home/wangyuancheng.p/zja/Amphion/bins/ttm/train.py", line 79, in main
+    trainer = build_trainer(args, cfg)
+  File "/home/wangyuancheng.p/zja/Amphion/bins/ttm/train.py", line 20, in build_trainer
+    trainer = trainer_class(args, cfg)
+  File "/home/wangyuancheng.p/zja/Amphion/models/ttm/musicgen/musicgen_trainer.py", line 34, in __init__
+    BaseTrainer.__init__(self, args, cfg)
+  File "/home/wangyuancheng.p/zja/Amphion/models/base/new_trainer.py", line 99, in __init__
+    self.train_dataloader, self.valid_dataloader = self._build_dataloader()
+  File "/home/wangyuancheng.p/zja/Amphion/models/ttm/musicgen/musicgen_trainer.py", line 47, in _build_dataloader
+    dataloader_dict = builders.get_audio_datasets(self.cfg, dataset_type=self.DATASET_TYPE)
+  File "/home/wangyuancheng.p/zja/Amphion/modules/audiocraft/solvers/builders.py", line 308, in get_audio_datasets
+    dataset_cfg = dict_from_config(cfg.dataset)
+  File "/home/wangyuancheng.p/zja/Amphion/modules/audiocraft/utils/utils.py", line 44, in dict_from_config
+    dct = omegaconf.OmegaConf.to_container(cfg, resolve=True)
+  File "/home/wangyuancheng.p/miniconda3/envs/amphion/lib/python3.9/site-packages/omegaconf/omegaconf.py", line 569, in to_container
+    raise ValueError(
+ValueError: Input cfg is not an OmegaConf config object (JsonHParams)
+Traceback (most recent call last):
+  File "/home/wangyuancheng.p/miniconda3/envs/amphion/bin/accelerate", line 8, in <module>
+    sys.exit(main())
+  File "/home/wangyuancheng.p/miniconda3/envs/amphion/lib/python3.9/site-packages/accelerate/commands/accelerate_cli.py", line 47, in main
+    args.func(args)
+  File "/home/wangyuancheng.p/miniconda3/envs/amphion/lib/python3.9/site-packages/accelerate/commands/launch.py", line 994, in launch_command
+    simple_launcher(args)
+  File "/home/wangyuancheng.p/miniconda3/envs/amphion/lib/python3.9/site-packages/accelerate/commands/launch.py", line 636, in simple_launcher
+    raise subprocess.CalledProcessError(returncode=process.returncode, cmd=cmd)
+subprocess.CalledProcessError: Command '['/home/wangyuancheng.p/miniconda3/envs/amphion/bin/python', '/home/wangyuancheng.p/zja/Amphion/bins/ttm/train.py', '--config', '/home/wangyuancheng.p/zja/Amphion/egs/ttm/musicgen/exp_config.json', '--exp_name', 'musicgen_test', '--log_level', 'info']' returned non-zero exit status 1.
+Exprimental Configuration File: /home/wangyuancheng.p/zja/Amphion/egs/ttm/musicgen/exp_config.json
+Exprimental Name: musicgen_test
+Start a new experiment...
+The following values were not passed to `accelerate launch` and had defaults used instead:
+	`--num_processes` was set to a value of `1`
+	`--num_machines` was set to a value of `1`
+	`--mixed_precision` was set to a value of `'no'`
+	`--dynamo_backend` was set to a value of `'no'`
+To avoid this warning pass in values for each of the problematic parameters or run `accelerate config`.
+Traceback (most recent call last):
+  File "/home/wangyuancheng.p/zja/Amphion/bins/ttm/train.py", line 85, in <module>
+    main()
+  File "/home/wangyuancheng.p/zja/Amphion/bins/ttm/train.py", line 79, in main
+    trainer = build_trainer(args, cfg)
+  File "/home/wangyuancheng.p/zja/Amphion/bins/ttm/train.py", line 20, in build_trainer
+    trainer = trainer_class(args, cfg)
+  File "/home/wangyuancheng.p/zja/Amphion/models/ttm/musicgen/musicgen_trainer.py", line 30, in __init__
+    self.cfg_omega = omegaconf.OmegaConf.create(cfg)
+  File "/home/wangyuancheng.p/miniconda3/envs/amphion/lib/python3.9/site-packages/omegaconf/omegaconf.py", line 175, in create
+    return OmegaConf._create_impl(
+  File "/home/wangyuancheng.p/miniconda3/envs/amphion/lib/python3.9/site-packages/omegaconf/omegaconf.py", line 926, in _create_impl
+    format_and_raise(node=None, key=None, value=None, msg=str(e), cause=e)
+  File "/home/wangyuancheng.p/miniconda3/envs/amphion/lib/python3.9/site-packages/omegaconf/_utils.py", line 844, in format_and_raise
+    _raise(ex, cause)
+  File "/home/wangyuancheng.p/miniconda3/envs/amphion/lib/python3.9/site-packages/omegaconf/_utils.py", line 742, in _raise
+    raise ex.with_traceback(sys.exc_info()[2])  # set env var OC_CAUSE=1 for full trace
+  File "/home/wangyuancheng.p/miniconda3/envs/amphion/lib/python3.9/site-packages/omegaconf/omegaconf.py", line 922, in _create_impl
+    raise ValidationError(
+omegaconf.errors.ValidationError: Object of unsupported type: 'JsonHParams'
+    full_key: 
+    object_type=None
+Traceback (most recent call last):
+  File "/home/wangyuancheng.p/miniconda3/envs/amphion/bin/accelerate", line 8, in <module>
+    sys.exit(main())
+  File "/home/wangyuancheng.p/miniconda3/envs/amphion/lib/python3.9/site-packages/accelerate/commands/accelerate_cli.py", line 47, in main
+    args.func(args)
+  File "/home/wangyuancheng.p/miniconda3/envs/amphion/lib/python3.9/site-packages/accelerate/commands/launch.py", line 994, in launch_command
+    simple_launcher(args)
+  File "/home/wangyuancheng.p/miniconda3/envs/amphion/lib/python3.9/site-packages/accelerate/commands/launch.py", line 636, in simple_launcher
+    raise subprocess.CalledProcessError(returncode=process.returncode, cmd=cmd)
+subprocess.CalledProcessError: Command '['/home/wangyuancheng.p/miniconda3/envs/amphion/bin/python', '/home/wangyuancheng.p/zja/Amphion/bins/ttm/train.py', '--config', '/home/wangyuancheng.p/zja/Amphion/egs/ttm/musicgen/exp_config.json', '--exp_name', 'musicgen_test', '--log_level', 'info']' returned non-zero exit status 1.
+Exprimental Configuration File: /home/wangyuancheng.p/zja/Amphion/egs/ttm/musicgen/exp_config.json
+Exprimental Name: musicgen_test
+Start a new experiment...
+The following values were not passed to `accelerate launch` and had defaults used instead:
+	`--num_processes` was set to a value of `1`
+	`--num_machines` was set to a value of `1`
+	`--mixed_precision` was set to a value of `'no'`
+	`--dynamo_backend` was set to a value of `'no'`
+To avoid this warning pass in values for each of the problematic parameters or run `accelerate config`.
+<class 'utils.util.JsonHParams'>
+Exprimental Configuration File: /home/wangyuancheng.p/zja/Amphion/egs/ttm/musicgen/exp_config.json
+Exprimental Name: musicgen_test
+Start a new experiment...
+The following values were not passed to `accelerate launch` and had defaults used instead:
+	`--num_processes` was set to a value of `1`
+	`--num_machines` was set to a value of `1`
+	`--mixed_precision` was set to a value of `'no'`
+	`--dynamo_backend` was set to a value of `'no'`
+To avoid this warning pass in values for each of the problematic parameters or run `accelerate config`.
+Traceback (most recent call last):
+  File "/home/wangyuancheng.p/zja/Amphion/bins/ttm/train.py", line 85, in <module>
+    main()
+  File "/home/wangyuancheng.p/zja/Amphion/bins/ttm/train.py", line 79, in main
+    trainer = build_trainer(args, cfg)
+  File "/home/wangyuancheng.p/zja/Amphion/bins/ttm/train.py", line 20, in build_trainer
+    trainer = trainer_class(args, cfg)
+  File "/home/wangyuancheng.p/zja/Amphion/models/ttm/musicgen/musicgen_trainer.py", line 32, in __init__
+    self.cfg_omega = omegaconf.OmegaConf.create(cfg.__dict__)
+  File "/home/wangyuancheng.p/miniconda3/envs/amphion/lib/python3.9/site-packages/omegaconf/omegaconf.py", line 175, in create
+    return OmegaConf._create_impl(
+  File "/home/wangyuancheng.p/miniconda3/envs/amphion/lib/python3.9/site-packages/omegaconf/omegaconf.py", line 926, in _create_impl
+    format_and_raise(node=None, key=None, value=None, msg=str(e), cause=e)
+  File "/home/wangyuancheng.p/miniconda3/envs/amphion/lib/python3.9/site-packages/omegaconf/_utils.py", line 764, in format_and_raise
+    _raise(ex, cause)
+  File "/home/wangyuancheng.p/miniconda3/envs/amphion/lib/python3.9/site-packages/omegaconf/_utils.py", line 742, in _raise
+    raise ex.with_traceback(sys.exc_info()[2])  # set env var OC_CAUSE=1 for full trace
+  File "/home/wangyuancheng.p/miniconda3/envs/amphion/lib/python3.9/site-packages/omegaconf/omegaconf.py", line 887, in _create_impl
+    return DictConfig(
+  File "/home/wangyuancheng.p/miniconda3/envs/amphion/lib/python3.9/site-packages/omegaconf/dictconfig.py", line 111, in __init__
+    format_and_raise(node=None, key=key, value=None, cause=ex, msg=str(ex))
+  File "/home/wangyuancheng.p/miniconda3/envs/amphion/lib/python3.9/site-packages/omegaconf/_utils.py", line 764, in format_and_raise
+    _raise(ex, cause)
+  File "/home/wangyuancheng.p/miniconda3/envs/amphion/lib/python3.9/site-packages/omegaconf/_utils.py", line 742, in _raise
+    raise ex.with_traceback(sys.exc_info()[2])  # set env var OC_CAUSE=1 for full trace
+  File "/home/wangyuancheng.p/miniconda3/envs/amphion/lib/python3.9/site-packages/omegaconf/dictconfig.py", line 109, in __init__
+    self._set_value(content, flags=flags)
+  File "/home/wangyuancheng.p/miniconda3/envs/amphion/lib/python3.9/site-packages/omegaconf/dictconfig.py", line 649, in _set_value
+    raise e
+  File "/home/wangyuancheng.p/miniconda3/envs/amphion/lib/python3.9/site-packages/omegaconf/dictconfig.py", line 646, in _set_value
+    self._set_value_impl(value, flags)
+  File "/home/wangyuancheng.p/miniconda3/envs/amphion/lib/python3.9/site-packages/omegaconf/dictconfig.py", line 692, in _set_value_impl
+    self.__setitem__(k, v)
+  File "/home/wangyuancheng.p/miniconda3/envs/amphion/lib/python3.9/site-packages/omegaconf/dictconfig.py", line 316, in __setitem__
+    self._format_and_raise(key=key, value=value, cause=e)
+  File "/home/wangyuancheng.p/miniconda3/envs/amphion/lib/python3.9/site-packages/omegaconf/base.py", line 211, in _format_and_raise
+    format_and_raise(
+  File "/home/wangyuancheng.p/miniconda3/envs/amphion/lib/python3.9/site-packages/omegaconf/_utils.py", line 844, in format_and_raise
+    _raise(ex, cause)
+  File "/home/wangyuancheng.p/miniconda3/envs/amphion/lib/python3.9/site-packages/omegaconf/_utils.py", line 742, in _raise
+    raise ex.with_traceback(sys.exc_info()[2])  # set env var OC_CAUSE=1 for full trace
+  File "/home/wangyuancheng.p/miniconda3/envs/amphion/lib/python3.9/site-packages/omegaconf/dictconfig.py", line 310, in __setitem__
+    self.__set_impl(key=key, value=value)
+  File "/home/wangyuancheng.p/miniconda3/envs/amphion/lib/python3.9/site-packages/omegaconf/dictconfig.py", line 320, in __set_impl
+    self._set_item_impl(key, value)
+  File "/home/wangyuancheng.p/miniconda3/envs/amphion/lib/python3.9/site-packages/omegaconf/basecontainer.py", line 586, in _set_item_impl
+    self._wrap_value_and_set(key, value, type_hint)
+  File "/home/wangyuancheng.p/miniconda3/envs/amphion/lib/python3.9/site-packages/omegaconf/basecontainer.py", line 593, in _wrap_value_and_set
+    wrapped = _maybe_wrap(
+  File "/home/wangyuancheng.p/miniconda3/envs/amphion/lib/python3.9/site-packages/omegaconf/omegaconf.py", line 1103, in _maybe_wrap
+    return _node_wrap(
+  File "/home/wangyuancheng.p/miniconda3/envs/amphion/lib/python3.9/site-packages/omegaconf/omegaconf.py", line 1062, in _node_wrap
+    node = AnyNode(value=value, key=key, parent=parent)
+  File "/home/wangyuancheng.p/miniconda3/envs/amphion/lib/python3.9/site-packages/omegaconf/nodes.py", line 120, in __init__
+    super().__init__(
+  File "/home/wangyuancheng.p/miniconda3/envs/amphion/lib/python3.9/site-packages/omegaconf/nodes.py", line 28, in __init__
+    self._set_value(value)  # lgtm [py/init-calls-subclass]
+  File "/home/wangyuancheng.p/miniconda3/envs/amphion/lib/python3.9/site-packages/omegaconf/nodes.py", line 45, in _set_value
+    self._val = self.validate_and_convert(value)
+  File "/home/wangyuancheng.p/miniconda3/envs/amphion/lib/python3.9/site-packages/omegaconf/nodes.py", line 61, in validate_and_convert
+    return self._validate_and_convert_impl(value)
+  File "/home/wangyuancheng.p/miniconda3/envs/amphion/lib/python3.9/site-packages/omegaconf/nodes.py", line 137, in _validate_and_convert_impl
+    raise UnsupportedValueType(
+omegaconf.errors.UnsupportedValueType: Value 'JsonHParams' is not a supported primitive type
+    full_key: train
+    object_type=dict
+Traceback (most recent call last):
+  File "/home/wangyuancheng.p/miniconda3/envs/amphion/bin/accelerate", line 8, in <module>
+    sys.exit(main())
+  File "/home/wangyuancheng.p/miniconda3/envs/amphion/lib/python3.9/site-packages/accelerate/commands/accelerate_cli.py", line 47, in main
+    args.func(args)
+  File "/home/wangyuancheng.p/miniconda3/envs/amphion/lib/python3.9/site-packages/accelerate/commands/launch.py", line 994, in launch_command
+    simple_launcher(args)
+  File "/home/wangyuancheng.p/miniconda3/envs/amphion/lib/python3.9/site-packages/accelerate/commands/launch.py", line 636, in simple_launcher
+    raise subprocess.CalledProcessError(returncode=process.returncode, cmd=cmd)
+subprocess.CalledProcessError: Command '['/home/wangyuancheng.p/miniconda3/envs/amphion/bin/python', '/home/wangyuancheng.p/zja/Amphion/bins/ttm/train.py', '--config', '/home/wangyuancheng.p/zja/Amphion/egs/ttm/musicgen/exp_config.json', '--exp_name', 'musicgen_test', '--log_level', 'info']' returned non-zero exit status 1.
+Exprimental Configuration File: /home/wangyuancheng.p/zja/Amphion/egs/ttm/musicgen/exp_config.json
+Exprimental Name: musicgen_test
+Start a new experiment...
+The following values were not passed to `accelerate launch` and had defaults used instead:
+	`--num_processes` was set to a value of `1`
+	`--num_machines` was set to a value of `1`
+	`--mixed_precision` was set to a value of `'no'`
+	`--dynamo_backend` was set to a value of `'no'`
+To avoid this warning pass in values for each of the problematic parameters or run `accelerate config`.
+Traceback (most recent call last):
+  File "/home/wangyuancheng.p/zja/Amphion/bins/ttm/train.py", line 85, in <module>
+    main()
+  File "/home/wangyuancheng.p/zja/Amphion/bins/ttm/train.py", line 79, in main
+    trainer = build_trainer(args, cfg, cfg_path=args.config)
+  File "/home/wangyuancheng.p/zja/Amphion/bins/ttm/train.py", line 20, in build_trainer
+    trainer = trainer_class(args, cfg, cfg_path=cfg_path)
+  File "/home/wangyuancheng.p/zja/Amphion/models/ttm/musicgen/musicgen_trainer.py", line 32, in __init__
+    self.cfg_omega = omegaconf.OmegaConf.create(json.load(open(cfg_path)))
+  File "/home/wangyuancheng.p/miniconda3/envs/amphion/lib/python3.9/json/__init__.py", line 293, in load
+    return loads(fp.read(),
+  File "/home/wangyuancheng.p/miniconda3/envs/amphion/lib/python3.9/json/__init__.py", line 346, in loads
+    return _default_decoder.decode(s)
+  File "/home/wangyuancheng.p/miniconda3/envs/amphion/lib/python3.9/json/decoder.py", line 337, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+  File "/home/wangyuancheng.p/miniconda3/envs/amphion/lib/python3.9/json/decoder.py", line 353, in raw_decode
+    obj, end = self.scan_once(s, idx)
+json.decoder.JSONDecodeError: Expecting property name enclosed in double quotes: line 2 column 9 (char 10)
+Traceback (most recent call last):
+  File "/home/wangyuancheng.p/miniconda3/envs/amphion/bin/accelerate", line 8, in <module>
+    sys.exit(main())
+  File "/home/wangyuancheng.p/miniconda3/envs/amphion/lib/python3.9/site-packages/accelerate/commands/accelerate_cli.py", line 47, in main
+    args.func(args)
+  File "/home/wangyuancheng.p/miniconda3/envs/amphion/lib/python3.9/site-packages/accelerate/commands/launch.py", line 994, in launch_command
+    simple_launcher(args)
+  File "/home/wangyuancheng.p/miniconda3/envs/amphion/lib/python3.9/site-packages/accelerate/commands/launch.py", line 636, in simple_launcher
+    raise subprocess.CalledProcessError(returncode=process.returncode, cmd=cmd)
+subprocess.CalledProcessError: Command '['/home/wangyuancheng.p/miniconda3/envs/amphion/bin/python', '/home/wangyuancheng.p/zja/Amphion/bins/ttm/train.py', '--config', '/home/wangyuancheng.p/zja/Amphion/egs/ttm/musicgen/exp_config.json', '--exp_name', 'musicgen_test', '--log_level', 'info']' returned non-zero exit status 1.
+Exprimental Configuration File: /home/wangyuancheng.p/zja/Amphion/egs/ttm/musicgen/exp_config.json
+Exprimental Name: musicgen_test
+Start a new experiment...
+The following values were not passed to `accelerate launch` and had defaults used instead:
+	`--num_processes` was set to a value of `1`
+	`--num_machines` was set to a value of `1`
+	`--mixed_precision` was set to a value of `'no'`
+	`--dynamo_backend` was set to a value of `'no'`
+To avoid this warning pass in values for each of the problematic parameters or run `accelerate config`.
+Detected kernel version 3.10.0, which is below the recommended minimum of 5.5.0; this can cause the process to hang. It is recommended to upgrade the kernel to the minimum version or higher.
+Detected kernel version 3.10.0, which is below the recommended minimum of 5.5.0; this can cause the process to hang. It is recommended to upgrade the kernel to the minimum version or higher.
+Traceback (most recent call last):
+  File "/home/wangyuancheng.p/zja/Amphion/bins/ttm/train.py", line 85, in <module>
+    main()
+  File "/home/wangyuancheng.p/zja/Amphion/bins/ttm/train.py", line 79, in main
+    trainer = build_trainer(args, cfg, cfg_path=args.config)
+  File "/home/wangyuancheng.p/zja/Amphion/bins/ttm/train.py", line 20, in build_trainer
+    trainer = trainer_class(args, cfg, cfg_path=cfg_path)
+  File "/home/wangyuancheng.p/zja/Amphion/models/ttm/musicgen/musicgen_trainer.py", line 38, in __init__
+    BaseTrainer.__init__(self, args, cfg)
+  File "/home/wangyuancheng.p/zja/Amphion/models/base/new_trainer.py", line 99, in __init__
+    self.train_dataloader, self.valid_dataloader = self._build_dataloader()
+  File "/home/wangyuancheng.p/zja/Amphion/models/ttm/musicgen/musicgen_trainer.py", line 47, in _build_dataloader
+    dataloader_dict = builders.get_audio_datasets(self.cfg_omega, dataset_type=self.DATASET_TYPE)
+  File "/home/wangyuancheng.p/zja/Amphion/modules/audiocraft/solvers/builders.py", line 347, in get_audio_datasets
+    dataset = data.music_dataset.MusicDataset.from_meta(path, **kwargs)
+  File "/home/wangyuancheng.p/zja/Amphion/modules/audiocraft/data/audio_dataset.py", line 541, in from_meta
+    return cls(meta, **kwargs)
+  File "/home/wangyuancheng.p/zja/Amphion/modules/audiocraft/data/music_dataset.py", line 210, in __init__
+    super().__init__(*args, **kwargs)
+  File "/home/wangyuancheng.p/zja/Amphion/modules/audiocraft/data/info_audio_dataset.py", line 60, in __init__
+    super().__init__(clusterify_all_meta(meta), **kwargs)
+  File "/home/wangyuancheng.p/zja/Amphion/modules/audiocraft/data/info_audio_dataset.py", line 35, in clusterify_all_meta
+    return [_clusterify_meta(m) for m in meta]
+  File "/home/wangyuancheng.p/zja/Amphion/modules/audiocraft/data/info_audio_dataset.py", line 35, in <listcomp>
+    return [_clusterify_meta(m) for m in meta]
+  File "/home/wangyuancheng.p/zja/Amphion/modules/audiocraft/data/info_audio_dataset.py", line 27, in _clusterify_meta
+    meta.path = AudioCraftEnvironment.apply_dataset_mappers(meta.path)
+  File "/home/wangyuancheng.p/zja/Amphion/modules/audiocraft/environment.py", line 171, in apply_dataset_mappers
+    instance = cls.instance()
+  File "/home/wangyuancheng.p/zja/Amphion/modules/audiocraft/environment.py", line 81, in instance
+    cls._instance = cls()
+  File "/home/wangyuancheng.p/zja/Amphion/modules/audiocraft/environment.py", line 66, in __init__
+    self.config = omegaconf.OmegaConf.load(config_path)
+  File "/home/wangyuancheng.p/miniconda3/envs/amphion/lib/python3.9/site-packages/omegaconf/omegaconf.py", line 186, in load
+    with io.open(os.path.abspath(file_), "r", encoding="utf-8") as f:
+FileNotFoundError: [Errno 2] No such file or directory: '/home/wangyuancheng.p/zja/Amphion/modules/config/teams/default.yaml'
+Traceback (most recent call last):
+  File "/home/wangyuancheng.p/miniconda3/envs/amphion/bin/accelerate", line 8, in <module>
+    sys.exit(main())
+  File "/home/wangyuancheng.p/miniconda3/envs/amphion/lib/python3.9/site-packages/accelerate/commands/accelerate_cli.py", line 47, in main
+    args.func(args)
+  File "/home/wangyuancheng.p/miniconda3/envs/amphion/lib/python3.9/site-packages/accelerate/commands/launch.py", line 994, in launch_command
+    simple_launcher(args)
+  File "/home/wangyuancheng.p/miniconda3/envs/amphion/lib/python3.9/site-packages/accelerate/commands/launch.py", line 636, in simple_launcher
+    raise subprocess.CalledProcessError(returncode=process.returncode, cmd=cmd)
+subprocess.CalledProcessError: Command '['/home/wangyuancheng.p/miniconda3/envs/amphion/bin/python', '/home/wangyuancheng.p/zja/Amphion/bins/ttm/train.py', '--config', '/home/wangyuancheng.p/zja/Amphion/egs/ttm/musicgen/exp_config.json', '--exp_name', 'musicgen_test', '--log_level', 'info']' returned non-zero exit status 1.
+Exprimental Configuration File: /home/wangyuancheng.p/zja/Amphion/egs/ttm/musicgen/exp_config.json
+Exprimental Name: musicgen_test
+Start a new experiment...
+The following values were not passed to `accelerate launch` and had defaults used instead:
+	`--num_processes` was set to a value of `1`
+	`--num_machines` was set to a value of `1`
+	`--mixed_precision` was set to a value of `'no'`
+	`--dynamo_backend` was set to a value of `'no'`
+To avoid this warning pass in values for each of the problematic parameters or run `accelerate config`.
+Detected kernel version 3.10.0, which is below the recommended minimum of 5.5.0; this can cause the process to hang. It is recommended to upgrade the kernel to the minimum version or higher.
+Detected kernel version 3.10.0, which is below the recommended minimum of 5.5.0; this can cause the process to hang. It is recommended to upgrade the kernel to the minimum version or higher.
+INFO:modules.audiocraft.solvers.builders:Loading audio data split valid: /home/wangyuancheng.p/zja/audiocraft/egs/musiccaps/train
+INFO:modules.audiocraft.solvers.builders:Loading audio data split evaluate: /home/wangyuancheng.p/zja/audiocraft/egs/musiccaps/train
+INFO:modules.audiocraft.solvers.builders:Loading audio data split generate: /home/wangyuancheng.p/zja/audiocraft/egs/musiccaps/train
+INFO:musicgen_test:Building dataset done in 147.39ms
+INFO:musicgen_test:Building model...
+INFO:root:Getting pretrained compression model from HF facebook/encodec_32khz
+INFO:root:Getting pretrained compression model from HF facebook/encodec_32khz
+INFO:musicgen_test:Compression model has 4 codebooks with 2048 cardinality, and a framerate of 50
+Traceback (most recent call last):
+  File "/home/wangyuancheng.p/zja/Amphion/bins/ttm/train.py", line 85, in <module>
+    main()
+  File "/home/wangyuancheng.p/zja/Amphion/bins/ttm/train.py", line 79, in main
+    trainer = build_trainer(args, cfg, cfg_path=args.config)
+  File "/home/wangyuancheng.p/zja/Amphion/bins/ttm/train.py", line 20, in build_trainer
+    trainer = trainer_class(args, cfg, cfg_path=cfg_path)
+  File "/home/wangyuancheng.p/zja/Amphion/models/ttm/musicgen/musicgen_trainer.py", line 38, in __init__
+    BaseTrainer.__init__(self, args, cfg)
+  File "/home/wangyuancheng.p/zja/Amphion/models/base/new_trainer.py", line 107, in __init__
+    self.model = self._build_model()
+  File "/home/wangyuancheng.p/zja/Amphion/models/ttm/musicgen/musicgen_trainer.py", line 79, in _build_model
+    self.model: models.LMModel = models.builders.get_lm_model(self.cfg).to(self.device)
+  File "/home/wangyuancheng.p/zja/Amphion/modules/audiocraft/models/builders.py", line 90, in get_lm_model
+    kwargs = dict_from_config(getattr(cfg, 'transformer_lm'))
+  File "/home/wangyuancheng.p/zja/Amphion/modules/audiocraft/utils/utils.py", line 44, in dict_from_config
+    dct = omegaconf.OmegaConf.to_container(cfg, resolve=True)
+  File "/home/wangyuancheng.p/miniconda3/envs/amphion/lib/python3.9/site-packages/omegaconf/omegaconf.py", line 569, in to_container
+    raise ValueError(
+ValueError: Input cfg is not an OmegaConf config object (JsonHParams)
+Traceback (most recent call last):
+  File "/home/wangyuancheng.p/miniconda3/envs/amphion/bin/accelerate", line 8, in <module>
+    sys.exit(main())
+  File "/home/wangyuancheng.p/miniconda3/envs/amphion/lib/python3.9/site-packages/accelerate/commands/accelerate_cli.py", line 47, in main
+    args.func(args)
+  File "/home/wangyuancheng.p/miniconda3/envs/amphion/lib/python3.9/site-packages/accelerate/commands/launch.py", line 994, in launch_command
+    simple_launcher(args)
+  File "/home/wangyuancheng.p/miniconda3/envs/amphion/lib/python3.9/site-packages/accelerate/commands/launch.py", line 636, in simple_launcher
+    raise subprocess.CalledProcessError(returncode=process.returncode, cmd=cmd)
+subprocess.CalledProcessError: Command '['/home/wangyuancheng.p/miniconda3/envs/amphion/bin/python', '/home/wangyuancheng.p/zja/Amphion/bins/ttm/train.py', '--config', '/home/wangyuancheng.p/zja/Amphion/egs/ttm/musicgen/exp_config.json', '--exp_name', 'musicgen_test', '--log_level', 'info']' returned non-zero exit status 1.
+Exprimental Configuration File: /home/wangyuancheng.p/zja/Amphion/egs/ttm/musicgen/exp_config.json
+Exprimental Name: musicgen_test
+Start a new experiment...
+The following values were not passed to `accelerate launch` and had defaults used instead:
+	`--num_processes` was set to a value of `1`
+	`--num_machines` was set to a value of `1`
+	`--mixed_precision` was set to a value of `'no'`
+	`--dynamo_backend` was set to a value of `'no'`
+To avoid this warning pass in values for each of the problematic parameters or run `accelerate config`.
+Detected kernel version 3.10.0, which is below the recommended minimum of 5.5.0; this can cause the process to hang. It is recommended to upgrade the kernel to the minimum version or higher.
+Detected kernel version 3.10.0, which is below the recommended minimum of 5.5.0; this can cause the process to hang. It is recommended to upgrade the kernel to the minimum version or higher.
+INFO:modules.audiocraft.solvers.builders:Loading audio data split valid: /home/wangyuancheng.p/zja/audiocraft/egs/musiccaps/train
+INFO:modules.audiocraft.solvers.builders:Loading audio data split evaluate: /home/wangyuancheng.p/zja/audiocraft/egs/musiccaps/train
+INFO:modules.audiocraft.solvers.builders:Loading audio data split generate: /home/wangyuancheng.p/zja/audiocraft/egs/musiccaps/train
+INFO:musicgen_test:Building dataset done in 150.12ms
+INFO:musicgen_test:Building model...
+INFO:root:Getting pretrained compression model from HF facebook/encodec_32khz
+INFO:root:Getting pretrained compression model from HF facebook/encodec_32khz
+INFO:musicgen_test:Compression model has 4 codebooks with 2048 cardinality, and a framerate of 50
+INFO:modules.audiocraft.modules.conditioners:T5 will be evaluated with autocast as float32
+INFO:musicgen_test:Building model done in 5454.94ms
+Traceback (most recent call last):
+  File "/home/wangyuancheng.p/zja/Amphion/bins/ttm/train.py", line 85, in <module>
+    main()
+  File "/home/wangyuancheng.p/zja/Amphion/bins/ttm/train.py", line 79, in main
+    trainer = build_trainer(args, cfg, cfg_path=args.config)
+  File "/home/wangyuancheng.p/zja/Amphion/bins/ttm/train.py", line 20, in build_trainer
+    trainer = trainer_class(args, cfg, cfg_path=cfg_path)
+  File "/home/wangyuancheng.p/zja/Amphion/models/ttm/musicgen/musicgen_trainer.py", line 38, in __init__
+    BaseTrainer.__init__(self, args, cfg)
+  File "/home/wangyuancheng.p/zja/Amphion/models/base/new_trainer.py", line 112, in __init__
+    f"Model parameters: {self.__count_parameters(self.model)/1e6:.2f}M"
+  File "/home/wangyuancheng.p/zja/Amphion/models/base/new_trainer.py", line 715, in __count_parameters
+    model_param = sum(p.numel() for p in model.parameters())
+AttributeError: 'NoneType' object has no attribute 'parameters'
+Traceback (most recent call last):
+  File "/home/wangyuancheng.p/miniconda3/envs/amphion/bin/accelerate", line 8, in <module>
+    sys.exit(main())
+  File "/home/wangyuancheng.p/miniconda3/envs/amphion/lib/python3.9/site-packages/accelerate/commands/accelerate_cli.py", line 47, in main
+    args.func(args)
+  File "/home/wangyuancheng.p/miniconda3/envs/amphion/lib/python3.9/site-packages/accelerate/commands/launch.py", line 994, in launch_command
+    simple_launcher(args)
+  File "/home/wangyuancheng.p/miniconda3/envs/amphion/lib/python3.9/site-packages/accelerate/commands/launch.py", line 636, in simple_launcher
+    raise subprocess.CalledProcessError(returncode=process.returncode, cmd=cmd)
+subprocess.CalledProcessError: Command '['/home/wangyuancheng.p/miniconda3/envs/amphion/bin/python', '/home/wangyuancheng.p/zja/Amphion/bins/ttm/train.py', '--config', '/home/wangyuancheng.p/zja/Amphion/egs/ttm/musicgen/exp_config.json', '--exp_name', 'musicgen_test', '--log_level', 'info']' returned non-zero exit status 1.
+Exprimental Configuration File: /home/wangyuancheng.p/zja/Amphion/egs/ttm/musicgen/exp_config.json
+Exprimental Name: musicgen_test
+Start a new experiment...
+The following values were not passed to `accelerate launch` and had defaults used instead:
+	`--num_processes` was set to a value of `1`
+	`--num_machines` was set to a value of `1`
+	`--mixed_precision` was set to a value of `'no'`
+	`--dynamo_backend` was set to a value of `'no'`
+To avoid this warning pass in values for each of the problematic parameters or run `accelerate config`.
+Detected kernel version 3.10.0, which is below the recommended minimum of 5.5.0; this can cause the process to hang. It is recommended to upgrade the kernel to the minimum version or higher.
+Detected kernel version 3.10.0, which is below the recommended minimum of 5.5.0; this can cause the process to hang. It is recommended to upgrade the kernel to the minimum version or higher.
+INFO:modules.audiocraft.solvers.builders:Loading audio data split valid: /home/wangyuancheng.p/zja/audiocraft/egs/musiccaps/train
+INFO:modules.audiocraft.solvers.builders:Loading audio data split evaluate: /home/wangyuancheng.p/zja/audiocraft/egs/musiccaps/train
+INFO:modules.audiocraft.solvers.builders:Loading audio data split generate: /home/wangyuancheng.p/zja/audiocraft/egs/musiccaps/train
+INFO:musicgen_test:Building dataset done in 150.65ms
+INFO:musicgen_test:Building model...
+INFO:root:Getting pretrained compression model from HF facebook/encodec_32khz
+INFO:root:Getting pretrained compression model from HF facebook/encodec_32khz
+INFO:musicgen_test:Compression model has 4 codebooks with 2048 cardinality, and a framerate of 50
+INFO:modules.audiocraft.modules.conditioners:T5 will be evaluated with autocast as float32
+INFO:musicgen_test:Building model done in 5598.27ms
+INFO:musicgen_test:Model parameters: 420.37M
+INFO:musicgen_test:Building optimizer and scheduler...
+INFO:modules.audiocraft.optim.dadam:Using decoupled weight decay
+INFO:musicgen_test:Building optimizer and scheduler done in 2.94ms
+INFO:musicgen_test:Initializing accelerate...
+INFO:musicgen_test:Initializing accelerate done in 4.87ms
+INFO:musicgen_test:Building criterion...
+INFO:musicgen_test:Building criterion done in 0.00ms
+INFO:musicgen_test:Task type: TTM
+INFO:musicgen_test:
+
+INFO:musicgen_test:--------------------------------
+INFO:musicgen_test:Epoch 0: 
+Training Epoch 0:   0%|[32m          [0m| 0/333334 [00:00<?, ?batch/s]                                                               Traceback (most recent call last):
+  File "/home/wangyuancheng.p/zja/Amphion/bins/ttm/train.py", line 85, in <module>
+    main()
+  File "/home/wangyuancheng.p/zja/Amphion/bins/ttm/train.py", line 81, in main
+    trainer.train_loop()
+  File "/home/wangyuancheng.p/zja/Amphion/models/base/new_trainer.py", line 254, in train_loop
+    train_loss = self._train_epoch()
+  File "/home/wangyuancheng.p/zja/Amphion/models/base/new_trainer.py", line 363, in _train_epoch
+    loss = self._train_step(batch)
+  File "/home/wangyuancheng.p/zja/Amphion/models/base/new_trainer.py", line 418, in _train_step
+    return self._forward_step(batch)
+  File "/home/wangyuancheng.p/zja/Amphion/models/ttm/musicgen/musicgen_trainer.py", line 100, in _forward_step
+    raise NotImplementedError
+NotImplementedError
+Traceback (most recent call last):
+  File "/home/wangyuancheng.p/miniconda3/envs/amphion/bin/accelerate", line 8, in <module>
+    sys.exit(main())
+  File "/home/wangyuancheng.p/miniconda3/envs/amphion/lib/python3.9/site-packages/accelerate/commands/accelerate_cli.py", line 47, in main
+    args.func(args)
+  File "/home/wangyuancheng.p/miniconda3/envs/amphion/lib/python3.9/site-packages/accelerate/commands/launch.py", line 994, in launch_command
+    simple_launcher(args)
+  File "/home/wangyuancheng.p/miniconda3/envs/amphion/lib/python3.9/site-packages/accelerate/commands/launch.py", line 636, in simple_launcher
+    raise subprocess.CalledProcessError(returncode=process.returncode, cmd=cmd)
+subprocess.CalledProcessError: Command '['/home/wangyuancheng.p/miniconda3/envs/amphion/bin/python', '/home/wangyuancheng.p/zja/Amphion/bins/ttm/train.py', '--config', '/home/wangyuancheng.p/zja/Amphion/egs/ttm/musicgen/exp_config.json', '--exp_name', 'musicgen_test', '--log_level', 'info']' returned non-zero exit status 1.

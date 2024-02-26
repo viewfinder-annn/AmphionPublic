@@ -48,7 +48,6 @@ ckpts
 *.flac
 pretrained/wenet/*conformer_exp
 !egs/tts/VALLE/prompt_examples/*.wav
-!modules/audiocraft/data/
 
 # Runtime data dirs
 processed_data
@@ -61,3 +60,5 @@ source_audio
 result
 conversion_results
 get_available_gpu.py
+
+!modules/audiocraft/data/
