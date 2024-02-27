@@ -1,1 +1,1 @@
-nohup sh egs/ttm/musicgen/run.sh --stage 2 --name musicgen_test >> /home/wangyuancheng.p/zja/Amphion/egs/ttm/musicgen/out.log &
+nohup sh egs/ttm/musicgen/run.sh --stage 2 --name musicgen_test --gpu "1" >> /home/wangyuancheng.p/zja/Amphion/egs/ttm/musicgen/out.log &

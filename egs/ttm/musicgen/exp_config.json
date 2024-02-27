@@ -2,7 +2,7 @@
         // amphion-related
         "model_type": "MusicGen",
         // Specify the output root path to save model ckpts and logs
-        "log_dir": "ckpts/tts",
+        "log_dir": "ckpts/ttm",
         "train": {
                 "gradient_accumulation_step": 1,
                 "tracker": [
@@ -15,13 +15,13 @@
                 // -1 means no limit
                 "max_epoch": -1,
                 "save_checkpoint_stride": [
-                        5,
-                        20
+                        50,
+                        500
                 ],
                 // unit is epoch
                 "keep_last": [
-                        3,
-                        -1
+                        1,
+                        1
                 ],
                 // -1 means infinite, if one number will broadcast
                 "run_eval": [
@@ -121,7 +121,7 @@
                 "timeout": 600
         },
         "dataset": {
-                "batch_size": 3,
+                "batch_size": 4,
                 "num_workers": 10,
                 "segment_duration": 10,
                 "num_samples": null,
@@ -131,7 +131,7 @@
                 "sample_on_weight": false,
                 "min_segment_ratio": 0.8,
                 "train": {
-                        "num_samples": 1000000,
+                        "num_samples": 40,
                         "shuffle": true,
                         "shuffle_seed": 0,
                         "permutation_on_files": false,
@@ -195,7 +195,7 @@
         "optim": {
                 "epochs": 500,
                 "updates_per_epoch": 2000,
-                "lr": 1,
+                "lr": 1e-2,
                 "optimizer": "dadam",
                 "adam": {
                         "betas": [
@@ -224,7 +224,7 @@
                         "lr_decay": null
                 },
                 "cosine": {
-                        "warmup": 4000,
+                        "warmup": 10,
                         "lr_min_ratio": 0.0,
                         "cycle_length": 1.0
                 },
