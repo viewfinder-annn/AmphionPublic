@@ -5,6 +5,7 @@
 
 import json5
 import os
+import shutil
 import math
 
 import torch
@@ -17,9 +18,10 @@ import modules.audiocraft.solvers.builders as builders
 import modules.audiocraft.models as models
 from modules.audiocraft.solvers.compression import CompressionSolver
 from modules.audiocraft.data.music_dataset import MusicDataset, MusicInfo, AudioInfo
-from modules.audiocraft.modules.conditioners import JointEmbedCondition, SegmentWithAttributes, WavCondition
+from modules.audiocraft.modules.conditioners import JointEmbedCondition, SegmentWithAttributes, WavCondition, T5Conditioner
 from modules.audiocraft.utils.autocast import TorchAutocast
 import omegaconf
+import torchaudio
 
 class MusicGenTrainer(BaseTrainer):
     r"""The base trainer for all MusicGen models. It inherits from BaseTrainer and implements
@@ -55,6 +57,21 @@ class MusicGenTrainer(BaseTrainer):
     def _build_dataloader(self):
         r"""Build the dataloader for training. This function is called in ``__init__`` function."""
         dataloader_dict = builders.get_audio_datasets(self.cfg_omega, dataset_type=self.DATASET_TYPE)
+        
+        ### DEBUG
+        dataloader_train = dataloader_dict['train']
+        shutil.rmtree(f"{self.exp_dir}/debug_train_sample", ignore_errors=True)
+        os.makedirs(f"{self.exp_dir}/debug_train_sample", exist_ok=True)
+        for data in dataloader_train:
+            wavs, infos = data
+            # print(wavs.shape)
+            for i in range(wavs.shape[0]):
+                # print(wavs[i])
+                print(infos[i])
+                # print(infos[i].to_condition_attributes())
+                torchaudio.save(f"{self.exp_dir}/debug_train_sample/{infos[i].description[:100]}.wav", wavs[i], self.cfg.sample_rate)
+                
+        
         return dataloader_dict['train'], dataloader_dict['train']
     
     def _build_model(self):
@@ -87,6 +104,13 @@ class MusicGenTrainer(BaseTrainer):
 
         # instantiate LM model
         self.model: models.LMModel = models.builders.get_lm_model(self.cfg_omega).to(self.device)
+        ### Conditioner info
+        for k, v in self.model.condition_provider.conditioners.items():
+            self.logger.info(f"Conditioner {k}: {v}")
+            if isinstance(v, T5Conditioner):
+                if v.name == "t5-base":
+                    self.logger.info("Using T5-base as the condition provider. (~110M parameters)")
+            
         if self.cfg_omega.fsdp.use:
             assert not self.cfg_omega.autocast, "Cannot use autocast with fsdp"
             self.model = self.wrap_with_fsdp(self.model)
@@ -205,43 +229,5 @@ class MusicGenTrainer(BaseTrainer):
             mask = padding_mask & model_output.mask
             ce, ce_per_codebook = self._compute_cross_entropy(logits, audio_tokens, mask)
             loss = ce
-        
-        # if self.scaler is not None:
-        #     loss = self.scaler.scale(loss)
-        
-        # if self.is_training:
-        #     if self.scaler is not None:
-        #         loss = self.scaler.scale(loss)
-        #     loss.backward()
-
-        #     if self.scaler is not None:
-        #         self.scaler.unscale_(self.optimizer)
-        #     if self.cfg.optim.max_norm:
-        #         if self.cfg.fsdp.use:
-        #             grad_norm = self.model.clip_grad_norm_(self.cfg.optim.max_norm)  # type: ignore
-        #         else:
-        #             grad_norm = torch.nn.utils.clip_grad_norm_(
-        #                 self.model.parameters(), self.cfg.optim.max_norm
-        #             )
-        #     if self.scaler is None:
-        #         self.optimizer.step()
-        #     else:
-        #         self.scaler.step(self.optimizer)
-        #         self.scaler.update()
-        #     if self.lr_scheduler:
-        #         self.lr_scheduler.step()
-        #     self.optimizer.zero_grad()
-        #     self.deadlock_detect.update('optim')
-        #     if self.scaler is not None:
-        #         scale = self.scaler.get_scale()
-        #         grad_scale = scale
-        #     if not loss.isfinite().all():
-        #         raise RuntimeError("Model probably diverged.")
-
-        # metrics['ce'] = ce
-        # metrics['ppl'] = torch.exp(ce)
-        # for k, ce_q in enumerate(ce_per_codebook):
-        #     metrics[f'ce_q{k + 1}'] = ce_q
-        #     metrics[f'ppl_q{k + 1}'] = torch.exp(ce_q)
 
         return loss

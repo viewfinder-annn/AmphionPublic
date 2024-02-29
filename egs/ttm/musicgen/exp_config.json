@@ -15,8 +15,8 @@
                 // -1 means no limit
                 "max_epoch": -1,
                 "save_checkpoint_stride": [
-                        50,
-                        500
+                        500,
+                        5000
                 ],
                 // unit is epoch
                 "keep_last": [
@@ -121,7 +121,7 @@
                 "timeout": 600
         },
         "dataset": {
-                "batch_size": 4,
+                "batch_size": 8,
                 "num_workers": 10,
                 "segment_duration": 10,
                 "num_samples": null,
@@ -131,13 +131,13 @@
                 "sample_on_weight": false,
                 "min_segment_ratio": 0.8,
                 "train": {
-                        "num_samples": 40,
-                        "shuffle": true,
+                        "num_samples": 8,
+                        "shuffle": false,
                         "shuffle_seed": 0,
                         "permutation_on_files": false,
-                        "merge_text_p": 0.25,
-                        "drop_desc_p": 0.5,
-                        "drop_other_p": 0.5
+                        "merge_text_p": 0,
+                        "drop_desc_p": 0,
+                        "drop_other_p": 0
                 },
                 "valid": {
                         "num_samples": 10000
@@ -195,7 +195,7 @@
         "optim": {
                 "epochs": 500,
                 "updates_per_epoch": 2000,
-                "lr": 1e-2,
+                "lr": 1,
                 "optimizer": "dadam",
                 "adam": {
                         "betas": [
@@ -361,9 +361,9 @@
                 }
         },
         "transformer_lm": {
-                "dim": 1024,
-                "num_heads": 16,
-                "num_layers": 24,
+                "dim": 512,
+                "num_heads": 8,
+                "num_layers": 6,
                 "hidden_scale": 4,
                 "n_q": 4,
                 "card": 2048,

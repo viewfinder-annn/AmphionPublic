@@ -12,7 +12,7 @@ export PYTHONPATH=$work_dir
 export PYTHONIOENCODING=UTF-8
 
 ######## Parse the Given Parameters from the Commond ###########
-options=$(getopt -o c:n:s --long gpu:,config:,name:,stage:,resume:,resume_from_ckpt_path:,resume_type:,infer_expt_dir:,infer_output_dir:,infer_source_file:,infer_source_audio_dir:,infer_target_speaker:,infer_key_shift:,infer_vocoder_dir: -- "$@")
+options=$(getopt -o c:n:s --long gpu:,config:,name:,stage:,resume:,resume_from_ckpt_path:,resume_type:,infer_expt_dir:,infer_output_dir:,text: -- "$@")
 eval set -- "$options"
 
 while true; do
@@ -37,15 +37,8 @@ while true; do
     --infer_expt_dir) shift; infer_expt_dir=$1 ; shift ;;
     # [Only for Inference] The output dir to save inferred audios. Its default value is "$expt_dir/result"
     --infer_output_dir) shift; infer_output_dir=$1 ; shift ;;
-    # [Only for Inference] The inference source (can be a json file or a dir). For example, the source_file can be "[Your path to save processed data]/[YourDataset]/test.json", and the source_audio_dir can be "$work_dir/source_audio" which includes several audio files (*.wav, *.mp3 or *.flac).
-    --infer_source_file) shift; infer_source_file=$1 ; shift ;;
-    --infer_source_audio_dir) shift; infer_source_audio_dir=$1 ; shift ;;
-    # [Only for Inference] Specify the target speaker you want to convert into. You can refer to "[Your path to save logs and checkpoints]/[Your Expt Name]/singers.json". In this singer look-up table, you can see the usable speaker names (all the keys of the dictionary). For example, for opencpop dataset, the speaker name would be "opencpop_female1".
-    --infer_target_speaker) shift; infer_target_speaker=$1 ; shift ;;
-    # [Only for Inference] For advanced users, you can modify the trans_key parameters into an integer (which means the semitones you want to transpose). Its default value is "autoshift".
-    --infer_key_shift) shift; infer_key_shift=$1 ; shift ;;
-    # [Only for Inference] The vocoder dir. Its default value is Amphion/pretrained/bigvgan. See Amphion/pretrained/README.md to download the pretrained BigVGAN vocoders.
-    --infer_vocoder_dir) shift; infer_vocoder_dir=$1 ; shift ;;
+    # [Only for Inference] The text you want to convert into audio.
+    --text) shift; text=$1 ; shift ;;
 
     --) shift ; break ;;
     *) echo "Invalid option: $1" exit 1 ;;
@@ -118,43 +111,19 @@ if [ $running_stage -eq 3 ]; then
     fi
 
     if [ -z "$infer_output_dir" ]; then
-        infer_output_dir="$expt_dir/result"
+        infer_output_dir="$infer_expt_dir/result"
     fi
 
-    if [ -z "$infer_source_file" ] && [ -z "$infer_source_audio_dir" ]; then
-        echo "[Error] Please specify the source file/dir. The inference source (can be a json file or a dir). For example, the source_file can be "[Your path to save processed data]/[YourDataset]/test.json", and the source_audio_dir should include several audio files (*.wav, *.mp3 or *.flac)."
+    if [ -z "$text" ]; then
+        echo "[Error] Please specify the text you want to convert into audio."
         exit 1
     fi
 
-    if [ -z "$infer_source_file" ]; then
-        infer_source=$infer_source_audio_dir
-    fi
-
-    if [ -z "$infer_source_audio_dir" ]; then
-        infer_source=$infer_source_file
-    fi
-
-    if [ -z "$infer_target_speaker" ]; then
-        echo "[Error] Please specify the target speaker. You can refer to "[Your path to save logs and checkpoints]/[Your Expt Name]/singers.json". In this singer look-up table, you can see the usable speaker names (all the keys of the dictionary). For example, for opencpop dataset, the speaker name would be "opencpop_female1""
-        exit 1
-    fi
-
-    if [ -z "$infer_key_shift" ]; then
-        infer_key_shift="autoshift"
-    fi
-
-    if [ -z "$infer_vocoder_dir" ]; then
-        infer_vocoder_dir="$work_dir"/pretrained/bigvgan
-        echo "[Warning] You don't specify the infer_vocoder_dir. It is set $infer_vocoder_dir by default. Make sure that you have followed Amphoion/pretrained/README.md to download the pretrained BigVGAN vocoder checkpoint."
-    fi
-
-    CUDA_VISIBLE_DEVICES=$gpu accelerate launch "$work_dir"/bins/svc/inference.py \
-        --config $exp_config \
-        --acoustics_dir $infer_expt_dir \
-        --vocoder_dir $infer_vocoder_dir \
-        --target_singer $infer_target_speaker \
-        --trans_key $infer_key_shift \
-        --source $infer_source \
-        --output_dir $infer_output_dir  \
-        --log_level debug
+    ######## Run inference ###########
+    CUDA_VISIBLE_DEVICES=$gpu accelerate launch "${work_dir}"/bins/ttm/inference.py \
+        --config "$exp_config" \
+        --infer_expt_dir "$infer_expt_dir" \
+        --output_dir "$infer_output_dir" \
+        --text="$text" \
+        # --checkpoint_path "$checkpoint_path" \
 fi
