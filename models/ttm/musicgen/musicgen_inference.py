@@ -1,3 +1,9 @@
+# Copyright (c) 2023 Amphion.
+#
+# This source code is licensed under the MIT license found in the
+# LICENSE file in the root directory of this source tree.
+# Code adapted from https://github.com/facebookresearch/audiocraft/blob/main/audiocraft/models/genmodel.py
+
 import modules.audiocraft.solvers.builders as builders
 import modules.audiocraft.models as models
 from modules.audiocraft.modules.conditioners import ConditioningAttributes
@@ -10,6 +16,7 @@ import torch
 import re
 import os
 import time
+import tqdm
 from pathlib import Path
 import torchaudio
 from utils.util import Logger
@@ -58,7 +65,7 @@ class MusicGenInference:
             self.logger.info("Loading checkpoint...")
             start = time.monotonic_ns()
             # TODO: Also, suppose only use latest one yet
-            self.__load_model(os.path.join(self.args.infer_expt_dir, "checkpoint"))
+            self.checkpoint_path = self.__load_model(os.path.join(self.args.infer_expt_dir, "checkpoint"))
             end = time.monotonic_ns()
             self.logger.info(f"Loading checkpoint done in {(end - start) / 1e6:.3f}ms")
 
@@ -66,19 +73,16 @@ class MusicGenInference:
         self.accelerator.wait_for_everyone()
         
         self.generation_params = {
-            'use_sampling': True,
+            'use_sampling': False,
             'temp': 0,
             'top_k': 0,
             'top_p': 0,
-            'cfg_coef': 1.0,
+            'cfg_coef': 3.0,
             'two_step_cfg': self.cfg.transformer_lm.two_step_cfg,
         }
     
     def _build_model(self):
         r"""Build the model for training. This function is called in ``__init__`` function."""
-        self.compression_model = CompressionSolver.wrapped_model_from_checkpoint(
-            self.cfg_omega, self.cfg_omega.compression_model_checkpoint, device=self.device)
-        
         # we can potentially not use all quantizers with which the EnCodec model was trained
         # (e.g. we trained the model with quantizers dropout)
         self.compression_model = CompressionSolver.wrapped_model_from_checkpoint(
@@ -268,10 +272,23 @@ class MusicGenInference:
         return gen_audio
     
     def inference(self):
-        text = [self.args.text]
-        audios = self.generate(text)
-        print(audios.shape)
-        os.makedirs(self.args.output_dir, exist_ok=True)
+        audios = []
+        if self.args.text_file != "":
+            with open(self.args.text_file, "r") as f:
+                text = f.readlines()
+                text = [t.strip() for t in text]
+                # print(text)
+            # split according to self.cfg.inference.batch_size
+            for i in tqdm.tqdm(range(0, len(text), self.cfg.inference.batch_size), desc="Generating"):
+                batch = text[i:i+self.cfg.inference.batch_size]
+                audios.extend(self.generate(batch))
+        else:
+            text = [text]
+            audios = self.generate(text)
+        # print(audios.shape)
+        chechpoint_name = os.path.basename(self.checkpoint_path)
+        target_dir = os.path.join(self.args.output_dir, chechpoint_name)
+        os.makedirs(target_dir, exist_ok=True)
         for i, audio in enumerate(audios):
-            file = os.path.join(self.args.output_dir, f"{text[i][:100]}.wav")
+            file = os.path.join(target_dir, f"{text[i][:100]}.wav")
             torchaudio.save(file, audio.cpu(), self.sample_rate)

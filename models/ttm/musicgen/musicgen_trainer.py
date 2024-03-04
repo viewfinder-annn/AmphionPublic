@@ -2,6 +2,7 @@
 #
 # This source code is licensed under the MIT license found in the
 # LICENSE file in the root directory of this source tree.
+# Code adapted from https://github.com/facebookresearch/audiocraft/blob/main/audiocraft/solvers/musicgen.py
 
 import json5
 import os
@@ -60,25 +61,25 @@ class MusicGenTrainer(BaseTrainer):
         
         ### DEBUG
         dataloader_train = dataloader_dict['train']
-        shutil.rmtree(f"{self.exp_dir}/debug_train_sample", ignore_errors=True)
-        os.makedirs(f"{self.exp_dir}/debug_train_sample", exist_ok=True)
-        for data in dataloader_train:
-            wavs, infos = data
-            # print(wavs.shape)
-            for i in range(wavs.shape[0]):
-                # print(wavs[i])
-                print(infos[i])
-                # print(infos[i].to_condition_attributes())
-                torchaudio.save(f"{self.exp_dir}/debug_train_sample/{infos[i].description[:100]}.wav", wavs[i], self.cfg.sample_rate)
+        debug_sample_dir = f"{self.exp_dir}/debug_train_sample"
+        shutil.rmtree(debug_sample_dir, ignore_errors=True)
+        os.makedirs(debug_sample_dir, exist_ok=True)
+        with open(f"{debug_sample_dir}/info", "w") as f:
+            for data in dataloader_train:
+                wavs, infos = data
+                # print(wavs.shape)
+                for i in range(wavs.shape[0]):
+                    # print(wavs[i])
+                    # print(infos[i])
+                    f.write(f"{infos[i]}\n")
+                    # print(infos[i].to_condition_attributes())
+                    torchaudio.save(f"{debug_sample_dir}/{infos[i].description[:100].replace('/', '-')}.wav", wavs[i], self.cfg.sample_rate)
                 
         
         return dataloader_dict['train'], dataloader_dict['train']
     
     def _build_model(self):
         r"""Build the model for training. This function is called in ``__init__`` function."""
-        self.compression_model = CompressionSolver.wrapped_model_from_checkpoint(
-            self.cfg_omega, self.cfg_omega.compression_model_checkpoint, device=self.device)
-        
         # we can potentially not use all quantizers with which the EnCodec model was trained
         # (e.g. we trained the model with quantizers dropout)
         self.compression_model = CompressionSolver.wrapped_model_from_checkpoint(
@@ -119,18 +120,22 @@ class MusicGenTrainer(BaseTrainer):
         # self.register_ema('model')
         return self.model
     
-    def _build_optimizer(self):
-        r"""Build the optimizer for training. This function is called in ``__init__`` function."""
-        return builders.get_optimizer(builders.get_optim_parameter_groups(self.model), self.cfg_omega.optim)
+    # def _build_optimizer(self):
+    #     r"""Build the optimizer for training. This function is called in ``__init__`` function."""
+    #     return builders.get_optimizer(builders.get_optim_parameter_groups(self.model), self.cfg_omega.optim)
     
     def _build_scheduler(self):
-        self.train_updates_per_epoch = len(self.train_dataloader) if self.train_dataloader else 0
-        if self.cfg_omega.optim.updates_per_epoch:
-            self.train_updates_per_epoch = self.cfg_omega.optim.updates_per_epoch
-        self.total_updates = self.train_updates_per_epoch * self.cfg_omega.optim.epochs
-        return builders.get_lr_scheduler(self.optimizer, self.cfg_omega.schedule, self.total_updates)
+        if self.cfg.train.scheduler.lower() == "cosine":
+            from diffusers.optimization import get_cosine_schedule_with_warmup
+            scheduler = get_cosine_schedule_with_warmup(
+                self.optimizer,
+                num_warmup_steps=self.cfg.train.warmup_steps
+                * self.accelerator.num_processes,
+                num_training_steps=self.cfg.train.total_training_steps
+                * self.accelerator.num_processes,
+            )
+        return scheduler
 
-    # adapted from https://github.com/facebookresearch/audiocraft/blob/main/audiocraft/solvers/musicgen.py
     def _compute_cross_entropy(
         self, logits: torch.Tensor, targets: torch.Tensor, mask: torch.Tensor
     ):

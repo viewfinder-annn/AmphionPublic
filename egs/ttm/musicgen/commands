@@ -1,1 +1,120 @@
-nohup sh egs/ttm/musicgen/run.sh --stage 2 --name musicgen_test --gpu "1" >> /home/wangyuancheng.p/zja/Amphion/egs/ttm/musicgen/out.log &
+nohup sh egs/ttm/musicgen/run.sh --stage 2 --config egs/ttm/musicgen/exp_config.json --name musicgen_test_0229 --gpu "1" >> /home/wangyuancheng.p/zja/Amphion/egs/ttm/musicgen/train.log &
+
+nohup sh egs/ttm/musicgen/run.sh --stage 3 --config egs/ttm/musicgen/exp_config.json --gpu "0" \
+    --infer_expt_dir "ckpts/ttm/musicgen_test_0229" \
+    --text "This is a children's song that includes a clarinet melody that follows the vocal melody. There are children laughing and a child singing the main vocal melody. There's a child exclaiming joy. There's a subtle bassline." \
+    >> /home/wangyuancheng.p/zja/Amphion/egs/ttm/musicgen/infer.log &
+
+nohup sh egs/ttm/musicgen/run.sh --stage 3 --config egs/ttm/musicgen/exp_config.json --gpu "0" \
+    --infer_expt_dir "ckpts/ttm/musicgen_test_0229" \
+    --text "The low quality recording features a live performance of a folk song that consists of an accordion melody playing over groovy bass, shimmering hi hats, punchy snare and electric guitar melody. There are crowd chattering noises in the background. It sounds passionate and groovy." \
+    >> /home/wangyuancheng.p/zja/Amphion/egs/ttm/musicgen/infer.log &
+
+nohup sh egs/ttm/musicgen/run.sh --stage 3 --config egs/ttm/musicgen/exp_config.json --gpu "0" \
+    --infer_expt_dir "ckpts/ttm/musicgen_test_0229" \
+    --text "This is an instrument which creates sounds that are similar to laser beams. It sounds futuristic and like something that would be heard in a sci-fi movie. There's a slight crackle to the sounds and they are high-pitched." \
+    >> /home/wangyuancheng.p/zja/Amphion/egs/ttm/musicgen/infer.log &
+
+nohup sh egs/ttm/musicgen/run.sh --stage 3 --config egs/ttm/musicgen/exp_config.json --gpu "0" \
+    --infer_expt_dir "ckpts/ttm/musicgen_test_0229" \
+    --text "This punk rock song features a male voice singing the main melody at a comfortable pitch. This is accompanied by percussion playing a simple rock beat. A distortion guitar plays power chords using downstrokes. The bass plays the root notes of the chords. This song is played at a moderate tempo. This song can be played at the end credits of an action movie." \
+    >> /home/wangyuancheng.p/zja/Amphion/egs/ttm/musicgen/infer.log &
+
+
+
+
+
+
+nohup sh egs/ttm/musicgen/run.sh --stage 2 --config egs/ttm/musicgen/exp_config_30s.json --name musicgen_test_0301_30s --gpu "1" >> /home/wangyuancheng.p/zja/Amphion/egs/ttm/musicgen/train_30s.log &
+
+nohup sh egs/ttm/musicgen/run.sh --stage 3 --config egs/ttm/musicgen/exp_config_30s.json --gpu "0" \
+    --infer_expt_dir "ckpts/ttm/musicgen_test_0301_30s" \
+    --text "This is an instrument which creates sounds that are similar to laser beams. It sounds futuristic and like something that would be heard in a sci-fi movie. There's a slight crackle to the sounds and they are high-pitched." \
+    >> /home/wangyuancheng.p/zja/Amphion/egs/ttm/musicgen/infer.log &
+
+nohup sh egs/ttm/musicgen/run.sh --stage 3 --config egs/ttm/musicgen/exp_config_30s.json --gpu "0" \
+    --infer_expt_dir "ckpts/ttm/musicgen_test_0301_30s" \
+    --text "This is a children's song that includes a clarinet melody that follows the vocal melody. There are children laughing and a child singing the main vocal melody. There's a child exclaiming joy. There's a subtle bassline." \
+    >> /home/wangyuancheng.p/zja/Amphion/egs/ttm/musicgen/infer.log &
+
+nohup sh egs/ttm/musicgen/run.sh --stage 3 --config egs/ttm/musicgen/exp_config_30s.json --gpu "0" \
+    --infer_expt_dir "ckpts/ttm/musicgen_test_0301_30s" \
+    --text "The low quality recording features a live performance of a folk song that consists of an accordion melody playing over groovy bass, shimmering hi hats, punchy snare and electric guitar melody. There are crowd chattering noises in the background. It sounds passionate and groovy." \
+    >> /home/wangyuancheng.p/zja/Amphion/egs/ttm/musicgen/infer.log &
+
+nohup sh egs/ttm/musicgen/run.sh --stage 3 --config egs/ttm/musicgen/exp_config_30s.json --gpu "0" \
+    --infer_expt_dir "ckpts/ttm/musicgen_test_0301_30s" \
+    --text "This punk rock song features a male voice singing the main melody at a comfortable pitch. This is accompanied by percussion playing a simple rock beat. A distortion guitar plays power chords using downstrokes. The bass plays the root notes of the chords. This song is played at a moderate tempo. This song can be played at the end credits of an action movie." \
+    >> /home/wangyuancheng.p/zja/Amphion/egs/ttm/musicgen/infer.log &
+
+nohup sh egs/ttm/musicgen/run.sh --stage 3 --config egs/ttm/musicgen/exp_config_30s.json --gpu "7" \
+    --infer_expt_dir "ckpts/ttm/musicgen_test_0301_30s" \
+    --text_file /home/wangyuancheng.p/zja/Amphion/egs/ttm/musicgen/infer_text.txt\
+    >> /home/wangyuancheng.p/zja/Amphion/egs/ttm/musicgen/infer.log &
+
+
+
+
+
+nohup sh egs/ttm/musicgen/run.sh --stage 2 --config egs/ttm/musicgen/exp_config_20s.json --name musicgen_test_0301_20s --gpu "2" >> /home/wangyuancheng.p/zja/Amphion/egs/ttm/musicgen/train_20s.log &
+
+nohup sh egs/ttm/musicgen/run.sh --stage 3 --config egs/ttm/musicgen/exp_config_20s.json --gpu "0" \
+    --infer_expt_dir "ckpts/ttm/musicgen_test_0301_20s" \
+    --text "This is an instrument which creates sounds that are similar to laser beams. It sounds futuristic and like something that would be heard in a sci-fi movie. There's a slight crackle to the sounds and they are high-pitched." \
+    >> /home/wangyuancheng.p/zja/Amphion/egs/ttm/musicgen/infer.log &
+
+nohup sh egs/ttm/musicgen/run.sh --stage 3 --config egs/ttm/musicgen/exp_config_20s.json --gpu "0" \
+    --infer_expt_dir "ckpts/ttm/musicgen_test_0301_20s" \
+    --text "This is a children's song that includes a clarinet melody that follows the vocal melody. There are children laughing and a child singing the main vocal melody. There's a child exclaiming joy. There's a subtle bassline." \
+    >> /home/wangyuancheng.p/zja/Amphion/egs/ttm/musicgen/infer.log &
+
+nohup sh egs/ttm/musicgen/run.sh --stage 3 --config egs/ttm/musicgen/exp_config_20s.json --gpu "0" \
+    --infer_expt_dir "ckpts/ttm/musicgen_test_0301_20s" \
+    --text "The low quality recording features a live performance of a folk song that consists of an accordion melody playing over groovy bass, shimmering hi hats, punchy snare and electric guitar melody. There are crowd chattering noises in the background. It sounds passionate and groovy." \
+    >> /home/wangyuancheng.p/zja/Amphion/egs/ttm/musicgen/infer.log &
+
+nohup sh egs/ttm/musicgen/run.sh --stage 3 --config egs/ttm/musicgen/exp_config_20s.json --gpu "0" \
+    --infer_expt_dir "ckpts/ttm/musicgen_test_0301_20s" \
+    --text "This punk rock song features a male voice singing the main melody at a comfortable pitch. This is accompanied by percussion playing a simple rock beat. A distortion guitar plays power chords using downstrokes. The bass plays the root notes of the chords. This song is played at a moderate tempo. This song can be played at the end credits of an action movie." \
+    >> /home/wangyuancheng.p/zja/Amphion/egs/ttm/musicgen/infer.log &
+
+nohup sh egs/ttm/musicgen/run.sh --stage 2 --config egs/ttm/musicgen/exp_config_20s.json --name musicgen_test_0301_20s --gpu "2" --resume true >> /home/wangyuancheng.p/zja/Amphion/egs/ttm/musicgen/train_20s.log &
+
+nohup sh egs/ttm/musicgen/run.sh --stage 3 --config egs/ttm/musicgen/exp_config_20s.json --gpu "7" \
+    --infer_expt_dir "ckpts/ttm/musicgen_test_0301_20s" \
+    --text_file /home/wangyuancheng.p/zja/Amphion/egs/ttm/musicgen/infer_text.txt\
+    >> /home/wangyuancheng.p/zja/Amphion/egs/ttm/musicgen/infer.log &
+
+
+
+
+
+
+nohup sh egs/ttm/musicgen/run.sh --stage 2 --config egs/ttm/musicgen/exp_config_30s_new.json --name musicgen_test_0301_30s_new --gpu "3" >> /home/wangyuancheng.p/zja/Amphion/egs/ttm/musicgen/train_30s_new.log &
+
+nohup sh egs/ttm/musicgen/run.sh --stage 2 --config egs/ttm/musicgen/exp_config_30s_new.json --name musicgen_test_0301_30s_new --gpu "3" --resume true >> /home/wangyuancheng.p/zja/Amphion/egs/ttm/musicgen/train_30s_new.log &
+
+nohup sh egs/ttm/musicgen/run.sh --stage 3 --config egs/ttm/musicgen/exp_config_30s_new.json --gpu "0" \
+    --infer_expt_dir "ckpts/ttm/musicgen_test_0301_30s_new" \
+    --text "This is an instrument which creates sounds that are similar to laser beams. It sounds futuristic and like something that would be heard in a sci-fi movie. There's a slight crackle to the sounds and they are high-pitched." \
+    >> /home/wangyuancheng.p/zja/Amphion/egs/ttm/musicgen/infer.log &
+
+nohup sh egs/ttm/musicgen/run.sh --stage 3 --config egs/ttm/musicgen/exp_config_30s_new.json --gpu "0" \
+    --infer_expt_dir "ckpts/ttm/musicgen_test_0301_30s_new" \
+    --text "This is a children's song that includes a clarinet melody that follows the vocal melody. There are children laughing and a child singing the main vocal melody. There's a child exclaiming joy. There's a subtle bassline." \
+    >> /home/wangyuancheng.p/zja/Amphion/egs/ttm/musicgen/infer.log &
+
+nohup sh egs/ttm/musicgen/run.sh --stage 3 --config egs/ttm/musicgen/exp_config_30s_new.json --gpu "0" \
+    --infer_expt_dir "ckpts/ttm/musicgen_test_0301_30s_new" \
+    --text "The low quality recording features a live performance of a folk song that consists of an accordion melody playing over groovy bass, shimmering hi hats, punchy snare and electric guitar melody. There are crowd chattering noises in the background. It sounds passionate and groovy." \
+    >> /home/wangyuancheng.p/zja/Amphion/egs/ttm/musicgen/infer.log &
+
+nohup sh egs/ttm/musicgen/run.sh --stage 3 --config egs/ttm/musicgen/exp_config_30s_new.json --gpu "0" \
+    --infer_expt_dir "ckpts/ttm/musicgen_test_0301_30s_new" \
+    --text "This punk rock song features a male voice singing the main melody at a comfortable pitch. This is accompanied by percussion playing a simple rock beat. A distortion guitar plays power chords using downstrokes. The bass plays the root notes of the chords. This song is played at a moderate tempo. This song can be played at the end credits of an action movie." \
+    >> /home/wangyuancheng.p/zja/Amphion/egs/ttm/musicgen/infer.log &
+
+nohup sh egs/ttm/musicgen/run.sh --stage 3 --config egs/ttm/musicgen/exp_config_30s_new.json --gpu "7" \
+    --infer_expt_dir "ckpts/ttm/musicgen_test_0301_30s_new" \
+    --text_file /home/wangyuancheng.p/zja/Amphion/egs/ttm/musicgen/infer_text.txt\
+    >> /home/wangyuancheng.p/zja/Amphion/egs/ttm/musicgen/infer.log &

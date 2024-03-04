@@ -36,7 +36,13 @@ def build_parser():
         "--text",
         help="Text to be synthesized",
         type=str,
-        default="Text to be synthesized.",
+        default=None
+    )
+    parser.add_argument(
+        "--text_file",
+        type=str,
+        default=None,
+        help="Text file to be synthesized",
     )
     parser.add_argument(
         "--infer_expt_dir",
@@ -64,6 +70,8 @@ def main():
     else:
         args.local_rank = torch.device("cpu")
     print("args: ", args)
+    if args.text == "" and args.text_file == "":
+        raise ValueError("Please provide either --text or --text_file")
 
     # Build inference
     inferencer = build_inference(args, cfg, cfg_path=args.config)

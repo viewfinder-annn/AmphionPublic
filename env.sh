@@ -32,5 +32,5 @@ pip install black==24.1.1
 # pip uninstall nvidia-cublas-cu11
 
 # musicgen
-pip install audiocraft
 pip install flashy xformers==0.0.22 num2words spacy>=3.6.1
+# TODO: transformers - frechet_audio_distance ...
