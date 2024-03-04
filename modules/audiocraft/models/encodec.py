@@ -119,7 +119,6 @@ class CompressionModel(ABC, nn.Module):
             logger.info("Getting pretrained compression model from HF %s", name)
             hf_model = HFEncodecModel.from_pretrained(name)
             model = HFEncodecCompressionModel(hf_model).to(device)
-            
         return model.to(device).eval()
 
 

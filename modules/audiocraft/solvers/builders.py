@@ -41,20 +41,20 @@ class DatasetType(Enum):
 
 def get_solver(cfg: omegaconf.DictConfig) -> StandardSolver:
     """Instantiate solver from config."""
-    # from .audiogen import AudioGenSolver
+    from .audiogen import AudioGenSolver
     from .compression import CompressionSolver
     from .musicgen import MusicGenSolver
-    # from .diffusion import DiffusionSolver
-    # from .magnet import MagnetSolver, AudioMagnetSolver
+    from .diffusion import DiffusionSolver
+    from .magnet import MagnetSolver, AudioMagnetSolver
     klass = {
         'compression': CompressionSolver,
         'musicgen': MusicGenSolver,
-        # 'audiogen': AudioGenSolver,
-        # 'magnet': MagnetSolver,
-        # 'audio_magnet': AudioMagnetSolver,
+        'audiogen': AudioGenSolver,
+        'magnet': MagnetSolver,
+        'audio_magnet': AudioMagnetSolver,
         'lm': MusicGenSolver,  # backward compatibility
-        # 'diffusion': DiffusionSolver,
-        # 'sound_lm': AudioGenSolver,  # backward compatibility
+        'diffusion': DiffusionSolver,
+        'sound_lm': AudioGenSolver,  # backward compatibility
     }[cfg.solver]
     return klass(cfg)  # type: ignore
 

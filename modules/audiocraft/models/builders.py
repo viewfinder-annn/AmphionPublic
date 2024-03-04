@@ -17,7 +17,7 @@ import torch
 
 from .encodec import CompressionModel, EncodecModel, InterleaveStereoCompressionModel
 from .lm import LMModel
-# from .lm_magnet import MagnetLMModel
+from .lm_magnet import MagnetLMModel
 from ..modules.codebooks_patterns import (
     CodebooksPatternProvider,
     DelayedPatternProvider,
@@ -35,10 +35,10 @@ from ..modules.conditioners import (
     LUTConditioner,
     T5Conditioner,
 )
-# from .unet import DiffusionUnet
+from .unet import DiffusionUnet
 from .. import quantization as qt
 from ..utils.utils import dict_from_config
-# from ..modules.diffusion_schedule import MultiBandProcessor, SampleProcessor
+from ..modules.diffusion_schedule import MultiBandProcessor, SampleProcessor
 
 
 def get_quantizer(quantizer: str, cfg: omegaconf.DictConfig, dimension: int) -> qt.BaseQuantizer:

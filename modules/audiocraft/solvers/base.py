@@ -37,14 +37,6 @@ class StandardSolver(ABC, flashy.BaseSolver):
     """
     def __init__(self, cfg: omegaconf.DictConfig):
         super().__init__()
-        import pprint
-        # pprint.pprint(cfg)
-        cfg_resolved = omegaconf.OmegaConf.to_container(cfg, resolve=True)
-        # pprint.pprint(cfg_resolved)
-        import json
-        cfg_resolved_json = json.dumps(cfg_resolved, indent=4)
-        print(cfg_resolved_json)
-        exit()
         self.logger.info(f"Instantiating solver {self.__class__.__name__} for XP {self.xp.sig}")
         self.logger.info(f"All XP logs are stored in {self.xp.folder}")
         self.cfg = cfg

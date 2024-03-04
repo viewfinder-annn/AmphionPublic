@@ -11,8 +11,8 @@ import subprocess
 import tempfile
 import typing as tp
 
-from audiocraft.data.audio import audio_write
-from audiocraft.data.audio_utils import convert_audio
+from ..data.audio import audio_write
+from ..data.audio_utils import convert_audio
 import flashy
 import torch
 import torchmetrics
