@@ -30,6 +30,7 @@ from preprocessors import (
     ljspeech_vocoder,
     librilight,
     hifitts,
+    musiccaps
 )
 
 
@@ -96,6 +97,8 @@ def preprocess_dataset(
         librilight.main(output_path, dataset_path, cfg)
     if dataset == "hifitts":
         hifitts.main(output_path, dataset_path)
+    if dataset == "musiccaps":
+        musiccaps.main(dataset, output_path, dataset_path)
 
 
 def prepare_align(dataset, dataset_path, cfg, output_path):

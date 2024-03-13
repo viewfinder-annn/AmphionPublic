@@ -12,10 +12,12 @@ import math
 import torch
 import torch.nn as nn
 from torch.nn import functional as F
+from torch.utils.data import ConcatDataset, DataLoader
 from tqdm import tqdm
+import logging
 
 from models.base.new_trainer import BaseTrainer
-
+from models.ttm.musicgen.musicgen_dataset import MusicGenDataset, MusicGenCollator
 import modules.audiocraft.solvers.builders as builders
 import modules.audiocraft.models as models
 from modules.audiocraft.solvers.compression import CompressionSolver
@@ -24,6 +26,8 @@ from modules.audiocraft.modules.conditioners import JointEmbedCondition, Segment
 from modules.audiocraft.utils.autocast import TorchAutocast
 import omegaconf
 import torchaudio
+
+logging.basicConfig(level=logging.INFO)
 
 class MusicGenTrainer(BaseTrainer):
     r"""The base trainer for all MusicGen models. It inherits from BaseTrainer and implements
@@ -44,8 +48,6 @@ class MusicGenTrainer(BaseTrainer):
             'float16': torch.float16, 'bfloat16': torch.bfloat16
         }[self.cfg_omega.autocast_dtype]
 
-        self._init_accelerator()
-
         # Super init
         BaseTrainer.__init__(self, args, cfg)
         
@@ -60,30 +62,68 @@ class MusicGenTrainer(BaseTrainer):
         self.task_type = "TTM"
         self.logger.info("Task type: {}".format(self.task_type))
 
+    def _build_dataset(self):
+        return MusicGenDataset, MusicGenCollator
+
     ### Following are methods only for TTM tasks ###
     def _build_dataloader(self):
         r"""Build the dataloader for training. This function is called in ``__init__`` function."""
-        dataloader_dict = builders.get_audio_datasets(self.cfg_omega, dataset_type=self.DATASET_TYPE)
         
-        ### DEBUG
-        dataloader_train = dataloader_dict['train']
-        debug_sample_dir = f"{self.exp_dir}/debug_train_sample"
-        shutil.rmtree(debug_sample_dir, ignore_errors=True)
-        os.makedirs(debug_sample_dir, exist_ok=True)
-        with open(f"{debug_sample_dir}/info", "w") as f:
-            for data in dataloader_train:
-                wavs, infos = data
-                # print(wavs.shape)
-                for i in range(wavs.shape[0]):
-                    # print(wavs[i])
-                    # print(infos[i])
-                    f.write(f"{infos[i]}\n")
-                    # print(infos[i].to_condition_attributes())
-                    torchaudio.save(f"{debug_sample_dir}/{infos[i].description[:100].replace('/', '-')}.wav", wavs[i], self.cfg_omega.sample_rate)
-                break
-                
-        
-        return dataloader_dict['train'], dataloader_dict['valid']
+        if self.cfg.train.use_audiocraft_dataset:
+            dataloader_dict = builders.get_audio_datasets(self.cfg_omega, dataset_type=self.DATASET_TYPE)
+            
+            ### DEBUG
+            dataloader_train = dataloader_dict['train']
+            debug_sample_dir = f"{self.exp_dir}/debug_train_sample"
+            shutil.rmtree(debug_sample_dir, ignore_errors=True)
+            os.makedirs(debug_sample_dir, exist_ok=True)
+            with open(f"{debug_sample_dir}/info", "w") as f:
+                for data in dataloader_train:
+                    wavs, infos = data
+                    # print(wavs.shape)
+                    for i in range(wavs.shape[0]):
+                        # print(wavs[i])
+                        # print(infos[i])
+                        f.write(f"{infos[i]}\n")
+                        # print(infos[i].to_condition_attributes())
+                        torchaudio.save(f"{debug_sample_dir}/{infos[i].description[:100].replace('/', '-')}.wav", wavs[i], self.cfg_omega.sample_rate)
+                    break
+                    
+            return dataloader_dict['train'], dataloader_dict['valid']
+        else:
+            self.logger.info("asdsadasdadasdsad")
+            Dataset, Collator = self._build_dataset()
+            datasets_list = []
+            for dataset in self.cfg.dataset:
+                subdataset = Dataset(self.cfg, dataset, is_valid=False)
+                datasets_list.append(subdataset)
+            train_dataset = ConcatDataset(datasets_list)
+            train_collate = Collator(self.cfg)
+            train_dataloader = DataLoader(train_dataset, collate_fn=train_collate, batch_size=self.cfg.train.batch_size, shuffle=True)
+
+            datasets_list = []
+            for dataset in self.cfg.dataset:
+                subdataset = Dataset(self.cfg, dataset, is_valid=True)
+                datasets_list.append(subdataset)
+            valid_dataset = ConcatDataset(datasets_list)
+            valid_collate = Collator(self.cfg)
+            valid_dataloader = DataLoader(valid_dataset, collate_fn=valid_collate, batch_size=self.cfg.train.batch_size, shuffle=False)
+            
+            # DEBUG
+            debug_sample_dir = f"{self.exp_dir}/debug_train_sample"
+            shutil.rmtree(debug_sample_dir, ignore_errors=True)
+            os.makedirs(debug_sample_dir, exist_ok=True)
+            with open(f"{debug_sample_dir}/info", "w") as f:
+                for i in range(8):
+                    wavs, infos = train_dataset[i]
+                    # print(wavs.shape)
+                    # print(infos)
+                    f.write(f"{infos.text, infos.wav}\n")
+                    # print(infos.to_condition_attributes())
+                    torchaudio.save(f"{debug_sample_dir}/{infos.text['description'][:100].replace('/', '-')}.wav", wavs, self.cfg_omega.sample_rate)
+            
+            return train_dataloader, valid_dataloader
+            
     
     def _build_model(self):
         r"""Build the model for training. This function is called in ``__init__`` function."""

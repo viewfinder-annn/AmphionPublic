@@ -12,6 +12,7 @@ Amphion support the following academic datasets (sort alphabetically):
   - [LibriTTS](#libritts)
   - [LJSpeech](#ljspeech)
   - [M4Singer](#m4singer)
+  - [MusicCaps](#musiccaps)
   - [NUS-48E](#nus-48e)
   - [Opencpop](#opencpop)
   - [OpenSinger](#opensinger)
@@ -270,6 +271,18 @@ Download the official M4Singer dataset [here](https://drive.google.com/file/d/1x
  ┣ ...
  ┗ meta.json
 ```
+
+## MusicCaps
+Download the official MusicCaps dataset [here](https://www.kaggle.com/datasets/googleai/musiccaps). You can use [this](https://github.com/nateraw/download-musiccaps-dataset) script to download the MusicCaps dataset. Remember to save both csv and wav files in the folder. The file structure looks like below:
+
+```plaintext
+[MusicCaps dataset path]
+ ┣ musiccaps-public.csv
+ ┣ _-kssA-FOzU.wav
+ ┣ _0-2meOf9qY.wav
+ ┣ ...
+```
+
 
 ## NUS-48E
 
