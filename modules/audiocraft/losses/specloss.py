@@ -32,16 +32,36 @@ class MelSpectrogramWrapper(nn.Module):
         normalized (bool): Whether to normalize the melspectrogram.
         floor_level (float): Floor level based on human perception (default=1e-5).
     """
-    def __init__(self, n_fft: int = 1024, hop_length: int = 256, win_length: tp.Optional[int] = None,
-                 n_mels: int = 80, sample_rate: float = 22050, f_min: float = 0.0, f_max: tp.Optional[float] = None,
-                 log: bool = True, normalized: bool = False, floor_level: float = 1e-5):
+
+    def __init__(
+        self,
+        n_fft: int = 1024,
+        hop_length: int = 256,
+        win_length: tp.Optional[int] = None,
+        n_mels: int = 80,
+        sample_rate: float = 22050,
+        f_min: float = 0.0,
+        f_max: tp.Optional[float] = None,
+        log: bool = True,
+        normalized: bool = False,
+        floor_level: float = 1e-5,
+    ):
         super().__init__()
         self.n_fft = n_fft
         hop_length = int(hop_length)
         self.hop_length = hop_length
-        self.mel_transform = MelSpectrogram(n_mels=n_mels, sample_rate=sample_rate, n_fft=n_fft, hop_length=hop_length,
-                                            win_length=win_length, f_min=f_min, f_max=f_max, normalized=normalized,
-                                            window_fn=torch.hann_window, center=False)
+        self.mel_transform = MelSpectrogram(
+            n_mels=n_mels,
+            sample_rate=sample_rate,
+            n_fft=n_fft,
+            hop_length=hop_length,
+            win_length=win_length,
+            f_min=f_min,
+            f_max=f_max,
+            normalized=normalized,
+            window_fn=torch.hann_window,
+            center=False,
+        )
         self.floor_level = floor_level
         self.log = log
 
@@ -77,14 +97,34 @@ class MelSpectrogramL1Loss(torch.nn.Module):
         normalized (bool): Whether to normalize the melspectrogram.
         floor_level (float): Floor level value based on human perception (default=1e-5).
     """
-    def __init__(self, sample_rate: int, n_fft: int = 1024, hop_length: int = 256, win_length: int = 1024,
-                 n_mels: int = 80, f_min: float = 0.0, f_max: tp.Optional[float] = None,
-                 log: bool = True, normalized: bool = False, floor_level: float = 1e-5):
+
+    def __init__(
+        self,
+        sample_rate: int,
+        n_fft: int = 1024,
+        hop_length: int = 256,
+        win_length: int = 1024,
+        n_mels: int = 80,
+        f_min: float = 0.0,
+        f_max: tp.Optional[float] = None,
+        log: bool = True,
+        normalized: bool = False,
+        floor_level: float = 1e-5,
+    ):
         super().__init__()
         self.l1 = torch.nn.L1Loss()
-        self.melspec = MelSpectrogramWrapper(n_fft=n_fft, hop_length=hop_length, win_length=win_length,
-                                             n_mels=n_mels, sample_rate=sample_rate, f_min=f_min, f_max=f_max,
-                                             log=log, normalized=normalized, floor_level=floor_level)
+        self.melspec = MelSpectrogramWrapper(
+            n_fft=n_fft,
+            hop_length=hop_length,
+            win_length=win_length,
+            n_mels=n_mels,
+            sample_rate=sample_rate,
+            f_min=f_min,
+            f_max=f_max,
+            log=log,
+            normalized=normalized,
+            floor_level=floor_level,
+        )
 
     def forward(self, x, y):
         self.melspec.to(x.device)
@@ -107,9 +147,19 @@ class MultiScaleMelSpectrogramLoss(nn.Module):
         alphas (bool): Whether to use alphas as coefficients or not.
         floor_level (float): Floor level value based on human perception (default=1e-5).
     """
-    def __init__(self, sample_rate: int, range_start: int = 6, range_end: int = 11,
-                 n_mels: int = 64, f_min: float = 0.0, f_max: tp.Optional[float] = None,
-                 normalized: bool = False, alphas: bool = True, floor_level: float = 1e-5):
+
+    def __init__(
+        self,
+        sample_rate: int,
+        range_start: int = 6,
+        range_end: int = 11,
+        n_mels: int = 64,
+        f_min: float = 0.0,
+        f_max: tp.Optional[float] = None,
+        normalized: bool = False,
+        alphas: bool = True,
+        floor_level: float = 1e-5,
+    ):
         super().__init__()
         l1s = list()
         l2s = list()
@@ -118,15 +168,35 @@ class MultiScaleMelSpectrogramLoss(nn.Module):
         self.normalized = normalized
         for i in range(range_start, range_end):
             l1s.append(
-                MelSpectrogramWrapper(n_fft=2 ** i, hop_length=(2 ** i) / 4, win_length=2 ** i,
-                                      n_mels=n_mels, sample_rate=sample_rate, f_min=f_min, f_max=f_max,
-                                      log=False, normalized=normalized, floor_level=floor_level))
+                MelSpectrogramWrapper(
+                    n_fft=2**i,
+                    hop_length=(2**i) / 4,
+                    win_length=2**i,
+                    n_mels=n_mels,
+                    sample_rate=sample_rate,
+                    f_min=f_min,
+                    f_max=f_max,
+                    log=False,
+                    normalized=normalized,
+                    floor_level=floor_level,
+                )
+            )
             l2s.append(
-                MelSpectrogramWrapper(n_fft=2 ** i, hop_length=(2 ** i) / 4, win_length=2 ** i,
-                                      n_mels=n_mels, sample_rate=sample_rate, f_min=f_min, f_max=f_max,
-                                      log=True, normalized=normalized, floor_level=floor_level))
+                MelSpectrogramWrapper(
+                    n_fft=2**i,
+                    hop_length=(2**i) / 4,
+                    win_length=2**i,
+                    n_mels=n_mels,
+                    sample_rate=sample_rate,
+                    f_min=f_min,
+                    f_max=f_max,
+                    log=True,
+                    normalized=normalized,
+                    floor_level=floor_level,
+                )
+            )
             if alphas:
-                self.alphas.append(np.sqrt(2 ** i - 1))
+                self.alphas.append(np.sqrt(2**i - 1))
             else:
                 self.alphas.append(1)
             self.total += self.alphas[-1] + 1

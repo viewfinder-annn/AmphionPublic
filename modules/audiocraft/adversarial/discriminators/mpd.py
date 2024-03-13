@@ -35,11 +35,22 @@ class PeriodDiscriminator(nn.Module):
         activation (str): Activation function.
         activation_params (dict): Parameters to provide to the activation function.
     """
-    def __init__(self, period: int, in_channels: int = 1, out_channels: int = 1,
-                 n_layers: int = 5, kernel_sizes: tp.List[int] = [5, 3], stride: int = 3,
-                 filters: int = 8, filters_scale: int = 4, max_filters: int = 1024,
-                 norm: str = 'weight_norm', activation: str = 'LeakyReLU',
-                 activation_params: dict = {'negative_slope': 0.2}):
+
+    def __init__(
+        self,
+        period: int,
+        in_channels: int = 1,
+        out_channels: int = 1,
+        n_layers: int = 5,
+        kernel_sizes: tp.List[int] = [5, 3],
+        stride: int = 3,
+        filters: int = 8,
+        filters_scale: int = 4,
+        max_filters: int = 1024,
+        norm: str = "weight_norm",
+        activation: str = "LeakyReLU",
+        activation_params: dict = {"negative_slope": 0.2},
+    ):
         super().__init__()
         self.period = period
         self.n_layers = n_layers
@@ -49,11 +60,25 @@ class PeriodDiscriminator(nn.Module):
         for i in range(self.n_layers):
             out_chs = min(filters * (filters_scale ** (i + 1)), max_filters)
             eff_stride = 1 if i == self.n_layers - 1 else stride
-            self.convs.append(NormConv2d(in_chs, out_chs, kernel_size=(kernel_sizes[0], 1), stride=(eff_stride, 1),
-                                         padding=((kernel_sizes[0] - 1) // 2, 0), norm=norm))
+            self.convs.append(
+                NormConv2d(
+                    in_chs,
+                    out_chs,
+                    kernel_size=(kernel_sizes[0], 1),
+                    stride=(eff_stride, 1),
+                    padding=((kernel_sizes[0] - 1) // 2, 0),
+                    norm=norm,
+                )
+            )
             in_chs = out_chs
-        self.conv_post = NormConv2d(in_chs, out_channels, kernel_size=(kernel_sizes[1], 1), stride=1,
-                                    padding=((kernel_sizes[1] - 1) // 2, 0), norm=norm)
+        self.conv_post = NormConv2d(
+            in_chs,
+            out_channels,
+            kernel_size=(kernel_sizes[1], 1),
+            stride=1,
+            padding=((kernel_sizes[1] - 1) // 2, 0),
+            norm=norm,
+        )
 
     def forward(self, x: torch.Tensor):
         fmap = []
@@ -61,7 +86,7 @@ class PeriodDiscriminator(nn.Module):
         b, c, t = x.shape
         if t % self.period != 0:  # pad first
             n_pad = self.period - (t % self.period)
-            x = F.pad(x, (0, n_pad), 'reflect')
+            x = F.pad(x, (0, n_pad), "reflect")
             t = t + n_pad
         x = x.view(b, c, t // self.period, self.period)
 
@@ -85,12 +110,21 @@ class MultiPeriodDiscriminator(MultiDiscriminator):
         periods (Sequence[int]): Periods between samples of audio for the sub-discriminators.
         **kwargs: Additional args for `PeriodDiscriminator`
     """
-    def __init__(self, in_channels: int = 1, out_channels: int = 1,
-                 periods: tp.Sequence[int] = [2, 3, 5, 7, 11], **kwargs):
+
+    def __init__(
+        self,
+        in_channels: int = 1,
+        out_channels: int = 1,
+        periods: tp.Sequence[int] = [2, 3, 5, 7, 11],
+        **kwargs
+    ):
         super().__init__()
-        self.discriminators = nn.ModuleList([
-            PeriodDiscriminator(p, in_channels, out_channels, **kwargs) for p in periods
-        ])
+        self.discriminators = nn.ModuleList(
+            [
+                PeriodDiscriminator(p, in_channels, out_channels, **kwargs)
+                for p in periods
+            ]
+        )
 
     @property
     def num_discriminators(self):

@@ -58,6 +58,7 @@ def get_slurm_parameters(
     If the cluster type is not specify, it infers it automatically.
     """
     from ..environment import AudioCraftEnvironment
+
     cluster_type = get_cluster_type(cluster_type)
     # apply cluster-specific adjustments
     if cluster_type == ClusterType.AWS:

@@ -15,13 +15,14 @@ logger = logging.getLogger(__name__)
 
 
 class Profiler:
-    """Context manager wrapper for xformers profiler.
-    """
+    """Context manager wrapper for xformers profiler."""
+
     def __init__(self, module: torch.nn.Module, enabled: bool = False):
         self.profiler: tp.Optional[tp.Any] = None
         if enabled:
             from xformers.profiler import profile
-            output_dir = dora.get_xp().folder / 'profiler_data'
+
+            output_dir = dora.get_xp().folder / "profiler_data"
             logger.info("Profiling activated, results with be saved to %s", output_dir)
             self.profiler = profile(output_dir=output_dir, module=module)
 

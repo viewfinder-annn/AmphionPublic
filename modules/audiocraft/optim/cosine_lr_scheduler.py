@@ -20,8 +20,15 @@ class CosineLRScheduler(_LRScheduler):
         lr_min_ratio (float): Minimum learning rate.
         cycle_length (float): Cycle length.
     """
-    def __init__(self, optimizer: Optimizer, total_steps: int, warmup_steps: int,
-                 lr_min_ratio: float = 0.0, cycle_length: float = 1.0):
+
+    def __init__(
+        self,
+        optimizer: Optimizer,
+        total_steps: int,
+        warmup_steps: int,
+        lr_min_ratio: float = 0.0,
+        cycle_length: float = 1.0,
+    ):
         self.warmup_steps = warmup_steps
         assert self.warmup_steps >= 0
         self.total_steps = total_steps
@@ -36,8 +43,9 @@ class CosineLRScheduler(_LRScheduler):
             lr = lr_ratio * lr
         elif step <= self.total_steps:
             s = (step - self.warmup_steps) / (self.total_steps - self.warmup_steps)
-            lr_ratio = self.lr_min_ratio + 0.5 * (1 - self.lr_min_ratio) * \
-                (1. + math.cos(math.pi * s / self.cycle_length))
+            lr_ratio = self.lr_min_ratio + 0.5 * (1 - self.lr_min_ratio) * (
+                1.0 + math.cos(math.pi * s / self.cycle_length)
+            )
             lr = lr_ratio * lr
         else:
             lr_ratio = self.lr_min_ratio

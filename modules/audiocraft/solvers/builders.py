@@ -19,6 +19,7 @@ import omegaconf
 import torch
 from torch import nn
 from torch.optim import Optimizer
+
 # LRScheduler was renamed in some torch versions
 try:
     from torch.optim.lr_scheduler import LRScheduler  # type: ignore
@@ -46,15 +47,16 @@ def get_solver(cfg: omegaconf.DictConfig) -> StandardSolver:
     from .musicgen import MusicGenSolver
     from .diffusion import DiffusionSolver
     from .magnet import MagnetSolver, AudioMagnetSolver
+
     klass = {
-        'compression': CompressionSolver,
-        'musicgen': MusicGenSolver,
-        'audiogen': AudioGenSolver,
-        'magnet': MagnetSolver,
-        'audio_magnet': AudioMagnetSolver,
-        'lm': MusicGenSolver,  # backward compatibility
-        'diffusion': DiffusionSolver,
-        'sound_lm': AudioGenSolver,  # backward compatibility
+        "compression": CompressionSolver,
+        "musicgen": MusicGenSolver,
+        "audiogen": AudioGenSolver,
+        "magnet": MagnetSolver,
+        "audio_magnet": AudioMagnetSolver,
+        "lm": MusicGenSolver,  # backward compatibility
+        "diffusion": DiffusionSolver,
+        "sound_lm": AudioGenSolver,  # backward compatibility
     }[cfg.solver]
     return klass(cfg)  # type: ignore
 
@@ -72,21 +74,23 @@ def get_optim_parameter_groups(model: nn.Module):
     other_params = []
     groups = []
     for name, module in model.named_modules():
-        if hasattr(module, 'make_optim_group'):
+        if hasattr(module, "make_optim_group"):
             group = module.make_optim_group()
-            params = set(group['params'])
+            params = set(group["params"])
             assert params.isdisjoint(seen_params)
             seen_params |= set(params)
             groups.append(group)
     for param in model.parameters():
         if param not in seen_params:
             other_params.append(param)
-    groups.insert(0, {'params': other_params})
+    groups.insert(0, {"params": other_params})
     parameters = groups
     return parameters
 
 
-def get_optimizer(params: tp.Union[nn.Module, tp.Iterable[torch.Tensor]], cfg: omegaconf.DictConfig) -> Optimizer:
+def get_optimizer(
+    params: tp.Union[nn.Module, tp.Iterable[torch.Tensor]], cfg: omegaconf.DictConfig
+) -> Optimizer:
     """Build torch optimizer from config and set of parameters.
     Supported optimizers: Adam, AdamW
 
@@ -96,28 +100,32 @@ def get_optimizer(params: tp.Union[nn.Module, tp.Iterable[torch.Tensor]], cfg: o
     Returns:
         torch.optim.Optimizer.
     """
-    if 'optimizer' not in cfg:
-        if getattr(cfg, 'optim', None) is not None:
-            raise KeyError("Optimizer not found in config. Try instantiating optimizer from cfg.optim?")
+    if "optimizer" not in cfg:
+        if getattr(cfg, "optim", None) is not None:
+            raise KeyError(
+                "Optimizer not found in config. Try instantiating optimizer from cfg.optim?"
+            )
         else:
             raise KeyError("Optimizer not found in config.")
 
-    parameters = get_optim_parameter_groups(params) if isinstance(params, nn.Module) else params
+    parameters = (
+        get_optim_parameter_groups(params) if isinstance(params, nn.Module) else params
+    )
     optimizer: torch.optim.Optimizer
-    if cfg.optimizer == 'adam':
+    if cfg.optimizer == "adam":
         optimizer = torch.optim.Adam(parameters, lr=cfg.lr, **cfg.adam)
-    elif cfg.optimizer == 'adamw':
+    elif cfg.optimizer == "adamw":
         optimizer = torch.optim.AdamW(parameters, lr=cfg.lr, **cfg.adam)
-    elif cfg.optimizer == 'dadam':
+    elif cfg.optimizer == "dadam":
         optimizer = optim.DAdaptAdam(parameters, lr=cfg.lr, **cfg.adam)
     else:
         raise ValueError(f"Unsupported Optimizer: {cfg.optimizer}")
     return optimizer
 
 
-def get_lr_scheduler(optimizer: torch.optim.Optimizer,
-                     cfg: omegaconf.DictConfig,
-                     total_updates: int) -> tp.Optional[LRScheduler]:
+def get_lr_scheduler(
+    optimizer: torch.optim.Optimizer, cfg: omegaconf.DictConfig, total_updates: int
+) -> tp.Optional[LRScheduler]:
     """Build torch learning rate scheduler from config and associated optimizer.
     Supported learning rate schedulers: ExponentialLRScheduler, PlateauLRScheduler
 
@@ -128,38 +136,48 @@ def get_lr_scheduler(optimizer: torch.optim.Optimizer,
     Returns:
         torch.optim.Optimizer.
     """
-    if 'lr_scheduler' not in cfg:
+    if "lr_scheduler" not in cfg:
         raise KeyError("LR Scheduler not found in config")
 
     lr_sched: tp.Optional[LRScheduler] = None
-    if cfg.lr_scheduler == 'step':
+    if cfg.lr_scheduler == "step":
         lr_sched = torch.optim.lr_scheduler.StepLR(optimizer, **cfg.step)
-    elif cfg.lr_scheduler == 'exponential':
-        lr_sched = torch.optim.lr_scheduler.ExponentialLR(optimizer, gamma=cfg.exponential)
-    elif cfg.lr_scheduler == 'cosine':
+    elif cfg.lr_scheduler == "exponential":
+        lr_sched = torch.optim.lr_scheduler.ExponentialLR(
+            optimizer, gamma=cfg.exponential
+        )
+    elif cfg.lr_scheduler == "cosine":
         kwargs = dict_from_config(cfg.cosine)
-        warmup_steps = kwargs.pop('warmup')
+        warmup_steps = kwargs.pop("warmup")
         lr_sched = optim.CosineLRScheduler(
-            optimizer, warmup_steps=warmup_steps, total_steps=total_updates, **kwargs)
-    elif cfg.lr_scheduler == 'polynomial_decay':
+            optimizer, warmup_steps=warmup_steps, total_steps=total_updates, **kwargs
+        )
+    elif cfg.lr_scheduler == "polynomial_decay":
         kwargs = dict_from_config(cfg.polynomial_decay)
-        warmup_steps = kwargs.pop('warmup')
+        warmup_steps = kwargs.pop("warmup")
         lr_sched = optim.PolynomialDecayLRScheduler(
-            optimizer, warmup_steps=warmup_steps, total_steps=total_updates, **kwargs)
-    elif cfg.lr_scheduler == 'inverse_sqrt':
+            optimizer, warmup_steps=warmup_steps, total_steps=total_updates, **kwargs
+        )
+    elif cfg.lr_scheduler == "inverse_sqrt":
         kwargs = dict_from_config(cfg.inverse_sqrt)
-        warmup_steps = kwargs.pop('warmup')
-        lr_sched = optim.InverseSquareRootLRScheduler(optimizer, warmup_steps=warmup_steps, **kwargs)
-    elif cfg.lr_scheduler == 'linear_warmup':
+        warmup_steps = kwargs.pop("warmup")
+        lr_sched = optim.InverseSquareRootLRScheduler(
+            optimizer, warmup_steps=warmup_steps, **kwargs
+        )
+    elif cfg.lr_scheduler == "linear_warmup":
         kwargs = dict_from_config(cfg.linear_warmup)
-        warmup_steps = kwargs.pop('warmup')
-        lr_sched = optim.LinearWarmupLRScheduler(optimizer, warmup_steps=warmup_steps, **kwargs)
+        warmup_steps = kwargs.pop("warmup")
+        lr_sched = optim.LinearWarmupLRScheduler(
+            optimizer, warmup_steps=warmup_steps, **kwargs
+        )
     elif cfg.lr_scheduler is not None:
         raise ValueError(f"Unsupported LR Scheduler: {cfg.lr_scheduler}")
     return lr_sched
 
 
-def get_ema(module_dict: nn.ModuleDict, cfg: omegaconf.DictConfig) -> tp.Optional[optim.ModuleDictEMA]:
+def get_ema(
+    module_dict: nn.ModuleDict, cfg: omegaconf.DictConfig
+) -> tp.Optional[optim.ModuleDictEMA]:
     """Initialize Exponential Moving Average.
 
     Args:
@@ -169,13 +187,15 @@ def get_ema(module_dict: nn.ModuleDict, cfg: omegaconf.DictConfig) -> tp.Optiona
         optim.ModuleDictEMA: EMA version of the ModuleDict.
     """
     kw: tp.Dict[str, tp.Any] = dict(cfg)
-    use = kw.pop('use', False)
-    decay = kw.pop('decay', None)
-    device = kw.pop('device', None)
+    use = kw.pop("use", False)
+    decay = kw.pop("decay", None)
+    device = kw.pop("device", None)
     if not use:
         return None
     if len(module_dict) == 0:
-        raise ValueError("Trying to build EMA but an empty module_dict source is provided!")
+        raise ValueError(
+            "Trying to build EMA but an empty module_dict source is provided!"
+        )
     ema_module = optim.ModuleDictEMA(module_dict, decay=decay, device=device)
     return ema_module
 
@@ -183,18 +203,20 @@ def get_ema(module_dict: nn.ModuleDict, cfg: omegaconf.DictConfig) -> tp.Optiona
 def get_loss(loss_name: str, cfg: omegaconf.DictConfig):
     """Instantiate loss from configuration."""
     klass = {
-        'l1': torch.nn.L1Loss,
-        'l2': torch.nn.MSELoss,
-        'mel': losses.MelSpectrogramL1Loss,
-        'mrstft': losses.MRSTFTLoss,
-        'msspec': losses.MultiScaleMelSpectrogramLoss,
-        'sisnr': losses.SISNR,
+        "l1": torch.nn.L1Loss,
+        "l2": torch.nn.MSELoss,
+        "mel": losses.MelSpectrogramL1Loss,
+        "mrstft": losses.MRSTFTLoss,
+        "msspec": losses.MultiScaleMelSpectrogramLoss,
+        "sisnr": losses.SISNR,
     }[loss_name]
     kwargs = dict(getattr(cfg, loss_name))
     return klass(**kwargs)
 
 
-def get_balancer(loss_weights: tp.Dict[str, float], cfg: omegaconf.DictConfig) -> losses.Balancer:
+def get_balancer(
+    loss_weights: tp.Dict[str, float], cfg: omegaconf.DictConfig
+) -> losses.Balancer:
     """Instantiate loss balancer from configuration for the provided weights."""
     kwargs: tp.Dict[str, tp.Any] = dict_from_config(cfg)
     return losses.Balancer(loss_weights, **kwargs)
@@ -203,9 +225,9 @@ def get_balancer(loss_weights: tp.Dict[str, float], cfg: omegaconf.DictConfig) -
 def get_adversary(name: str, cfg: omegaconf.DictConfig) -> nn.Module:
     """Initialize adversary from config."""
     klass = {
-        'msd': adversarial.MultiScaleDiscriminator,
-        'mpd': adversarial.MultiPeriodDiscriminator,
-        'msstftd': adversarial.MultiScaleSTFTDiscriminator,
+        "msd": adversarial.MultiScaleDiscriminator,
+        "mpd": adversarial.MultiPeriodDiscriminator,
+        "msstftd": adversarial.MultiScaleSTFTDiscriminator,
     }[name]
     adv_cfg: tp.Dict[str, tp.Any] = dict(getattr(cfg, name))
     return klass(**adv_cfg)
@@ -214,14 +236,17 @@ def get_adversary(name: str, cfg: omegaconf.DictConfig) -> nn.Module:
 def get_adversarial_losses(cfg) -> nn.ModuleDict:
     """Initialize dict of adversarial losses from config."""
     device = cfg.device
-    adv_cfg = getattr(cfg, 'adversarial')
-    adversaries = adv_cfg.get('adversaries', [])
-    adv_loss_name = adv_cfg['adv_loss']
-    feat_loss_name = adv_cfg.get('feat_loss')
-    normalize = adv_cfg.get('normalize', True)
+    adv_cfg = getattr(cfg, "adversarial")
+    adversaries = adv_cfg.get("adversaries", [])
+    adv_loss_name = adv_cfg["adv_loss"]
+    feat_loss_name = adv_cfg.get("feat_loss")
+    normalize = adv_cfg.get("normalize", True)
     feat_loss: tp.Optional[adversarial.FeatureMatchingLoss] = None
     if feat_loss_name:
-        assert feat_loss_name in ['l1', 'l2'], f"Feature loss only support L1 or L2 but {feat_loss_name} found."
+        assert feat_loss_name in [
+            "l1",
+            "l2",
+        ], f"Feature loss only support L1 or L2 but {feat_loss_name} found."
         loss = get_loss(feat_loss_name, cfg)
         feat_loss = adversarial.FeatureMatchingLoss(loss, normalize)
     loss = adversarial.get_adv_criterion(adv_loss_name)
@@ -238,7 +263,7 @@ def get_adversarial_losses(cfg) -> nn.ModuleDict:
             loss_real=loss_real,
             loss_fake=loss_fake,
             loss_feat=feat_loss,
-            normalize=normalize
+            normalize=normalize,
         )
         adv_losses[adv_name] = adv_loss
     return adv_losses
@@ -254,14 +279,14 @@ def get_fad(cfg: omegaconf.DictConfig) -> metrics.FrechetAudioDistanceMetric:
     """Instantiate Frechet Audio Distance metric from config."""
     kwargs = dict_from_config(cfg.tf)
     xp = dora.get_xp()
-    kwargs['log_folder'] = xp.folder
+    kwargs["log_folder"] = xp.folder
     return metrics.FrechetAudioDistanceMetric(**kwargs)
 
 
 def get_kldiv(cfg: omegaconf.DictConfig) -> metrics.KLDivergenceMetric:
     """Instantiate KL-Divergence metric from config."""
     kld_metrics = {
-        'passt': metrics.PasstKLDivergenceMetric,
+        "passt": metrics.PasstKLDivergenceMetric,
     }
     klass = kld_metrics[cfg.model]
     kwargs = dict_from_config(cfg.get(cfg.model))
@@ -270,23 +295,26 @@ def get_kldiv(cfg: omegaconf.DictConfig) -> metrics.KLDivergenceMetric:
 
 def get_text_consistency(cfg: omegaconf.DictConfig) -> metrics.TextConsistencyMetric:
     """Instantiate Text Consistency metric from config."""
-    text_consistency_metrics = {
-        'clap': metrics.CLAPTextConsistencyMetric
-    }
+    text_consistency_metrics = {"clap": metrics.CLAPTextConsistencyMetric}
     klass = text_consistency_metrics[cfg.model]
     kwargs = dict_from_config(cfg.get(cfg.model))
     return klass(**kwargs)
 
 
-def get_chroma_cosine_similarity(cfg: omegaconf.DictConfig) -> metrics.ChromaCosineSimilarityMetric:
+def get_chroma_cosine_similarity(
+    cfg: omegaconf.DictConfig,
+) -> metrics.ChromaCosineSimilarityMetric:
     """Instantiate Chroma Cosine Similarity metric from config."""
-    assert cfg.model == 'chroma_base', "Only support 'chroma_base' method for chroma cosine similarity metric"
+    assert (
+        cfg.model == "chroma_base"
+    ), "Only support 'chroma_base' method for chroma cosine similarity metric"
     kwargs = dict_from_config(cfg.get(cfg.model))
     return metrics.ChromaCosineSimilarityMetric(**kwargs)
 
 
-def get_audio_datasets(cfg: omegaconf.DictConfig,
-                       dataset_type: DatasetType = DatasetType.AUDIO) -> tp.Dict[str, torch.utils.data.DataLoader]:
+def get_audio_datasets(
+    cfg: omegaconf.DictConfig, dataset_type: DatasetType = DatasetType.AUDIO
+) -> tp.Dict[str, torch.utils.data.DataLoader]:
     """Build AudioDataset from configuration.
 
     Args:
@@ -307,11 +335,11 @@ def get_audio_datasets(cfg: omegaconf.DictConfig,
 
     dataset_cfg = dict_from_config(cfg.dataset)
     splits_cfg: dict = {}
-    splits_cfg['train'] = dataset_cfg.pop('train')
-    splits_cfg['valid'] = dataset_cfg.pop('valid')
-    splits_cfg['evaluate'] = dataset_cfg.pop('evaluate')
-    splits_cfg['generate'] = dataset_cfg.pop('generate')
-    execute_only_stage = cfg.get('execute_only', None)
+    splits_cfg["train"] = dataset_cfg.pop("train")
+    splits_cfg["valid"] = dataset_cfg.pop("valid")
+    splits_cfg["evaluate"] = dataset_cfg.pop("evaluate")
+    splits_cfg["generate"] = dataset_cfg.pop("generate")
+    execute_only_stage = cfg.get("execute_only", None)
 
     for split, path in cfg.datasource.items():
         if not isinstance(path, str):
@@ -328,27 +356,35 @@ def get_audio_datasets(cfg: omegaconf.DictConfig,
 
         split_cfg = splits_cfg[split]
         split_kwargs = {k: v for k, v in split_cfg.items()}
-        kwargs = {**dataset_cfg, **split_kwargs}  # split kwargs overrides default dataset_cfg
-        kwargs['sample_rate'] = sample_rate
-        kwargs['channels'] = channels
+        kwargs = {
+            **dataset_cfg,
+            **split_kwargs,
+        }  # split kwargs overrides default dataset_cfg
+        kwargs["sample_rate"] = sample_rate
+        kwargs["channels"] = channels
 
-        if kwargs.get('permutation_on_files') and cfg.optim.updates_per_epoch:
-            kwargs['num_samples'] = (
-                flashy.distrib.world_size() * cfg.dataset.batch_size * cfg.optim.updates_per_epoch)
+        if kwargs.get("permutation_on_files") and cfg.optim.updates_per_epoch:
+            kwargs["num_samples"] = (
+                flashy.distrib.world_size()
+                * cfg.dataset.batch_size
+                * cfg.optim.updates_per_epoch
+            )
 
-        num_samples = kwargs['num_samples']
-        shuffle = kwargs['shuffle']
+        num_samples = kwargs["num_samples"]
+        shuffle = kwargs["shuffle"]
 
-        return_info = kwargs.pop('return_info')
-        batch_size = kwargs.pop('batch_size', None)
-        num_workers = kwargs.pop('num_workers')
+        return_info = kwargs.pop("return_info")
+        batch_size = kwargs.pop("batch_size", None)
+        num_workers = kwargs.pop("num_workers")
 
         if dataset_type == DatasetType.MUSIC:
             dataset = data.music_dataset.MusicDataset.from_meta(path, **kwargs)
         elif dataset_type == DatasetType.SOUND:
             dataset = data.sound_dataset.SoundDataset.from_meta(path, **kwargs)
         elif dataset_type == DatasetType.AUDIO:
-            dataset = data.info_audio_dataset.InfoAudioDataset.from_meta(path, return_info=return_info, **kwargs)
+            dataset = data.info_audio_dataset.InfoAudioDataset.from_meta(
+                path, return_info=return_info, **kwargs
+            )
         else:
             raise ValueError(f"Dataset type is unsupported: {dataset_type}")
 

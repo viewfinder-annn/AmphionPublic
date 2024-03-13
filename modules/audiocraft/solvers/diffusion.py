@@ -27,6 +27,7 @@ class PerStageMetrics:
     It outputs the metrics per range of diffusion states.
     e.g. avg loss when t in [250, 500]
     """
+
     def __init__(self, num_steps: int, num_stages: int = 4):
         self.num_steps = num_steps
         self.num_stages = num_stages
@@ -39,7 +40,7 @@ class PerStageMetrics:
             stage_tensor = ((step / self.num_steps) * self.num_stages).long()
             out: tp.Dict[str, float] = {}
             for stage_idx in range(self.num_stages):
-                mask = (stage_tensor == stage_idx)
+                mask = stage_tensor == stage_idx
                 N = mask.sum()
                 stage_out = {}
                 if N > 0:  # pass if no elements in the stage
@@ -64,9 +65,19 @@ class DataProcess:
         cutoffs ():
         boost (bool):
     """
-    def __init__(self, initial_sr: int = 24000, target_sr: int = 16000, use_resampling: bool = False,
-                 use_filter: bool = False, n_bands: int = 4,
-                 idx_band: int = 0, device: torch.device = torch.device('cpu'), cutoffs=None, boost=False):
+
+    def __init__(
+        self,
+        initial_sr: int = 24000,
+        target_sr: int = 16000,
+        use_resampling: bool = False,
+        use_filter: bool = False,
+        n_bands: int = 4,
+        idx_band: int = 0,
+        device: torch.device = torch.device("cpu"),
+        cutoffs=None,
+        boost=False,
+    ):
         """Apply filtering or resampling
         Args:
             initial_sr (int): sample rate of the dataset
@@ -83,9 +94,13 @@ class DataProcess:
         self.idx_band = idx_band
         if use_filter:
             if cutoffs is not None:
-                self.filter = julius.SplitBands(sample_rate=initial_sr, cutoffs=cutoffs).to(device)
+                self.filter = julius.SplitBands(
+                    sample_rate=initial_sr, cutoffs=cutoffs
+                ).to(device)
             else:
-                self.filter = julius.SplitBands(sample_rate=initial_sr, n_bands=n_bands).to(device)
+                self.filter = julius.SplitBands(
+                    sample_rate=initial_sr, n_bands=n_bands
+                ).to(device)
         self.use_filter = use_filter
         self.use_resampling = use_resampling
         self.target_sr = target_sr
@@ -119,44 +134,56 @@ class DiffusionSolver(base.StandardSolver):
     Args:
         cfg (DictConfig): Configuration.
     """
+
     def __init__(self, cfg: omegaconf.DictConfig):
         super().__init__(cfg)
         self.cfg = cfg
         self.device = cfg.device
         self.sample_rate: int = self.cfg.sample_rate
         self.codec_model = CompressionSolver.model_from_checkpoint(
-            cfg.compression_model_checkpoint, device=self.device)
+            cfg.compression_model_checkpoint, device=self.device
+        )
 
         self.codec_model.set_num_codebooks(cfg.n_q)
         assert self.codec_model.sample_rate == self.cfg.sample_rate, (
             f"Codec model sample rate is {self.codec_model.sample_rate} but "
             f"Solver sample rate is {self.cfg.sample_rate}."
-            )
-        assert self.codec_model.sample_rate == self.sample_rate, \
-            f"Sample rate of solver {self.sample_rate} and codec {self.codec_model.sample_rate} " \
+        )
+        assert self.codec_model.sample_rate == self.sample_rate, (
+            f"Sample rate of solver {self.sample_rate} and codec {self.codec_model.sample_rate} "
             "don't match."
+        )
 
-        self.sample_processor = get_processor(cfg.processor, sample_rate=self.sample_rate)
-        self.register_stateful('sample_processor')
+        self.sample_processor = get_processor(
+            cfg.processor, sample_rate=self.sample_rate
+        )
+        self.register_stateful("sample_processor")
         self.sample_processor.to(self.device)
 
         self.schedule = NoiseSchedule(
-            **cfg.schedule, device=self.device, sample_processor=self.sample_processor)
+            **cfg.schedule, device=self.device, sample_processor=self.sample_processor
+        )
 
         self.eval_metric: tp.Optional[torch.nn.Module] = None
 
         self.rvm = RelativeVolumeMel()
-        self.data_processor = DataProcess(initial_sr=self.sample_rate, target_sr=cfg.resampling.target_sr,
-                                          use_resampling=cfg.resampling.use, cutoffs=cfg.filter.cutoffs,
-                                          use_filter=cfg.filter.use, n_bands=cfg.filter.n_bands,
-                                          idx_band=cfg.filter.idx_band, device=self.device)
+        self.data_processor = DataProcess(
+            initial_sr=self.sample_rate,
+            target_sr=cfg.resampling.target_sr,
+            use_resampling=cfg.resampling.use,
+            cutoffs=cfg.filter.cutoffs,
+            use_filter=cfg.filter.use,
+            n_bands=cfg.filter.n_bands,
+            idx_band=cfg.filter.idx_band,
+            device=self.device,
+        )
 
     @property
     def best_metric_name(self) -> tp.Optional[str]:
         if self._current_stage == "evaluate":
-            return 'rvm'
+            return "rvm"
         else:
-            return 'loss'
+            return "loss"
 
     @torch.no_grad()
     def get_condition(self, wav: torch.Tensor) -> torch.Tensor:
@@ -166,14 +193,13 @@ class DiffusionSolver(base.StandardSolver):
         return emb
 
     def build_model(self):
-        """Build model and optimizer as well as optional Exponential Moving Average of the model.
-        """
+        """Build model and optimizer as well as optional Exponential Moving Average of the model."""
         # Model and optimizer
         self.model = models.builders.get_diffusion_model(self.cfg).to(self.device)
         self.optimizer = builders.get_optimizer(self.model.parameters(), self.cfg.optim)
-        self.register_stateful('model', 'optimizer')
-        self.register_best_state('model')
-        self.register_ema('model')
+        self.register_stateful("model", "optimizer")
+        self.register_best_state("model")
+        self.register_ema("model")
 
     def build_dataloaders(self):
         """Build audio dataloaders for each stage."""
@@ -186,18 +212,19 @@ class DiffusionSolver(base.StandardSolver):
     def run_step(self, idx: int, batch: torch.Tensor, metrics: dict):
         """Perform one training or valid step on a given batch."""
         x = batch.to(self.device)
-        loss_fun = F.mse_loss if self.cfg.loss.kind == 'mse' else F.l1_loss
+        loss_fun = F.mse_loss if self.cfg.loss.kind == "mse" else F.l1_loss
 
         condition = self.get_condition(x)  # [bs, 128, T/hop, n_emb]
         sample = self.data_processor.process_data(x)
 
-        input_, target, step = self.schedule.get_training_item(sample,
-                                                               tensor_step=self.cfg.schedule.variable_step_batch)
+        input_, target, step = self.schedule.get_training_item(
+            sample, tensor_step=self.cfg.schedule.variable_step_batch
+        )
         out = self.model(input_, step, condition=condition).sample
 
-        base_loss = loss_fun(out, target, reduction='none').mean(dim=(1, 2))
-        reference_loss = loss_fun(input_, target, reduction='none').mean(dim=(1, 2))
-        loss = base_loss / reference_loss ** self.cfg.loss.norm_power
+        base_loss = loss_fun(out, target, reduction="none").mean(dim=(1, 2))
+        reference_loss = loss_fun(input_, target, reduction="none").mean(dim=(1, 2))
+        loss = base_loss / reference_loss**self.cfg.loss.norm_power
 
         if self.is_training:
             loss.mean().backward()
@@ -205,18 +232,24 @@ class DiffusionSolver(base.StandardSolver):
             self.optimizer.step()
             self.optimizer.zero_grad()
         metrics = {
-            'loss': loss.mean(), 'normed_loss': (base_loss / reference_loss).mean(),
-            }
-        metrics.update(self.per_stage({'loss': loss, 'normed_loss': base_loss / reference_loss}, step))
-        metrics.update({
-            'std_in': input_.std(), 'std_out': out.std()})
+            "loss": loss.mean(),
+            "normed_loss": (base_loss / reference_loss).mean(),
+        }
+        metrics.update(
+            self.per_stage(
+                {"loss": loss, "normed_loss": base_loss / reference_loss}, step
+            )
+        )
+        metrics.update({"std_in": input_.std(), "std_out": out.std()})
         return metrics
 
     def run_epoch(self):
         # reset random seed at the beginning of the epoch
         self.rng = torch.Generator()
         self.rng.manual_seed(1234 + self.epoch)
-        self.per_stage = PerStageMetrics(self.schedule.num_steps, self.cfg.metrics.num_stage)
+        self.per_stage = PerStageMetrics(
+            self.schedule.num_steps, self.cfg.metrics.num_stage
+        )
         # run epoch
         super().run_epoch()
 
@@ -225,10 +258,15 @@ class DiffusionSolver(base.StandardSolver):
         Runs audio reconstruction evaluation.
         """
         self.model.eval()
-        evaluate_stage_name = f'{self.current_stage}'
-        loader = self.dataloaders['evaluate']
+        evaluate_stage_name = f"{self.current_stage}"
+        loader = self.dataloaders["evaluate"]
         updates = len(loader)
-        lp = self.log_progress(f'{evaluate_stage_name} estimate', loader, total=updates, updates=self.log_updates)
+        lp = self.log_progress(
+            f"{evaluate_stage_name} estimate",
+            loader,
+            total=updates,
+            updates=self.log_updates,
+        )
 
         metrics = {}
         n = 1
@@ -253,9 +291,12 @@ class DiffusionSolver(base.StandardSolver):
     def regenerate(self, wav: torch.Tensor, step_list: tp.Optional[list] = None):
         """Regenerate the given waveform."""
         condition = self.get_condition(wav)
-        initial = self.schedule.get_initial_noise(self.data_processor.process_data(wav))  # sampling rate changes.
-        result = self.schedule.generate_subsampled(self.model, initial=initial, condition=condition,
-                                                   step_list=step_list)
+        initial = self.schedule.get_initial_noise(
+            self.data_processor.process_data(wav)
+        )  # sampling rate changes.
+        result = self.schedule.generate_subsampled(
+            self.model, initial=initial, condition=condition, step_list=step_list
+        )
         result = self.data_processor.inverse_process(result)
         return result
 
@@ -263,11 +304,13 @@ class DiffusionSolver(base.StandardSolver):
         """Generate stage."""
         sample_manager = SampleManager(self.xp)
         self.model.eval()
-        generate_stage_name = f'{self.current_stage}'
+        generate_stage_name = f"{self.current_stage}"
 
-        loader = self.dataloaders['generate']
+        loader = self.dataloaders["generate"]
         updates = len(loader)
-        lp = self.log_progress(generate_stage_name, loader, total=updates, updates=self.log_updates)
+        lp = self.log_progress(
+            generate_stage_name, loader, total=updates, updates=self.log_updates
+        )
 
         for batch in lp:
             reference, _ = batch
@@ -275,5 +318,7 @@ class DiffusionSolver(base.StandardSolver):
             estimate = self.regenerate(reference)
             reference = reference.cpu()
             estimate = estimate.cpu()
-            sample_manager.add_samples(estimate, self.epoch, ground_truth_wavs=reference)
+            sample_manager.add_samples(
+                estimate, self.epoch, ground_truth_wavs=reference
+            )
         flashy.distrib.barrier()

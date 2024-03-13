@@ -50,19 +50,30 @@ class ViSQOL:
         model (str): Name of the model to use for similarity to quality model.
         debug (bool): Whether to also get debug metrics from ViSQOL or not.
     """
+
     SAMPLE_RATES_MODES = {"audio": 48_000, "speech": 16_000}
     ALLOWED_SAMPLE_RATES = frozenset(SAMPLE_RATES_MODES.values())
 
-    def __init__(self, bin: tp.Union[Path, str], mode: str = "audio",
-                 model: str = "libsvm_nu_svr_model.txt", debug: bool = False):
-        assert bin is not None and Path(bin).exists(), f"Could not find ViSQOL binary in specified path: {bin}"
+    def __init__(
+        self,
+        bin: tp.Union[Path, str],
+        mode: str = "audio",
+        model: str = "libsvm_nu_svr_model.txt",
+        debug: bool = False,
+    ):
+        assert (
+            bin is not None and Path(bin).exists()
+        ), f"Could not find ViSQOL binary in specified path: {bin}"
         self.visqol_bin = str(bin)
         self.visqol_mode = mode
         self.target_sr = self._get_target_sr(self.visqol_mode)
         self.model = model
         self.debug = debug
-        assert Path(self.visqol_model).exists(), \
+        assert Path(
+            self.visqol_model
+        ).exists(), (
             f"Could not find the specified model in ViSQOL install: {self.visqol_model}"
+        )
 
     def _get_target_sr(self, mode: str) -> int:
         # returns target sampling rate for the corresponding ViSQOL mode.
@@ -73,13 +84,18 @@ class ViSQOL:
         return ViSQOL.SAMPLE_RATES_MODES[mode]
 
     def _prepare_files(
-        self, ref_sig: torch.Tensor, deg_sig: torch.Tensor, sr: int, target_sr: int, pad_with_silence: bool = False
+        self,
+        ref_sig: torch.Tensor,
+        deg_sig: torch.Tensor,
+        sr: int,
+        target_sr: int,
+        pad_with_silence: bool = False,
     ):
         # prepare files for ViSQOL evaluation.
         assert target_sr in ViSQOL.ALLOWED_SAMPLE_RATES
         assert len(ref_sig) == len(deg_sig), (
             "Expects same number of ref and degraded inputs",
-            f" but ref len {len(ref_sig)} != deg len {len(deg_sig)}"
+            f" but ref len {len(ref_sig)} != deg len {len(deg_sig)}",
         )
         # resample audio if needed
         if sr != target_sr:
@@ -91,8 +107,12 @@ class ViSQOL:
                 rs_ref_i = transform(ref_sig[i])
                 rs_deg_i = transform(deg_sig[i])
                 if pad_with_silence:
-                    rs_ref_i = torch.nn.functional.pad(rs_ref_i, (pad, pad), mode='constant', value=0)
-                    rs_deg_i = torch.nn.functional.pad(rs_deg_i, (pad, pad), mode='constant', value=0)
+                    rs_ref_i = torch.nn.functional.pad(
+                        rs_ref_i, (pad, pad), mode="constant", value=0
+                    )
+                    rs_deg_i = torch.nn.functional.pad(
+                        rs_deg_i, (pad, pad), mode="constant", value=0
+                    )
                 rs_ref.append(rs_ref_i)
                 rs_deg.append(rs_deg_i)
             ref_sig = torch.stack(rs_ref)
@@ -114,17 +134,22 @@ class ViSQOL:
                         torch.clamp(ref_sig[i], min=-0.99, max=0.99),
                         sample_rate=target_sr,
                         bits_per_sample=16,
-                        encoding="PCM_S"
+                        encoding="PCM_S",
                     )
                     torchaudio.save(
                         tmp_deg_filename,
                         torch.clamp(deg_sig[i], min=-0.99, max=0.99),
                         sample_rate=target_sr,
                         bits_per_sample=16,
-                        encoding="PCM_S"
+                        encoding="PCM_S",
                     )
                     csv_writer.writerow([str(tmp_ref_filename), str(tmp_deg_filename)])
-            return tmp_dir, tmp_input_csv_path, tmp_results_csv_path, tmp_debug_json_path
+            return (
+                tmp_dir,
+                tmp_input_csv_path,
+                tmp_results_csv_path,
+                tmp_debug_json_path,
+            )
         except Exception as e:
             logger.error("Exception occurred when preparing files for ViSQOL: %s", e)
             return tmp_dir, None, None, None
@@ -151,7 +176,7 @@ class ViSQOL:
 
     @property
     def visqol_model(self):
-        return f'{self.visqol_bin}/model/{self.model}'
+        return f"{self.visqol_bin}/model/{self.model}"
 
     def _run_visqol(
         self,
@@ -163,18 +188,24 @@ class ViSQOL:
         results_csv_path = str(results_csv_path)
         debug_csv_path = str(debug_csv_path)
         cmd = [
-            f'{self.visqol_bin}/bazel-bin/visqol',
-            '--batch_input_csv', f'{input_csv_path}',
-            '--results_csv', f'{results_csv_path}'
+            f"{self.visqol_bin}/bazel-bin/visqol",
+            "--batch_input_csv",
+            f"{input_csv_path}",
+            "--results_csv",
+            f"{results_csv_path}",
         ]
         if debug_csv_path is not None:
-            cmd += ['--output_debug', f'{debug_csv_path}']
+            cmd += ["--output_debug", f"{debug_csv_path}"]
         if self.visqol_mode == "speech":
-            cmd += ['--use_speech_mode']
-        cmd += ['--similarity_to_quality_model', f'{self.visqol_model}']
+            cmd += ["--use_speech_mode"]
+        cmd += ["--similarity_to_quality_model", f"{self.visqol_model}"]
         result = subprocess.run(cmd, capture_output=True)
         if result.returncode:
-            logger.error("Error with visqol: \n %s \n %s", result.stdout.decode(), result.stderr.decode())
+            logger.error(
+                "Error with visqol: \n %s \n %s",
+                result.stdout.decode(),
+                result.stderr.decode(),
+            )
             raise RuntimeError("Error while executing visqol")
         result.check_returncode()
 
@@ -195,7 +226,9 @@ class ViSQOL:
         Returns:
             float: The ViSQOL score or mean score for the batch.
         """
-        logger.debug(f"Calculating visqol with mode={self.visqol_mode} on {len(ref_sig)} samples")
+        logger.debug(
+            f"Calculating visqol with mode={self.visqol_mode} on {len(ref_sig)} samples"
+        )
         tmp_dir, input_csv, results_csv, debug_json = self._prepare_files(
             ref_sig, deg_sig, sr, self.target_sr, pad_with_silence
         )

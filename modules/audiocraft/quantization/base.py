@@ -25,8 +25,7 @@ class QuantizedResult:
 
 
 class BaseQuantizer(nn.Module):
-    """Base class for quantizers.
-    """
+    """Base class for quantizers."""
 
     def forward(self, x: torch.Tensor, frame_rate: int) -> QuantizedResult:
         """
@@ -61,14 +60,16 @@ class BaseQuantizer(nn.Module):
 
 
 class DummyQuantizer(BaseQuantizer):
-    """Fake quantizer that actually does not perform any quantization.
-    """
+    """Fake quantizer that actually does not perform any quantization."""
+
     def __init__(self):
         super().__init__()
 
     def forward(self, x: torch.Tensor, frame_rate: int):
         q = x.unsqueeze(1)
-        return QuantizedResult(x, q, torch.tensor(q.numel() * 32 * frame_rate / 1000 / len(x)).to(x))
+        return QuantizedResult(
+            x, q, torch.tensor(q.numel() * 32 * frame_rate / 1000 / len(x)).to(x)
+        )
 
     def encode(self, x: torch.Tensor) -> torch.Tensor:
         """Encode a given input tensor with the specified sample rate at the given bandwidth.
@@ -96,4 +97,6 @@ class DummyQuantizer(BaseQuantizer):
 
     def set_num_codebooks(self, n: int):
         """Set the number of active codebooks."""
-        raise AttributeError("Cannot override the number of codebooks for the dummy quantizer")
+        raise AttributeError(
+            "Cannot override the number of codebooks for the dummy quantizer"
+        )

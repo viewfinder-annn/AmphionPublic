@@ -31,24 +31,30 @@ class AudioGen(BaseGenModel):
         max_duration (float, optional): maximum duration the model can produce,
             otherwise, inferred from the training params.
     """
-    def __init__(self, name: str, compression_model: CompressionModel, lm: LMModel,
-                 max_duration: tp.Optional[float] = None):
+
+    def __init__(
+        self,
+        name: str,
+        compression_model: CompressionModel,
+        lm: LMModel,
+        max_duration: tp.Optional[float] = None,
+    ):
         super().__init__(name, compression_model, lm, max_duration)
         self.set_generation_params(duration=5)  # default duration
 
     @staticmethod
-    def get_pretrained(name: str = 'facebook/audiogen-medium', device=None):
+    def get_pretrained(name: str = "facebook/audiogen-medium", device=None):
         """Return pretrained model, we provide a single model for now:
         - facebook/audiogen-medium (1.5B), text to sound,
           # see: https://huggingface.co/facebook/audiogen-medium
         """
         if device is None:
             if torch.cuda.device_count():
-                device = 'cuda'
+                device = "cuda"
             else:
-                device = 'cpu'
+                device = "cpu"
 
-        if name == 'debug':
+        if name == "debug":
             # used only for unit tests
             compression_model = get_debug_compression_model(device, sample_rate=16000)
             lm = get_debug_lm_model(device)
@@ -56,14 +62,22 @@ class AudioGen(BaseGenModel):
 
         compression_model = load_compression_model(name, device=device)
         lm = load_lm_model(name, device=device)
-        assert 'self_wav' not in lm.condition_provider.conditioners, \
-            "AudioGen do not support waveform conditioning for now"
+        assert (
+            "self_wav" not in lm.condition_provider.conditioners
+        ), "AudioGen do not support waveform conditioning for now"
         return AudioGen(name, compression_model, lm)
 
-    def set_generation_params(self, use_sampling: bool = True, top_k: int = 250,
-                              top_p: float = 0.0, temperature: float = 1.0,
-                              duration: float = 10.0, cfg_coef: float = 3.0,
-                              two_step_cfg: bool = False, extend_stride: float = 2):
+    def set_generation_params(
+        self,
+        use_sampling: bool = True,
+        top_k: int = 250,
+        top_p: float = 0.0,
+        temperature: float = 1.0,
+        duration: float = 10.0,
+        cfg_coef: float = 3.0,
+        two_step_cfg: bool = False,
+        extend_stride: float = 2,
+    ):
         """Set the generation parameters for AudioGen.
 
         Args:
@@ -80,14 +94,16 @@ class AudioGen(BaseGenModel):
                 should we extend the audio each time. Larger values will mean less context is
                 preserved, and shorter value will require extra computations.
         """
-        assert extend_stride < self.max_duration, "Cannot stride by more than max generation duration."
+        assert (
+            extend_stride < self.max_duration
+        ), "Cannot stride by more than max generation duration."
         self.extend_stride = extend_stride
         self.duration = duration
         self.generation_params = {
-            'use_sampling': use_sampling,
-            'temp': temperature,
-            'top_k': top_k,
-            'top_p': top_p,
-            'cfg_coef': cfg_coef,
-            'two_step_cfg': two_step_cfg,
+            "use_sampling": use_sampling,
+            "temp": temperature,
+            "top_k": top_k,
+            "top_p": top_p,
+            "cfg_coef": cfg_coef,
+            "two_step_cfg": two_step_cfg,
         }

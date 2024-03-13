@@ -36,8 +36,14 @@ class BaseGenModel(ABC):
         max_duration (float, optional): maximum duration the model can produce,
             otherwise, inferred from the training params.
     """
-    def __init__(self, name: str, compression_model: CompressionModel, lm: LMModel,
-                 max_duration: tp.Optional[float] = None):
+
+    def __init__(
+        self,
+        name: str,
+        compression_model: CompressionModel,
+        lm: LMModel,
+        max_duration: tp.Optional[float] = None,
+    ):
         self.name = name
         self.compression_model = compression_model
         self.lm = lm
@@ -46,19 +52,23 @@ class BaseGenModel(ABC):
         self.compression_model.eval()
         self.lm.eval()
 
-        if hasattr(lm, 'cfg'):
+        if hasattr(lm, "cfg"):
             cfg = lm.cfg
             assert isinstance(cfg, omegaconf.DictConfig)
             self.cfg = cfg
 
         if self.cfg is not None:
-            self.compression_model = get_wrapped_compression_model(self.compression_model, self.cfg)
+            self.compression_model = get_wrapped_compression_model(
+                self.compression_model, self.cfg
+            )
 
         if max_duration is None:
             if self.cfg is not None:
                 max_duration = lm.cfg.dataset.segment_duration  # type: ignore
             else:
-                raise ValueError("You must provide max_duration when building directly your GenModel")
+                raise ValueError(
+                    "You must provide max_duration when building directly your GenModel"
+                )
         assert max_duration is not None
 
         self.max_duration: float = max_duration
@@ -71,11 +81,12 @@ class BaseGenModel(ABC):
         self.device = next(iter(lm.parameters())).device
         self.generation_params: dict = {}
         self._progress_callback: tp.Optional[tp.Callable[[int, int], None]] = None
-        if self.device.type == 'cpu':
+        if self.device.type == "cpu":
             self.autocast = TorchAutocast(enabled=False)
         else:
             self.autocast = TorchAutocast(
-                enabled=True, device_type=self.device.type, dtype=torch.float16)
+                enabled=True, device_type=self.device.type, dtype=torch.float16
+            )
 
     @property
     def frame_rate(self) -> float:
@@ -92,14 +103,18 @@ class BaseGenModel(ABC):
         """Audio channels of the generated audio."""
         return self.compression_model.channels
 
-    def set_custom_progress_callback(self, progress_callback: tp.Optional[tp.Callable[[int, int], None]] = None):
+    def set_custom_progress_callback(
+        self, progress_callback: tp.Optional[tp.Callable[[int, int], None]] = None
+    ):
         """Override the default progress callback."""
         self._progress_callback = progress_callback
 
     @abstractmethod
     def set_generation_params(self, *args, **kwargs):
         """Set the generation parameters."""
-        raise NotImplementedError("No base implementation for setting generation params.")
+        raise NotImplementedError(
+            "No base implementation for setting generation params."
+        )
 
     @staticmethod
     @abstractmethod
@@ -108,9 +123,9 @@ class BaseGenModel(ABC):
 
     @torch.no_grad()
     def _prepare_tokens_and_attributes(
-            self,
-            descriptions: tp.Sequence[tp.Optional[str]],
-            prompt: tp.Optional[torch.Tensor],
+        self,
+        descriptions: tp.Sequence[tp.Optional[str]],
+        prompt: tp.Optional[torch.Tensor],
     ) -> tp.Tuple[tp.List[ConditioningAttributes], tp.Optional[torch.Tensor]]:
         """Prepare model inputs.
 
@@ -119,12 +134,15 @@ class BaseGenModel(ABC):
             prompt (torch.Tensor): A batch of waveforms used for continuation.
         """
         attributes = [
-            ConditioningAttributes(text={'description': description})
-            for description in descriptions]
+            ConditioningAttributes(text={"description": description})
+            for description in descriptions
+        ]
 
         if prompt is not None:
             if descriptions is not None:
-                assert len(descriptions) == len(prompt), "Prompt and nb. descriptions doesn't match"
+                assert len(descriptions) == len(
+                    prompt
+                ), "Prompt and nb. descriptions doesn't match"
             prompt = prompt.to(self.device)
             prompt_tokens, scale = self.compression_model.encode(prompt)
             assert scale is None
@@ -132,9 +150,9 @@ class BaseGenModel(ABC):
             prompt_tokens = None
         return attributes, prompt_tokens
 
-    def generate_unconditional(self, num_samples: int, progress: bool = False,
-                               return_tokens: bool = False) -> tp.Union[torch.Tensor,
-                                                                        tp.Tuple[torch.Tensor, torch.Tensor]]:
+    def generate_unconditional(
+        self, num_samples: int, progress: bool = False, return_tokens: bool = False
+    ) -> tp.Union[torch.Tensor, tp.Tuple[torch.Tensor, torch.Tensor]]:
         """Generate samples in an unconditional manner.
 
         Args:
@@ -142,31 +160,43 @@ class BaseGenModel(ABC):
             progress (bool, optional): Flag to display progress of the generation process. Defaults to False.
         """
         descriptions: tp.List[tp.Optional[str]] = [None] * num_samples
-        attributes, prompt_tokens = self._prepare_tokens_and_attributes(descriptions, None)
+        attributes, prompt_tokens = self._prepare_tokens_and_attributes(
+            descriptions, None
+        )
         tokens = self._generate_tokens(attributes, prompt_tokens, progress)
         if return_tokens:
             return self.generate_audio(tokens), tokens
         return self.generate_audio(tokens)
 
-    def generate(self, descriptions: tp.List[str], progress: bool = False, return_tokens: bool = False) \
-            -> tp.Union[torch.Tensor, tp.Tuple[torch.Tensor, torch.Tensor]]:
+    def generate(
+        self,
+        descriptions: tp.List[str],
+        progress: bool = False,
+        return_tokens: bool = False,
+    ) -> tp.Union[torch.Tensor, tp.Tuple[torch.Tensor, torch.Tensor]]:
         """Generate samples conditioned on text.
 
         Args:
             descriptions (list of str): A list of strings used as text conditioning.
             progress (bool, optional): Flag to display progress of the generation process. Defaults to False.
         """
-        attributes, prompt_tokens = self._prepare_tokens_and_attributes(descriptions, None)
+        attributes, prompt_tokens = self._prepare_tokens_and_attributes(
+            descriptions, None
+        )
         assert prompt_tokens is None
         tokens = self._generate_tokens(attributes, prompt_tokens, progress)
         if return_tokens:
             return self.generate_audio(tokens), tokens
         return self.generate_audio(tokens)
 
-    def generate_continuation(self, prompt: torch.Tensor, prompt_sample_rate: int,
-                              descriptions: tp.Optional[tp.List[tp.Optional[str]]] = None,
-                              progress: bool = False, return_tokens: bool = False) \
-            -> tp.Union[torch.Tensor, tp.Tuple[torch.Tensor, torch.Tensor]]:
+    def generate_continuation(
+        self,
+        prompt: torch.Tensor,
+        prompt_sample_rate: int,
+        descriptions: tp.Optional[tp.List[tp.Optional[str]]] = None,
+        progress: bool = False,
+        return_tokens: bool = False,
+    ) -> tp.Union[torch.Tensor, tp.Tuple[torch.Tensor, torch.Tensor]]:
         """Generate samples conditioned on audio prompts and an optional text description.
 
         Args:
@@ -180,18 +210,26 @@ class BaseGenModel(ABC):
             prompt = prompt[None]
         if prompt.dim() != 3:
             raise ValueError("prompt should have 3 dimensions: [B, C, T] (C = 1).")
-        prompt = convert_audio(prompt, prompt_sample_rate, self.sample_rate, self.audio_channels)
+        prompt = convert_audio(
+            prompt, prompt_sample_rate, self.sample_rate, self.audio_channels
+        )
         if descriptions is None:
             descriptions = [None] * len(prompt)
-        attributes, prompt_tokens = self._prepare_tokens_and_attributes(descriptions, prompt)
+        attributes, prompt_tokens = self._prepare_tokens_and_attributes(
+            descriptions, prompt
+        )
         assert prompt_tokens is not None
         tokens = self._generate_tokens(attributes, prompt_tokens, progress)
         if return_tokens:
             return self.generate_audio(tokens), tokens
         return self.generate_audio(tokens)
 
-    def _generate_tokens(self, attributes: tp.List[ConditioningAttributes],
-                         prompt_tokens: tp.Optional[torch.Tensor], progress: bool = False) -> torch.Tensor:
+    def _generate_tokens(
+        self,
+        attributes: tp.List[ConditioningAttributes],
+        prompt_tokens: tp.Optional[torch.Tensor],
+        progress: bool = False,
+    ) -> torch.Tensor:
         """Generate discrete audio tokens given audio prompt and/or conditions.
 
         Args:
@@ -212,11 +250,12 @@ class BaseGenModel(ABC):
                 # codebook pattern used, but with delay it is almost accurate.
                 self._progress_callback(generated_tokens, tokens_to_generate)
             else:
-                print(f'{generated_tokens: 6d} / {tokens_to_generate: 6d}', end='\r')
+                print(f"{generated_tokens: 6d} / {tokens_to_generate: 6d}", end="\r")
 
         if prompt_tokens is not None:
-            assert max_prompt_len >= prompt_tokens.shape[-1], \
-                "Prompt is longer than audio to generate"
+            assert (
+                max_prompt_len >= prompt_tokens.shape[-1]
+            ), "Prompt is longer than audio to generate"
 
         callback = None
         if progress:
@@ -226,12 +265,20 @@ class BaseGenModel(ABC):
             # generate by sampling from LM, simple case.
             with self.autocast:
                 gen_tokens = self.lm.generate(
-                    prompt_tokens, attributes,
-                    callback=callback, max_gen_len=total_gen_len, **self.generation_params)
+                    prompt_tokens,
+                    attributes,
+                    callback=callback,
+                    max_gen_len=total_gen_len,
+                    **self.generation_params,
+                )
 
         else:
-            assert self.extend_stride is not None, "Stride should be defined to generate beyond max_duration"
-            assert self.extend_stride < self.max_duration, "Cannot stride by more than max generation duration."
+            assert (
+                self.extend_stride is not None
+            ), "Stride should be defined to generate beyond max_duration"
+            assert (
+                self.extend_stride < self.max_duration
+            ), "Cannot stride by more than max generation duration."
             all_tokens = []
             if prompt_tokens is None:
                 prompt_length = 0
@@ -246,12 +293,16 @@ class BaseGenModel(ABC):
                 max_gen_len = int(chunk_duration * self.frame_rate)
                 with self.autocast:
                     gen_tokens = self.lm.generate(
-                        prompt_tokens, attributes,
-                        callback=callback, max_gen_len=max_gen_len, **self.generation_params)
+                        prompt_tokens,
+                        attributes,
+                        callback=callback,
+                        max_gen_len=max_gen_len,
+                        **self.generation_params,
+                    )
                 if prompt_tokens is None:
                     all_tokens.append(gen_tokens)
                 else:
-                    all_tokens.append(gen_tokens[:, :, prompt_tokens.shape[-1]:])
+                    all_tokens.append(gen_tokens[:, :, prompt_tokens.shape[-1] :])
                 prompt_tokens = gen_tokens[:, :, stride_tokens:]
                 prompt_length = prompt_tokens.shape[-1]
                 current_gen_offset += stride_tokens

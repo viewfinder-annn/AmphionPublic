@@ -16,4 +16,5 @@ class AudioGenSolver(musicgen.MusicGenSolver):
 
     More information can be found in the AudioGen model card.
     """
+
     DATASET_TYPE: builders.DatasetType = builders.DatasetType.SOUND

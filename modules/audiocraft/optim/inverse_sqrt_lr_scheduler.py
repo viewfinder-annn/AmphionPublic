@@ -19,7 +19,13 @@ class InverseSquareRootLRScheduler(_LRScheduler):
         warmup_init_lr (tp.Optional[float]): Initial learning rate
             during warmup phase. When not set, use the provided learning rate.
     """
-    def __init__(self, optimizer: Optimizer, warmup_steps: int, warmup_init_lr: tp.Optional[float] = 0):
+
+    def __init__(
+        self,
+        optimizer: Optimizer,
+        warmup_steps: int,
+        warmup_init_lr: tp.Optional[float] = 0,
+    ):
         self.warmup_steps = warmup_steps
         self.warmup_init_lr = warmup_init_lr
         super().__init__(optimizer)
@@ -35,4 +41,6 @@ class InverseSquareRootLRScheduler(_LRScheduler):
         return lr
 
     def get_lr(self):
-        return [self._get_sched_lr(base_lr, self._step_count) for base_lr in self.base_lrs]
+        return [
+            self._get_sched_lr(base_lr, self._step_count) for base_lr in self.base_lrs
+        ]

@@ -13,7 +13,7 @@ import typing as tp
 from abc import ABC, abstractmethod
 import torch
 
-LayoutCoord = namedtuple('LayoutCoord', ['t', 'q'])  # (timestep, codebook index)
+LayoutCoord = namedtuple("LayoutCoord", ["t", "q"])  # (timestep, codebook index)
 PatternLayout = tp.List[tp.List[LayoutCoord]]  # Sequence of coordinates
 logger = logging.getLogger(__name__)
 
@@ -39,6 +39,7 @@ class Pattern:
         to fill and specify invalid positions if needed.
     See the dedicated methods for more details.
     """
+
     # Pattern layout, for each sequence step, we have a list of coordinates
     # corresponding to the original codebook timestep and position.
     # The first list is always an empty list in order to properly insert
@@ -50,9 +51,17 @@ class Pattern:
     def __post_init__(self):
         assert len(self.layout) > 0
         self._validate_layout()
-        self._build_reverted_sequence_scatter_indexes = lru_cache(100)(self._build_reverted_sequence_scatter_indexes)
-        self._build_pattern_sequence_scatter_indexes = lru_cache(100)(self._build_pattern_sequence_scatter_indexes)
-        logger.info("New pattern, time steps: %d, sequence steps: %d", self.timesteps, len(self.layout))
+        self._build_reverted_sequence_scatter_indexes = lru_cache(100)(
+            self._build_reverted_sequence_scatter_indexes
+        )
+        self._build_pattern_sequence_scatter_indexes = lru_cache(100)(
+            self._build_pattern_sequence_scatter_indexes
+        )
+        logger.info(
+            "New pattern, time steps: %d, sequence steps: %d",
+            self.timesteps,
+            len(self.layout),
+        )
 
     def _validate_layout(self):
         """Runs checks on the layout to ensure a valid pattern is defined.
@@ -68,12 +77,14 @@ class Pattern:
                 for coord in seq_coords:
                     qs.add(coord.q)
                     last_q_timestep = q_timesteps[coord.q]
-                    assert coord.t >= last_q_timestep, \
-                        f"Past timesteps are found in the sequence for codebook = {coord.q} at step {s}"
+                    assert (
+                        coord.t >= last_q_timestep
+                    ), f"Past timesteps are found in the sequence for codebook = {coord.q} at step {s}"
                     q_timesteps[coord.q] = coord.t
                 # each sequence step contains at max 1 coordinate per codebook
-                assert len(qs) == len(seq_coords), \
-                    f"Multiple entries for a same codebook are found at step {s}"
+                assert len(qs) == len(
+                    seq_coords
+                ), f"Multiple entries for a same codebook are found at step {s}"
 
     @property
     def num_sequence_steps(self):
@@ -100,9 +111,13 @@ class Pattern:
         and optionally to the codebook q. Coordinates are returned as a tuple with the sequence step
         and the actual codebook coordinates.
         """
-        assert t <= self.timesteps, "provided timesteps is greater than the pattern's number of timesteps"
+        assert (
+            t <= self.timesteps
+        ), "provided timesteps is greater than the pattern's number of timesteps"
         if q is not None:
-            assert q <= self.n_q, "provided number of codebooks is greater than the pattern's number of codebooks"
+            assert (
+                q <= self.n_q
+            ), "provided number of codebooks is greater than the pattern's number of codebooks"
         coords = []
         for s, seq_codes in enumerate(self.layout):
             for code in seq_codes:
@@ -110,15 +125,24 @@ class Pattern:
                     coords.append((s, code))
         return coords
 
-    def get_steps_with_timestep(self, t: int, q: tp.Optional[int] = None) -> tp.List[int]:
+    def get_steps_with_timestep(
+        self, t: int, q: tp.Optional[int] = None
+    ) -> tp.List[int]:
         return [step for step, coords in self.get_sequence_coords_with_timestep(t, q)]
 
-    def get_first_step_with_timesteps(self, t: int, q: tp.Optional[int] = None) -> tp.Optional[int]:
+    def get_first_step_with_timesteps(
+        self, t: int, q: tp.Optional[int] = None
+    ) -> tp.Optional[int]:
         steps_with_timesteps = self.get_steps_with_timestep(t, q)
         return steps_with_timesteps[0] if len(steps_with_timesteps) > 0 else None
 
-    def _build_pattern_sequence_scatter_indexes(self, timesteps: int, n_q: int, keep_only_valid_steps: bool,
-                                                device: tp.Union[torch.device, str] = 'cpu'):
+    def _build_pattern_sequence_scatter_indexes(
+        self,
+        timesteps: int,
+        n_q: int,
+        keep_only_valid_steps: bool,
+        device: tp.Union[torch.device, str] = "cpu",
+    ):
         """Build scatter indexes corresponding to the pattern, up to the provided sequence_steps.
 
         Args:
@@ -129,8 +153,12 @@ class Pattern:
             indexes (torch.Tensor): Indexes corresponding to the sequence, of shape [K, S].
             mask (torch.Tensor): Mask corresponding to indexes that matches valid indexes, of shape [K, S].
         """
-        assert n_q == self.n_q, f"invalid number of codebooks for the sequence and the pattern: {n_q} != {self.n_q}"
-        assert timesteps <= self.timesteps, "invalid number of timesteps used to build the sequence from the pattern"
+        assert (
+            n_q == self.n_q
+        ), f"invalid number of codebooks for the sequence and the pattern: {n_q} != {self.n_q}"
+        assert (
+            timesteps <= self.timesteps
+        ), "invalid number of timesteps used to build the sequence from the pattern"
         # use the proper layout based on whether we limit ourselves to valid steps only or not,
         # note that using the valid_layout will result in a truncated sequence up to the valid steps
         ref_layout = self.valid_layout if keep_only_valid_steps else self.layout
@@ -151,7 +179,9 @@ class Pattern:
         mask = torch.from_numpy(mask).to(device)
         return indexes, mask
 
-    def build_pattern_sequence(self, z: torch.Tensor, special_token: int, keep_only_valid_steps: bool = False):
+    def build_pattern_sequence(
+        self, z: torch.Tensor, special_token: int, keep_only_valid_steps: bool = False
+    ):
         """Build sequence corresponding to the pattern from the input tensor z.
         The sequence is built using up to sequence_steps if specified, and non-pattern
         coordinates are filled with the special token.
@@ -178,10 +208,14 @@ class Pattern:
         values = values.view(B, K, indexes.shape[-1])
         return values, indexes, mask
 
-    def _build_reverted_sequence_scatter_indexes(self, sequence_steps: int, n_q: int,
-                                                 keep_only_valid_steps: bool = False,
-                                                 is_model_output: bool = False,
-                                                 device: tp.Union[torch.device, str] = 'cpu'):
+    def _build_reverted_sequence_scatter_indexes(
+        self,
+        sequence_steps: int,
+        n_q: int,
+        keep_only_valid_steps: bool = False,
+        is_model_output: bool = False,
+        device: tp.Union[torch.device, str] = "cpu",
+    ):
         """Builds scatter indexes required to retrieve the original multi-codebook sequence
         from interleaving pattern.
 
@@ -199,9 +233,12 @@ class Pattern:
         ref_layout = self.valid_layout if keep_only_valid_steps else self.layout
         # TODO(jade): Do we want to further truncate to only valid timesteps here as well?
         timesteps = self.timesteps
-        assert n_q == self.n_q, f"invalid number of codebooks for the sequence and the pattern: {n_q} != {self.n_q}"
-        assert sequence_steps <= len(ref_layout), \
-            f"sequence to revert is longer than the defined pattern: {sequence_steps} > {len(ref_layout)}"
+        assert (
+            n_q == self.n_q
+        ), f"invalid number of codebooks for the sequence and the pattern: {n_q} != {self.n_q}"
+        assert sequence_steps <= len(
+            ref_layout
+        ), f"sequence to revert is longer than the defined pattern: {sequence_steps} > {len(ref_layout)}"
 
         # ensure we take the appropriate indexes to keep the model output from the first special token as well
         if is_model_output and self.starts_with_special_token():
@@ -222,7 +259,9 @@ class Pattern:
         mask = torch.from_numpy(mask).to(device)
         return indexes, mask
 
-    def revert_pattern_sequence(self, s: torch.Tensor, special_token: int, keep_only_valid_steps: bool = False):
+    def revert_pattern_sequence(
+        self, s: torch.Tensor, special_token: int, keep_only_valid_steps: bool = False
+    ):
         """Revert a sequence built from the pattern back to the original multi-codebook sequence without interleaving.
         The sequence is reverted using up to timesteps if specified, and non-pattern coordinates
         are filled with the special token.
@@ -247,7 +286,12 @@ class Pattern:
         values = values.view(B, K, indexes.shape[-1])
         return values, indexes, mask
 
-    def revert_pattern_logits(self, logits: torch.Tensor, special_token: float, keep_only_valid_steps: bool = False):
+    def revert_pattern_logits(
+        self,
+        logits: torch.Tensor,
+        special_token: float,
+        keep_only_valid_steps: bool = False,
+    ):
         """Revert model logits obtained on a sequence built from the pattern
         back to a tensor matching the original sequence.
 
@@ -263,7 +307,9 @@ class Pattern:
         )
         logits = logits.reshape(B, card, -1)
         # we append the special token as the last index of our flattened z tensor
-        logits = torch.cat([logits, torch.zeros_like(logits[:, :, :1]) + special_token], dim=-1)  # [B, card, K x S]
+        logits = torch.cat(
+            [logits, torch.zeros_like(logits[:, :, :1]) + special_token], dim=-1
+        )  # [B, card, K x S]
         values = logits[:, :, indexes.view(-1)]
         values = values.view(B, card, K, indexes.shape[-1])
         return values, indexes, mask
@@ -287,6 +333,7 @@ class CodebooksPatternProvider(ABC):
         cached (bool): if True, patterns for a given length are cached. In general
             that should be true for efficiency reason to avoid synchronization points.
     """
+
     def __init__(self, n_q: int, cached: bool = True):
         assert n_q > 0
         self.n_q = n_q
@@ -325,8 +372,14 @@ class DelayedPatternProvider(CodebooksPatternProvider):
         flatten_first (int): Flatten the first N timesteps.
         empty_initial (int): Prepend with N empty list of coordinates.
     """
-    def __init__(self, n_q: int, delays: tp.Optional[tp.List[int]] = None,
-                 flatten_first: int = 0, empty_initial: int = 0):
+
+    def __init__(
+        self,
+        n_q: int,
+        delays: tp.Optional[tp.List[int]] = None,
+        flatten_first: int = 0,
+        empty_initial: int = 0,
+    ):
         super().__init__(n_q)
         if delays is None:
             delays = list(range(n_q))
@@ -365,6 +418,7 @@ class ParallelPatternProvider(DelayedPatternProvider):
         n_q (int): Number of codebooks.
         empty_initial (int): Prepend with N empty list of coordinates.
     """
+
     def __init__(self, n_q: int, empty_initial: int = 0):
         super().__init__(n_q, [0] * n_q, empty_initial=empty_initial)
 
@@ -418,10 +472,15 @@ class UnrolledPatternProvider(CodebooksPatternProvider):
             Note that two codebooks that will be flattened to the same inner step
             should have the same delay, otherwise the pattern is considered as invalid.
     """
-    FlattenedCodebook = namedtuple('FlattenedCodebook', ['codebooks', 'delay'])
 
-    def __init__(self, n_q: int, flattening: tp.Optional[tp.List[int]] = None,
-                 delays: tp.Optional[tp.List[int]] = None):
+    FlattenedCodebook = namedtuple("FlattenedCodebook", ["codebooks", "delay"])
+
+    def __init__(
+        self,
+        n_q: int,
+        flattening: tp.Optional[tp.List[int]] = None,
+        delays: tp.Optional[tp.List[int]] = None,
+    ):
         super().__init__(n_q)
         if flattening is None:
             flattening = list(range(n_q))
@@ -434,7 +493,9 @@ class UnrolledPatternProvider(CodebooksPatternProvider):
         self._flattened_codebooks = self._build_flattened_codebooks(delays, flattening)
         self.max_delay = max(delays)
 
-    def _build_flattened_codebooks(self, delays: tp.List[int], flattening: tp.List[int]):
+    def _build_flattened_codebooks(
+        self, delays: tp.List[int], flattening: tp.List[int]
+    ):
         """Build a flattened codebooks representation as a dictionary of inner step
         and the actual codebook indices corresponding to the flattened codebook. For convenience, we
         also store the delay associated to the flattened codebook to avoid maintaining an extra mapping.
@@ -442,12 +503,14 @@ class UnrolledPatternProvider(CodebooksPatternProvider):
         flattened_codebooks: dict = {}
         for q, (inner_step, delay) in enumerate(zip(flattening, delays)):
             if inner_step not in flattened_codebooks:
-                flat_codebook = UnrolledPatternProvider.FlattenedCodebook(codebooks=[q], delay=delay)
+                flat_codebook = UnrolledPatternProvider.FlattenedCodebook(
+                    codebooks=[q], delay=delay
+                )
             else:
                 flat_codebook = flattened_codebooks[inner_step]
                 assert flat_codebook.delay == delay, (
                     "Delay and flattening between codebooks is inconsistent: ",
-                    "two codebooks flattened to the same position should have the same delay."
+                    "two codebooks flattened to the same position should have the same delay.",
                 )
                 flat_codebook.codebooks.append(q)
             flattened_codebooks[inner_step] = flat_codebook
@@ -455,8 +518,7 @@ class UnrolledPatternProvider(CodebooksPatternProvider):
 
     @property
     def _num_inner_steps(self):
-        """Number of inner steps to unroll between timesteps in order to flatten the codebooks.
-        """
+        """Number of inner steps to unroll between timesteps in order to flatten the codebooks."""
         return max([inner_step for inner_step in self._flattened_codebooks.keys()]) + 1
 
     def num_virtual_steps(self, timesteps: int) -> int:
@@ -504,6 +566,7 @@ class CoarseFirstPattern(CodebooksPatternProvider):
         delays (list of int, optional): Delay for each of the codebooks.
             If delays not defined, each codebook is delayed by 1 compared to the previous one.
     """
+
     def __init__(self, n_q: int, delays: tp.Optional[tp.List[int]] = None):
         super().__init__(n_q)
         if delays is None:
@@ -535,6 +598,7 @@ class MusicLMPattern(CodebooksPatternProvider):
         n_q (int): Number of codebooks.
         group_by (int): Number of codebooks to group together.
     """
+
     def __init__(self, n_q: int, group_by: int = 2):
         super().__init__(n_q)
         self.group_by = group_by

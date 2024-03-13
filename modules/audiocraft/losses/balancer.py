@@ -58,13 +58,21 @@ class Balancer:
         monitor (bool): If True, stores in `self.metrics` the relative ratio between the norm of the gradients
             coming from each loss, when calling `backward()`.
     """
-    def __init__(self, weights: tp.Dict[str, float], balance_grads: bool = True, total_norm: float = 1.,
-                 ema_decay: float = 0.999, per_batch_item: bool = True, epsilon: float = 1e-12,
-                 monitor: bool = False):
+
+    def __init__(
+        self,
+        weights: tp.Dict[str, float],
+        balance_grads: bool = True,
+        total_norm: float = 1.0,
+        ema_decay: float = 0.999,
+        per_batch_item: bool = True,
+        epsilon: float = 1e-12,
+        monitor: bool = False,
+    ):
         self.weights = weights
         self.per_batch_item = per_batch_item
-        self.total_norm = total_norm or 1.
-        self.averager = flashy.averager(ema_decay or 1.)
+        self.total_norm = total_norm or 1.0
+        self.averager = flashy.averager(ema_decay or 1.0)
         self.epsilon = epsilon
         self.monitor = monitor
         self.balance_grads = balance_grads
@@ -74,7 +82,9 @@ class Balancer:
     def metrics(self):
         return self._metrics
 
-    def backward(self, losses: tp.Dict[str, torch.Tensor], input: torch.Tensor) -> torch.Tensor:
+    def backward(
+        self, losses: tp.Dict[str, torch.Tensor], input: torch.Tensor
+    ) -> torch.Tensor:
         """Compute the backward and return the effective train loss, e.g. the loss obtained from
         computing the effective weights. If `balance_grads` is True, the effective weights
         are the one that needs to be applied to each gradient to respect the desired relative
@@ -90,7 +100,7 @@ class Balancer:
         grads = {}
         for name, loss in losses.items():
             # Compute partial derivative of the less with respect to the input.
-            grad, = autograd.grad(loss, [input], retain_graph=True)
+            (grad,) = autograd.grad(loss, [input], retain_graph=True)
             if self.per_batch_item:
                 # We do not average the gradient over the batch dimension.
                 dims = tuple(range(1, grad.dim()))
@@ -114,18 +124,20 @@ class Balancer:
         if self.monitor:
             # Store the ratio of the total gradient represented by each loss.
             for k, v in avg_norms.items():
-                self._metrics[f'ratio_{k}'] = v / total
+                self._metrics[f"ratio_{k}"] = v / total
 
         total_weights = sum([self.weights[k] for k in avg_norms])
-        assert total_weights > 0.
+        assert total_weights > 0.0
         desired_ratios = {k: w / total_weights for k, w in self.weights.items()}
 
         out_grad = torch.zeros_like(input)
-        effective_loss = torch.tensor(0., device=input.device, dtype=input.dtype)
+        effective_loss = torch.tensor(0.0, device=input.device, dtype=input.dtype)
         for name, avg_norm in avg_norms.items():
             if self.balance_grads:
                 # g_balanced = g / avg(||g||) * total_norm * desired_ratio
-                scale = desired_ratios[name] * self.total_norm / (self.epsilon + avg_norm)
+                scale = (
+                    desired_ratios[name] * self.total_norm / (self.epsilon + avg_norm)
+                )
             else:
                 # We just do regular weighted sum of the gradients.
                 scale = self.weights[name]

@@ -40,6 +40,7 @@ class StreamingModule(nn.Module):
     this one is trickier, as all parents module must be StreamingModule and implement
     it as well for it to work properly. See `StreamingSequential` after.
     """
+
     def __init__(self) -> None:
         super().__init__()
         self._streaming_state: State = {}
@@ -53,6 +54,7 @@ class StreamingModule(nn.Module):
     def _set_streaming(self, streaming: bool):
         def _set_streaming(name, module):
             module._is_streaming = streaming
+
         self._apply_named_streaming(_set_streaming)
 
     @contextmanager
@@ -67,6 +69,7 @@ class StreamingModule(nn.Module):
 
     def reset_streaming(self):
         """Reset the streaming state."""
+
         def _reset(name: str, module: StreamingModule):
             module._streaming_state.clear()
 
@@ -96,8 +99,8 @@ class StreamingModule(nn.Module):
             for key, value in list(state.items()):
                 # complexity is not ideal here, but probably fine.
                 if key.startswith(name):
-                    local_key = key[len(name):]
-                    if '.' not in local_key:
+                    local_key = key[len(name) :]
+                    if "." not in local_key:
                         module._streaming_state[local_key] = value
                         del state[key]
 
@@ -120,8 +123,8 @@ class StreamingModule(nn.Module):
 
 
 class StreamingSequential(StreamingModule, nn.Sequential):
-    """A streaming compatible alternative of `nn.Sequential`.
-    """
+    """A streaming compatible alternative of `nn.Sequential`."""
+
     def flush(self, x: tp.Optional[torch.Tensor] = None):
         for module in self:
             if isinstance(module, StreamingModule):

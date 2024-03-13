@@ -43,6 +43,7 @@ class AudioCraftEnvironment:
             specify your cluster configuration in the configuration file under a key mapping
             your team name.
     """
+
     _instance = None
     DEFAULT_TEAM = "default"
 
@@ -50,9 +51,7 @@ class AudioCraftEnvironment:
         """Loads configuration."""
         self.team: str = os.getenv("AUDIOCRAFT_TEAM", self.DEFAULT_TEAM)
         cluster_type = _guess_cluster_type()
-        cluster = os.getenv(
-            "AUDIOCRAFT_CLUSTER", cluster_type.value
-        )
+        cluster = os.getenv("AUDIOCRAFT_CLUSTER", cluster_type.value)
         logger.info("Detecting cluster type %s", cluster_type)
 
         self.cluster: str = cluster
@@ -64,10 +63,7 @@ class AudioCraftEnvironment:
         #     .with_suffix(".yaml"),
         # )
         # self.config = omegaconf.OmegaConf.load(config_path)
-        default_config = {
-            "default": { 
-            }
-        }
+        default_config = {"default": {}}
         self.config = omegaconf.OmegaConf.create(default_config)
         self._dataset_mappers = []
         cluster_config = self._get_cluster_config()
@@ -121,7 +117,9 @@ class AudioCraftEnvironment:
         Value is overridden by the AUDIOCRAFT_REFERENCE_DIR env var.
         """
         cluster_config = cls.instance()._get_cluster_config()
-        return Path(os.getenv("AUDIOCRAFT_REFERENCE_DIR", cluster_config["reference_dir"]))
+        return Path(
+            os.getenv("AUDIOCRAFT_REFERENCE_DIR", cluster_config["reference_dir"])
+        )
 
     @classmethod
     def get_slurm_exclude(cls) -> tp.Optional[str]:
@@ -130,7 +128,9 @@ class AudioCraftEnvironment:
         return cluster_config.get("slurm_exclude")
 
     @classmethod
-    def get_slurm_partitions(cls, partition_types: tp.Optional[tp.List[str]] = None) -> str:
+    def get_slurm_partitions(
+        cls, partition_types: tp.Optional[tp.List[str]] = None
+    ) -> str:
         """Gets the requested partitions for the current team and cluster as a comma-separated string.
 
         Args:

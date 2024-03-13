@@ -18,6 +18,7 @@ class TorchAutocast:
         args: Additional args for torch.autocast.
         kwargs: Additional kwargs for torch.autocast
     """
+
     def __init__(self, enabled: bool, *args, **kwargs):
         self.autocast = torch.autocast(*args, **kwargs) if enabled else None
 

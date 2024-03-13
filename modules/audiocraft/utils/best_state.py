@@ -33,27 +33,39 @@ class BestStateDictManager(flashy.state.StateDictSource):
         device (torch.device or str): Device on which we keep the copy.
         dtype (torch.dtype): Data type for the state parameters.
     """
-    def __init__(self, device: tp.Union[torch.device, str] = 'cpu',
-                 dtype: tp.Optional[torch.dtype] = None):
+
+    def __init__(
+        self,
+        device: tp.Union[torch.device, str] = "cpu",
+        dtype: tp.Optional[torch.dtype] = None,
+    ):
         self.device = device
         self.states: dict = {}
         self.param_ids: dict = defaultdict(dict)
         self.dtype = dtype
 
     def _get_parameter_ids(self, state_dict):
-        return {id(p): name for name, p in state_dict.items() if isinstance(p, torch.Tensor)}
+        return {
+            id(p): name for name, p in state_dict.items() if isinstance(p, torch.Tensor)
+        }
 
     def _validate_no_parameter_ids_overlap(self, name: str, param_ids: dict):
         for registered_name, registered_param_ids in self.param_ids.items():
             if registered_name != name:
-                overlap = set.intersection(registered_param_ids.keys(), param_ids.keys())
-                assert len(overlap) == 0, f"Found {len(overlap)} / {len(param_ids.keys())} overlapping parameters"
+                overlap = set.intersection(
+                    registered_param_ids.keys(), param_ids.keys()
+                )
+                assert (
+                    len(overlap) == 0
+                ), f"Found {len(overlap)} / {len(param_ids.keys())} overlapping parameters"
                 f" in {name} and already registered {registered_name}: {' '.join(overlap)}"
 
     def update(self, name: str, source: flashy.state.StateDictSource):
         if name not in self.states:
             raise ValueError(f"{name} missing from registered states.")
-        self.states[name] = copy_state(source.state_dict(), device=self.device, dtype=self.dtype)
+        self.states[name] = copy_state(
+            source.state_dict(), device=self.device, dtype=self.dtype
+        )
 
     def register(self, name: str, source: flashy.state.StateDictSource):
         if name in self.states:
@@ -62,15 +74,21 @@ class BestStateDictManager(flashy.state.StateDictSource):
         # there is no overlap that would create ambiguity about how to handle the best state
         param_ids = self._get_parameter_ids(source.state_dict())
         if isinstance(source, ModuleDictEMA):
-            logger.debug(f"Registering to best state: ModuleDictEMA '{name}' with {len(param_ids)} params")
+            logger.debug(
+                f"Registering to best state: ModuleDictEMA '{name}' with {len(param_ids)} params"
+            )
             self._validate_no_parameter_ids_overlap(name, param_ids)
             self.param_ids[name] = param_ids
         else:
-            logger.debug(f"Registering to best state: StateDictSource '{name}' with {len(param_ids)} params")
-            self._validate_no_parameter_ids_overlap('base', param_ids)
-            self.param_ids['base'].update(param_ids)
+            logger.debug(
+                f"Registering to best state: StateDictSource '{name}' with {len(param_ids)} params"
+            )
+            self._validate_no_parameter_ids_overlap("base", param_ids)
+            self.param_ids["base"].update(param_ids)
         # Register state
-        self.states[name] = copy_state(source.state_dict(), device=self.device, dtype=self.dtype)
+        self.states[name] = copy_state(
+            source.state_dict(), device=self.device, dtype=self.dtype
+        )
 
     def state_dict(self) -> flashy.state.StateDict:
         return self.states

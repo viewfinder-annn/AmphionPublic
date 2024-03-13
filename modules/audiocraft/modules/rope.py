@@ -21,8 +21,15 @@ class XPos(nn.Module):
         device (torch.device, optional): Device on which to initialize the module.
         dtype (torch.dtype): dtype to use to generate the embedding.
     """
-    def __init__(self, dim: int, smoothing: float = 0.4, base_scale: int = 512,
-                 device=None, dtype: torch.dtype = torch.float32):
+
+    def __init__(
+        self,
+        dim: int,
+        smoothing: float = 0.4,
+        base_scale: int = 512,
+        device=None,
+        dtype: torch.dtype = torch.float32,
+    ):
         super().__init__()
         assert dim % 2 == 0
         assert dtype in [torch.float64, torch.float32]
@@ -57,8 +64,16 @@ class RotaryEmbedding(nn.Module):
         device (torch.device, optional): Device on which to initialize the module.
         dtype (torch.dtype): dtype to use to generate the embedding.
     """
-    def __init__(self, dim: int, max_period: float = 10000.0, xpos: bool = False,
-                 scale: float = 1.0, device=None, dtype: torch.dtype = torch.float32):
+
+    def __init__(
+        self,
+        dim: int,
+        max_period: float = 10000.0,
+        xpos: bool = False,
+        scale: float = 1.0,
+        device=None,
+        dtype: torch.dtype = torch.float32,
+    ):
         super().__init__()
         assert dim % 2 == 0
         self.scale = scale
@@ -81,7 +96,13 @@ class RotaryEmbedding(nn.Module):
             self.rotation = torch.polar(torch.ones_like(angles), angles)
         return self.rotation[start:end]
 
-    def rotate(self, x: torch.Tensor, start: int = 0, time_dim: int = 1, invert_decay: bool = False):
+    def rotate(
+        self,
+        x: torch.Tensor,
+        start: int = 0,
+        time_dim: int = 1,
+        invert_decay: bool = False,
+    ):
         """Apply rope rotation to query or key tensor."""
         T = x.shape[time_dim]
         target_shape = [1] * x.dim()
@@ -95,16 +116,20 @@ class RotaryEmbedding(nn.Module):
             decay = 1.0
 
         if invert_decay:
-            decay = decay ** -1
+            decay = decay**-1
 
-        x_complex = torch.view_as_complex(x.to(self.dtype).reshape(*x.shape[:-1], -1, 2))
+        x_complex = torch.view_as_complex(
+            x.to(self.dtype).reshape(*x.shape[:-1], -1, 2)
+        )
         scaled_rotation = (rotation * decay) * self.scale + (1.0 - self.scale)
         x_out = torch.view_as_real(x_complex * scaled_rotation).view_as(x)
 
         return x_out.type_as(x)
 
-    def rotate_qk(self, query: torch.Tensor, key: torch.Tensor, start: int = 0, time_dim: int = 1):
-        """ Apply rope rotation to both query and key tensors.
+    def rotate_qk(
+        self, query: torch.Tensor, key: torch.Tensor, start: int = 0, time_dim: int = 1
+    ):
+        """Apply rope rotation to both query and key tensors.
         Supports streaming mode, in which query and key are not expected to have the same shape.
         In streaming mode, key will be of length [P + C] with P the cached past timesteps, but
         query will be [C] (typically C == 1).

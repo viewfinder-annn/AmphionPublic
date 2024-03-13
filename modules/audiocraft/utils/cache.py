@@ -21,7 +21,9 @@ import torch
 logger = logging.getLogger(__name__)
 
 
-def get_full_embed(full_embed: torch.Tensor, x: tp.Any, idx: int, device: tp.Union[str, torch.device]) -> torch.Tensor:
+def get_full_embed(
+    full_embed: torch.Tensor, x: tp.Any, idx: int, device: tp.Union[str, torch.device]
+) -> torch.Tensor:
     """Utility function for the EmbeddingCache, returning the full embedding without any chunking.
     This method can be used in case there is no need in extracting a chunk of the full embedding
     read from the cache.
@@ -57,9 +59,16 @@ class EmbeddingCache:
             specify the index corresponding to the current embedding in the object that can represent batch metadata.
             If not specified, will return the full embedding unmodified.
     """
-    def __init__(self, cache_path: tp.Union[str, Path], device: tp.Union[str, torch.device],
-                 compute_embed_fn: tp.Callable[[Path, tp.Any, int], torch.Tensor],
-                 extract_embed_fn: tp.Optional[tp.Callable[[torch.Tensor, tp.Any, int], torch.Tensor]] = None):
+
+    def __init__(
+        self,
+        cache_path: tp.Union[str, Path],
+        device: tp.Union[str, torch.device],
+        compute_embed_fn: tp.Callable[[Path, tp.Any, int], torch.Tensor],
+        extract_embed_fn: tp.Optional[
+            tp.Callable[[torch.Tensor, tp.Any, int], torch.Tensor]
+        ] = None,
+    ):
         self.cache_path = Path(cache_path)
         self.device = device
         self._compute_embed_fn = compute_embed_fn
@@ -85,7 +94,7 @@ class EmbeddingCache:
     def _get_full_embed_from_cache(cache: Path):
         """Loads full pre-computed embedding from the cache."""
         try:
-            embed = torch.load(cache, 'cpu')
+            embed = torch.load(cache, "cpu")
         except Exception as exc:
             logger.error("Error loading %s: %r", cache, exc)
             embed = None
@@ -113,9 +122,13 @@ class EmbeddingCache:
                     with flashy.utils.write_and_rename(cache, pid=True) as f:
                         torch.save(full_embed.cpu(), f)
                 except Exception as exc:
-                    logger.error('Error saving embed %s (%s): %r', cache, full_embed.shape, exc)
+                    logger.error(
+                        "Error saving embed %s (%s): %r", cache, full_embed.shape, exc
+                    )
                 else:
-                    logger.info('New embed cache saved: %s (%s)', cache, full_embed.shape)
+                    logger.info(
+                        "New embed cache saved: %s (%s)", cache, full_embed.shape
+                    )
                     embed = self._extract_embed_fn(full_embed, x, idx)
             embeds.append(embed)
         embed = torch.stack(embeds, dim=0)
@@ -140,7 +153,11 @@ class EmbeddingCache:
                 if cache in self._memory_cache or not cache.exists():
                     futures.append(None)
                 else:
-                    futures.append(self.pool.submit(EmbeddingCache._get_full_embed_from_cache, cache))
+                    futures.append(
+                        self.pool.submit(
+                            EmbeddingCache._get_full_embed_from_cache, cache
+                        )
+                    )
             for idx, (path, future) in enumerate(zip(paths, futures)):
                 assert path is not None
                 cache = self._get_cache_path(path)
@@ -177,14 +194,14 @@ class CachedBatchWriter:
     See the grid `audiocraft/grids/musicgen/musicgen_warmup_cache.py`
     for an example of how to warmup the cache.
     """
+
     def __init__(self, cache_folder: Path):
         self.cache_folder = cache_folder
         self._current_epoch: tp.Optional[int] = None
         self._current_index = 0
 
     def start_epoch(self, epoch: int):
-        """Call at the beginning of each epoch.
-        """
+        """Call at the beginning of each epoch."""
         self._current_epoch = epoch
         self._current_index = 0
         self._zip_path.parent.mkdir(exist_ok=True, parents=True)
@@ -196,7 +213,9 @@ class CachedBatchWriter:
     @property
     def _zip_path(self):
         assert self._current_epoch is not None
-        return CachedBatchWriter._get_zip_path(self.cache_folder, self._current_epoch, self._current_index)
+        return CachedBatchWriter._get_zip_path(
+            self.cache_folder, self._current_epoch, self._current_index
+        )
 
     def save(self, *content):
         """Save one mini batch. This function is distributed-aware
@@ -211,10 +230,10 @@ class CachedBatchWriter:
         if flashy.distrib.is_rank_zero():
             idx = 0
             with flashy.utils.write_and_rename(self._zip_path) as tmp:
-                with zipfile.ZipFile(tmp, 'w') as zf:
+                with zipfile.ZipFile(tmp, "w") as zf:
                     for content in all_contents:
                         for vals in zip(*content):
-                            with zf.open(f'{idx}', 'w') as f:  # type: ignore
+                            with zf.open(f"{idx}", "w") as f:  # type: ignore
                                 torch.save(vals, f)
                             idx += 1
         flashy.distrib.barrier()
@@ -234,8 +253,13 @@ class CachedBatchLoader:
     This is iterable just like a regular DataLoader.
     """
 
-    def __init__(self, cache_folder: Path, batch_size: int,
-                 num_workers: int = 10, min_length: int = 1):
+    def __init__(
+        self,
+        cache_folder: Path,
+        batch_size: int,
+        num_workers: int = 10,
+        min_length: int = 1,
+    ):
         self.cache_folder = cache_folder
         self.batch_size = batch_size
         self.num_workers = num_workers
@@ -244,28 +268,33 @@ class CachedBatchLoader:
         self.sampler = None  # for compatibility with the regular DataLoader
 
     def __len__(self):
-        path = CachedBatchWriter._get_zip_path(self.cache_folder, self._current_epoch or 0, 0).parent
+        path = CachedBatchWriter._get_zip_path(
+            self.cache_folder, self._current_epoch or 0, 0
+        ).parent
         return len([p for p in path.iterdir() if p.suffix == ".zip"])
 
     def start_epoch(self, epoch: int):
-        """Call at the beginning of each epoch.
-        """
+        """Call at the beginning of each epoch."""
         self._current_epoch = epoch
 
     def _zip_path(self, index: int):
         assert self._current_epoch is not None
-        return CachedBatchWriter._get_zip_path(self.cache_folder, self._current_epoch, index)
+        return CachedBatchWriter._get_zip_path(
+            self.cache_folder, self._current_epoch, index
+        )
 
     def _load_one(self, index: int):
         zip_path = self._zip_path(index)
         if not zip_path.exists():
             if index < self.min_length:
-                raise RuntimeError(f"Cache should have at least {self.min_length} batches, but {index} doesn't exist")
+                raise RuntimeError(
+                    f"Cache should have at least {self.min_length} batches, but {index} doesn't exist"
+                )
 
             return None
         mode = "rb" if sys.version_info >= (3, 9) else "r"
         try:
-            with zipfile.ZipFile(zip_path, 'r') as zf:
+            with zipfile.ZipFile(zip_path, "r") as zf:
                 rank = flashy.distrib.rank()
                 world_size = flashy.distrib.world_size()
                 root = zipfile.Path(zf)
@@ -274,12 +303,13 @@ class CachedBatchLoader:
                 if len(items) < total_batch_size:
                     raise RuntimeError(
                         f"The cache can handle a max batch size of {len(items)}, "
-                        f"but {total_batch_size} is needed.")
+                        f"but {total_batch_size} is needed."
+                    )
                 start = rank * self.batch_size
-                items = items[start: start + self.batch_size]
+                items = items[start : start + self.batch_size]
                 assert len(items) == self.batch_size
                 entries = []
-                entries = [torch.load(item.open(mode), 'cpu') for item in items]  # type: ignore
+                entries = [torch.load(item.open(mode), "cpu") for item in items]  # type: ignore
                 transposed = zip(*entries)
                 out = []
                 for part in transposed:

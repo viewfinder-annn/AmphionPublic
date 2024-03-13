@@ -66,22 +66,37 @@ class RelativeVolumeMel(nn.Module):
         num_aggregated_bands (int): Number of bands to keep when computing the average RVM value.
             For instance, a value of 3 would give 3 scores, roughly for low, mid and high freqs.
     """
-    def __init__(self, sample_rate: int = 24000, n_mels: int = 80, n_fft: int = 512,
-                 hop_length: int = 128, min_relative_volume: float = -25,
-                 max_relative_volume: float = 25, max_initial_gain: float = 25,
-                 min_activity_volume: float = -25,
-                 num_aggregated_bands: int = 4) -> None:
+
+    def __init__(
+        self,
+        sample_rate: int = 24000,
+        n_mels: int = 80,
+        n_fft: int = 512,
+        hop_length: int = 128,
+        min_relative_volume: float = -25,
+        max_relative_volume: float = 25,
+        max_initial_gain: float = 25,
+        min_activity_volume: float = -25,
+        num_aggregated_bands: int = 4,
+    ) -> None:
         super().__init__()
         self.melspec = torchaudio.transforms.MelSpectrogram(
-            n_mels=n_mels, n_fft=n_fft, hop_length=hop_length,
-            normalized=True, sample_rate=sample_rate, power=2)
+            n_mels=n_mels,
+            n_fft=n_fft,
+            hop_length=hop_length,
+            normalized=True,
+            sample_rate=sample_rate,
+            power=2,
+        )
         self.min_relative_volume = min_relative_volume
         self.max_relative_volume = max_relative_volume
         self.max_initial_gain = max_initial_gain
         self.min_activity_volume = min_activity_volume
         self.num_aggregated_bands = num_aggregated_bands
 
-    def forward(self, estimate: torch.Tensor, ground_truth: torch.Tensor) -> tp.Dict[str, torch.Tensor]:
+    def forward(
+        self, estimate: torch.Tensor, ground_truth: torch.Tensor
+    ) -> tp.Dict[str, torch.Tensor]:
         """Compute RVM metric between estimate and reference samples.
 
         Args:
@@ -100,11 +115,16 @@ class RelativeVolumeMel(nn.Module):
         delta = z_gt - z_est
         ref_db = scale_to_db(z_gt, self.min_activity_volume)
         delta_db = scale_to_db(delta.abs(), min_volume=-120)
-        relative_db = (delta_db - ref_db).clamp(self.min_relative_volume, self.max_relative_volume)
+        relative_db = (delta_db - ref_db).clamp(
+            self.min_relative_volume, self.max_relative_volume
+        )
         dims = list(range(relative_db.dim()))
         dims.remove(dims[-2])
         losses_per_band = relative_db.mean(dim=dims)
-        aggregated = [chunk.mean() for chunk in losses_per_band.chunk(self.num_aggregated_bands, dim=0)]
-        metrics = {f'rvm_{index}': value for index, value in enumerate(aggregated)}
-        metrics['rvm'] = losses_per_band.mean()
+        aggregated = [
+            chunk.mean()
+            for chunk in losses_per_band.chunk(self.num_aggregated_bands, dim=0)
+        ]
+        metrics = {f"rvm_{index}": value for index, value in enumerate(aggregated)}
+        metrics["rvm"] = losses_per_band.mean()
         return metrics

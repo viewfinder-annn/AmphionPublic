@@ -15,7 +15,11 @@ import torch
 
 from torch.distributed.fsdp import FullyShardedDataParallel as FSDP
 from torch.distributed.fsdp import (
-    MixedPrecision, ShardingStrategy, FullStateDictConfig, StateDictType)
+    MixedPrecision,
+    ShardingStrategy,
+    FullStateDictConfig,
+    StateDictType,
+)
 from torch.distributed._shard.sharded_tensor.api import ShardedTensor
 
 
@@ -24,7 +28,7 @@ def is_fsdp_used() -> bool:
     # A bit of a hack but should work from anywhere.
     if dora.is_xp():
         cfg = dora.get_xp().cfg
-        if hasattr(cfg, 'fsdp'):
+        if hasattr(cfg, "fsdp"):
             return cfg.fsdp.use
     return False
 
@@ -39,8 +43,10 @@ def switch_to_full_state_dict(models: tp.List[FSDP]):
     # so let's do thing manually.
     for model in models:
         FSDP.set_state_dict_type(  # type: ignore
-            model, StateDictType.FULL_STATE_DICT,
-            FullStateDictConfig(offload_to_cpu=True, rank0_only=True))
+            model,
+            StateDictType.FULL_STATE_DICT,
+            FullStateDictConfig(offload_to_cpu=True, rank0_only=True),
+        )
     try:
         yield
     finally:
@@ -48,8 +54,9 @@ def switch_to_full_state_dict(models: tp.List[FSDP]):
             FSDP.set_state_dict_type(model, StateDictType.LOCAL_STATE_DICT)  # type: ignore
 
 
-def wrap_with_fsdp(cfg, model: torch.nn.Module,
-                   block_classes: tp.Optional[tp.Set[tp.Type]] = None) -> FSDP:
+def wrap_with_fsdp(
+    cfg, model: torch.nn.Module, block_classes: tp.Optional[tp.Set[tp.Type]] = None
+) -> FSDP:
     """Wraps a model with FSDP."""
     # Some of the typing is disabled until this gets integrated
     # into the stable version of PyTorch.
@@ -85,8 +92,9 @@ def wrap_with_fsdp(cfg, model: torch.nn.Module,
     # when doing LM, because this would flush the weights for every time step
     # during generation. One possiblity is to use hybrid sharding:
     # See: https://pytorch.org/docs/master/fsdp.html#torch.distributed.fsdp.ShardingStrategy
-    assert sharding_strategy_config != ShardingStrategy.FULL_SHARD, \
-        "Not supported at the moment, requires a bit more work."
+    assert (
+        sharding_strategy_config != ShardingStrategy.FULL_SHARD
+    ), "Not supported at the moment, requires a bit more work."
 
     local_rank = dora.distrib.get_distrib_spec().local_rank
     assert local_rank < torch.cuda.device_count(), "Please upgrade Dora!"
@@ -113,7 +121,7 @@ def wrap_with_fsdp(cfg, model: torch.nn.Module,
     # the wrapped model would call itself and bypass FSDP.
     for module in FSDP.fsdp_modules(wrapped):
         original = module._fsdp_wrapped_module
-        original.__dict__['_fsdp'] = module
+        original.__dict__["_fsdp"] = module
     return wrapped
 
 
@@ -122,6 +130,7 @@ def purge_fsdp(model: FSDP):
     allow setting the best state or switching to the EMA.
     """
     from torch.distributed.fsdp._runtime_utils import _reshard  # type: ignore
+
     for module in FSDP.fsdp_modules(model):
         handles = module._handles
         if not handles:
@@ -139,9 +148,10 @@ class _FSDPFixStateDict(FSDP):
     @staticmethod
     def _name_without_fsdp_prefix(name: str) -> str:
         from torch.distributed.fsdp._common_utils import FSDP_WRAPPED_MODULE  # type: ignore
-        parts = name.split('.')
+
+        parts = name.split(".")
         new_parts = [part for part in parts if part != FSDP_WRAPPED_MODULE]
-        return '.'.join(new_parts)
+        return ".".join(new_parts)
 
     def state_dict(self, *args, **kwargs) -> tp.Dict[str, tp.Any]:  # type: ignore
         state = dict(super().state_dict(*args, **kwargs))
@@ -180,10 +190,13 @@ def _fix_post_backward_hook():
 
     from torch.distributed.fsdp import _runtime_utils
     from torch.distributed.fsdp._common_utils import TrainingState, HandleTrainingState
+
     old_hook = _runtime_utils._post_backward_hook
 
     def _post_backward_hook(state, handle, *args, **kwargs):
-        checkpointed = getattr(state._fsdp_wrapped_module, '_audiocraft_checkpointed', False)
+        checkpointed = getattr(
+            state._fsdp_wrapped_module, "_audiocraft_checkpointed", False
+        )
         if checkpointed:
             # there will be one more forward in the backward with checkpointing and that will
             # massively confuse FSDP, so we have to make it think everything

@@ -34,18 +34,30 @@ class MagnetLMModel(LMModel):
                         for both training and inference. Defaults to 3.
         **kwargs: Additional parameters for the LMModel.
     """
-    def __init__(self, subcodes_context: int = 5, compression_model_framerate: int = 50,
-                 segment_duration: int = 10, span_len: int = 3, **kwargs):
+
+    def __init__(
+        self,
+        subcodes_context: int = 5,
+        compression_model_framerate: int = 50,
+        segment_duration: int = 10,
+        span_len: int = 3,
+        **kwargs
+    ):
         super().__init__(**kwargs)
-        self.causal = kwargs['causal']
+        self.causal = kwargs["causal"]
         self.subcodes_context = subcodes_context
         self.span_len = span_len
-        self._build_attn_masks(compression_model_framerate=compression_model_framerate,
-                               segment_duration=segment_duration,
-                               num_heads=kwargs['num_heads'],
-                               device=kwargs['device'], dtype=kwargs['dtype'])
+        self._build_attn_masks(
+            compression_model_framerate=compression_model_framerate,
+            segment_duration=segment_duration,
+            num_heads=kwargs["num_heads"],
+            device=kwargs["device"],
+            dtype=kwargs["dtype"],
+        )
 
-    def restricted_context_attn_mask(self, seq_len: int, device: torch.device, dtype: torch.dtype) -> torch.Tensor:
+    def restricted_context_attn_mask(
+        self, seq_len: int, device: torch.device, dtype: torch.dtype
+    ) -> torch.Tensor:
         """Creates a restricted attention mask (local attention map) where the context
            is determined by self.subcodes_context.
         Args:
@@ -64,10 +76,17 @@ class MagnetLMModel(LMModel):
         return torch.where(
             valid,
             torch.zeros([], device=device, dtype=dtype),
-            torch.full([], float('-inf'), device=device, dtype=dtype))
+            torch.full([], float("-inf"), device=device, dtype=dtype),
+        )
 
-    def _stage_attn_mask(self, stage: int, seq_len: int, num_heads: int,
-                         device: torch.device, dtype: torch.dtype) -> tp.Optional[torch.Tensor]:
+    def _stage_attn_mask(
+        self,
+        stage: int,
+        seq_len: int,
+        num_heads: int,
+        device: torch.device,
+        dtype: torch.dtype,
+    ) -> tp.Optional[torch.Tensor]:
         """Creates a restricted attention mask given the stage (codebook index).
         Args:
             stage (int): The codebook index. Takes values in [0, n_q].
@@ -82,7 +101,9 @@ class MagnetLMModel(LMModel):
 
         if stage > 0 and self.subcodes_context > -1:
             # parallel - non-causal - with restricted subcodes context
-            sa_mask = self.restricted_context_attn_mask(seq_len, device=device, dtype=dtype)
+            sa_mask = self.restricted_context_attn_mask(
+                seq_len, device=device, dtype=dtype
+            )
 
         if sa_mask is not None:
             # Repeat for each attention head
@@ -90,17 +111,29 @@ class MagnetLMModel(LMModel):
 
             # align8 to enable memory efficient attention
             MEMORY_EFFICIENT_ATTN_ALIGN_FACTOR = 8
-            seq_len_aligned = \
-                int(np.ceil(seq_len / MEMORY_EFFICIENT_ATTN_ALIGN_FACTOR)) * MEMORY_EFFICIENT_ATTN_ALIGN_FACTOR
+            seq_len_aligned = (
+                int(np.ceil(seq_len / MEMORY_EFFICIENT_ATTN_ALIGN_FACTOR))
+                * MEMORY_EFFICIENT_ATTN_ALIGN_FACTOR
+            )
 
-            sa_mask_aligned = torch.zeros((1, num_heads, seq_len_aligned, seq_len_aligned), device=device, dtype=dtype)
+            sa_mask_aligned = torch.zeros(
+                (1, num_heads, seq_len_aligned, seq_len_aligned),
+                device=device,
+                dtype=dtype,
+            )
             sa_mask_aligned[..., :seq_len, :seq_len] = sa_mask
             sa_mask = sa_mask_aligned
 
         return sa_mask
 
-    def _build_attn_masks(self, compression_model_framerate: int, segment_duration: int, num_heads: int,
-                          device: torch.device, dtype: torch.dtype):
+    def _build_attn_masks(
+        self,
+        compression_model_framerate: int,
+        segment_duration: int,
+        num_heads: int,
+        device: torch.device,
+        dtype: torch.dtype,
+    ):
         """Construct attention mask per stage. For each of the RVQ codebook levels in the [0, n_q] range,
            either a local attention map or None would be stored as an entry in the self.attn_mask_per_stage list.
         Args:
@@ -111,58 +144,73 @@ class MagnetLMModel(LMModel):
             dtype (torch.dtype): data type of the output tensor.
         """
         seq_len = compression_model_framerate * segment_duration
-        self.attn_mask_per_stage = [self._stage_attn_mask(stage, seq_len, num_heads,
-                                                          device, dtype) for stage in range(self.n_q)]
+        self.attn_mask_per_stage = [
+            self._stage_attn_mask(stage, seq_len, num_heads, device, dtype)
+            for stage in range(self.n_q)
+        ]
 
     @torch.no_grad()
-    def generate(self,
-                 prompt: tp.Optional[torch.Tensor] = None,
-                 conditions: tp.List[ConditioningAttributes] = [],
-                 num_samples: tp.Optional[int] = None,
-                 max_gen_len: int = 256,
-                 use_sampling: bool = True,
-                 temp: float = 1.0,
-                 top_k: int = 250,
-                 top_p: float = 0.0,
-                 cfg_coef: tp.Optional[float] = None,
-                 two_step_cfg: tp.Optional[bool] = None,
-                 remove_prompts: bool = False,
-                 check: bool = False,
-                 callback: tp.Optional[tp.Callable[[int, int], None]] = None,
-                 **kwargs) -> torch.Tensor:
+    def generate(
+        self,
+        prompt: tp.Optional[torch.Tensor] = None,
+        conditions: tp.List[ConditioningAttributes] = [],
+        num_samples: tp.Optional[int] = None,
+        max_gen_len: int = 256,
+        use_sampling: bool = True,
+        temp: float = 1.0,
+        top_k: int = 250,
+        top_p: float = 0.0,
+        cfg_coef: tp.Optional[float] = None,
+        two_step_cfg: tp.Optional[bool] = None,
+        remove_prompts: bool = False,
+        check: bool = False,
+        callback: tp.Optional[tp.Callable[[int, int], None]] = None,
+        **kwargs
+    ) -> torch.Tensor:
 
-        assert cfg_coef is None, "Unsupported in MAGNeT. Use max_cfg_coef,min_cfg_coef instead."
-        assert two_step_cfg is None, "MAGNeT currently doesn't support two step classifier-free-guidance."
-        assert remove_prompts is False, "MAGNeT currently doesn't support the remove_prompts arg."
+        assert (
+            cfg_coef is None
+        ), "Unsupported in MAGNeT. Use max_cfg_coef,min_cfg_coef instead."
+        assert (
+            two_step_cfg is None
+        ), "MAGNeT currently doesn't support two step classifier-free-guidance."
+        assert (
+            remove_prompts is False
+        ), "MAGNeT currently doesn't support the remove_prompts arg."
         assert check is False, "MAGNeT currently doesn't support the check arg."
         # Call the MAGNeT-specific generation method
-        return self._generate_magnet(prompt=prompt,
-                                     conditions=conditions,
-                                     num_samples=num_samples,
-                                     max_gen_len=max_gen_len,
-                                     use_sampling=use_sampling,
-                                     temp=temp,
-                                     top_k=top_k,
-                                     top_p=top_p,
-                                     callback=callback, **kwargs)
+        return self._generate_magnet(
+            prompt=prompt,
+            conditions=conditions,
+            num_samples=num_samples,
+            max_gen_len=max_gen_len,
+            use_sampling=use_sampling,
+            temp=temp,
+            top_k=top_k,
+            top_p=top_p,
+            callback=callback,
+            **kwargs
+        )
 
     @torch.no_grad()
-    def _generate_magnet(self,
-                         prompt: tp.Optional[torch.Tensor] = None,
-                         conditions: tp.List[ConditioningAttributes] = [],
-                         num_samples: tp.Optional[int] = None,
-                         max_gen_len: int = 256,
-                         use_sampling: bool = True,
-                         temp: float = 3.0,
-                         top_k: int = 0,
-                         top_p: float = 0.9,
-                         callback: tp.Optional[tp.Callable[[int, int], None]] = None,
-                         max_cfg_coef: float = 10.0,
-                         min_cfg_coef: float = 1.0,
-                         decoding_steps: tp.List[int] = [20, 10, 10, 10],
-                         anneal_temp: bool = True,
-                         span_scoring='max',
-                         span_arrangement='nonoverlap') -> torch.Tensor:
+    def _generate_magnet(
+        self,
+        prompt: tp.Optional[torch.Tensor] = None,
+        conditions: tp.List[ConditioningAttributes] = [],
+        num_samples: tp.Optional[int] = None,
+        max_gen_len: int = 256,
+        use_sampling: bool = True,
+        temp: float = 3.0,
+        top_k: int = 0,
+        top_p: float = 0.9,
+        callback: tp.Optional[tp.Callable[[int, int], None]] = None,
+        max_cfg_coef: float = 10.0,
+        min_cfg_coef: float = 1.0,
+        decoding_steps: tp.List[int] = [20, 10, 10, 10],
+        anneal_temp: bool = True,
+        span_scoring="max",
+        span_arrangement="nonoverlap",
+    ) -> torch.Tensor:
         """Generate audio tokens given textual conditions, and optionally given audio prompts,
         by running MAGNeT's iterative decoding algorithm for each of the n_q RVQ levels.
         Args:
@@ -201,7 +249,9 @@ class MagnetLMModel(LMModel):
             possible_num_samples.append(len(conditions))
         else:
             possible_num_samples.append(1)
-        assert [x == possible_num_samples[0] for x in possible_num_samples], "Inconsistent inputs shapes"
+        assert [
+            x == possible_num_samples[0] for x in possible_num_samples
+        ], "Inconsistent inputs shapes"
         num_samples = possible_num_samples[0]
 
         # below we create set of conditions: one conditional and one unconditional
@@ -218,7 +268,9 @@ class MagnetLMModel(LMModel):
 
         if prompt is None:
             assert num_samples > 0
-            prompt = torch.zeros((num_samples, self.num_codebooks, 0), dtype=torch.long, device=device)
+            prompt = torch.zeros(
+                (num_samples, self.num_codebooks, 0), dtype=torch.long, device=device
+            )
 
         B, K, prompt_length = prompt.shape
         start_offset = prompt_length
@@ -237,49 +289,53 @@ class MagnetLMModel(LMModel):
 
         curr_step = 0
         for stage, n_steps in zip(range(self.n_q), decoding_steps):
-            gen_sequence, curr_step = self._generate_stage(gen_sequence,
-                                                           cfg_conditions,
-                                                           stage=stage,
-                                                           device=device,
-                                                           prompt_length=prompt_length,
-                                                           prompt=prompt,
-                                                           temp=temp,
-                                                           max_cfg_coef=max_cfg_coef,
-                                                           min_cfg_coef=min_cfg_coef,
-                                                           top_k=top_k,
-                                                           top_p=top_p,
-                                                           timesteps=n_steps,
-                                                           anneal_temp=anneal_temp,
-                                                           span_scoring=span_scoring,
-                                                           use_sampling=use_sampling,
-                                                           span_arrangement=span_arrangement,
-                                                           curr_step=curr_step,
-                                                           total_steps=sum(decoding_steps),
-                                                           callback=callback)
+            gen_sequence, curr_step = self._generate_stage(
+                gen_sequence,
+                cfg_conditions,
+                stage=stage,
+                device=device,
+                prompt_length=prompt_length,
+                prompt=prompt,
+                temp=temp,
+                max_cfg_coef=max_cfg_coef,
+                min_cfg_coef=min_cfg_coef,
+                top_k=top_k,
+                top_p=top_p,
+                timesteps=n_steps,
+                anneal_temp=anneal_temp,
+                span_scoring=span_scoring,
+                use_sampling=use_sampling,
+                span_arrangement=span_arrangement,
+                curr_step=curr_step,
+                total_steps=sum(decoding_steps),
+                callback=callback,
+            )
 
         return gen_sequence
 
     @torch.no_grad()
-    def _generate_stage(self,
-                        gen_sequence: torch.Tensor,
-                        condition_tensors: tp.Optional[ConditionTensors],
-                        stage: int,
-                        device: torch.device,
-                        prompt_length: int = 0,
-                        prompt: tp.Optional[torch.Tensor] = None,
-                        use_sampling: bool = True,
-                        temp: float = 3.0,
-                        max_cfg_coef: float = 10.0,
-                        min_cfg_coef: float = 1.0,
-                        top_k: int = 0,
-                        top_p: float = 0.0,
-                        timesteps: int = 10,
-                        anneal_temp: bool = True,
-                        span_scoring: str = 'max',
-                        span_arrangement: str = 'nonoverlap',
-                        curr_step: int = 0,
-                        total_steps: int = 0,
-                        callback: tp.Optional[tp.Callable[[int, int], None]] = None) -> tp.Tuple[torch.Tensor, int]:
+    def _generate_stage(
+        self,
+        gen_sequence: torch.Tensor,
+        condition_tensors: tp.Optional[ConditionTensors],
+        stage: int,
+        device: torch.device,
+        prompt_length: int = 0,
+        prompt: tp.Optional[torch.Tensor] = None,
+        use_sampling: bool = True,
+        temp: float = 3.0,
+        max_cfg_coef: float = 10.0,
+        min_cfg_coef: float = 1.0,
+        top_k: int = 0,
+        top_p: float = 0.0,
+        timesteps: int = 10,
+        anneal_temp: bool = True,
+        span_scoring: str = "max",
+        span_arrangement: str = "nonoverlap",
+        curr_step: int = 0,
+        total_steps: int = 0,
+        callback: tp.Optional[tp.Callable[[int, int], None]] = None,
+    ) -> tp.Tuple[torch.Tensor, int]:
         """Generate audio tokens of a single RVQ level (stage), given the previously generated stages,
            and the textual conditions.
         Args:
@@ -313,8 +369,8 @@ class MagnetLMModel(LMModel):
         mask_id = self.special_token_id
         stage_gen_seq = torch.full(shape, mask_id, dtype=torch.long, device=device)
 
-        assert span_arrangement == 'nonoverlap' or span_arrangement == 'stride1'
-        chunk_masking = self.span_len > 1 and span_arrangement == 'nonoverlap'
+        assert span_arrangement == "nonoverlap" or span_arrangement == "stride1"
+        chunk_masking = self.span_len > 1 and span_arrangement == "nonoverlap"
 
         DONT_REMASK_ME_SCORE = -1e4
 
@@ -341,7 +397,9 @@ class MagnetLMModel(LMModel):
             gen_T = T - prompt_length
 
         # run MAGNeT iterative decoding for "timesteps" iterations
-        for timestep, steps_left in zip(torch.linspace(0, 1, timesteps, device=device), reversed(range(timesteps))):
+        for timestep, steps_left in zip(
+            torch.linspace(0, 1, timesteps, device=device), reversed(range(timesteps))
+        ):
 
             mask_p = torch.cos(timestep * math.pi * 0.5)
 
@@ -351,18 +409,28 @@ class MagnetLMModel(LMModel):
                 num_masked = max(int((mask_p * gen_T).item()), 1)
 
             # masking
-            run_lps_masking = (span_arrangement == 'stride1') and self.span_len > 1
+            run_lps_masking = (span_arrangement == "stride1") and self.span_len > 1
             if run_lps_masking:
                 # masking of the k least probable overlapping (stride 1) spans
-                mask = torch.concat((
-                    [self._least_probable_span_masking(scores[[i], :, :], num_masked).to(device)
-                     for i in range(B)]), dim=0)
+                mask = torch.concat(
+                    (
+                        [
+                            self._least_probable_span_masking(
+                                scores[[i], :, :], num_masked
+                            ).to(device)
+                            for i in range(B)
+                        ]
+                    ),
+                    dim=0,
+                )
                 stage_gen_seq[mask] = mask_id
             else:
                 # masking of the k least probable non-overlapping spans
                 masked = scores.topk(num_masked, dim=-1).indices
                 if chunk_masking:
-                    chunks_mask = torch.full(chunked_shape, False, dtype=torch.bool, device=device)
+                    chunks_mask = torch.full(
+                        chunked_shape, False, dtype=torch.bool, device=device
+                    )
                     chunks_mask = chunks_mask.scatter(2, masked, True)
                     mask = torch.repeat_interleave(chunks_mask, self.span_len, dim=-1)
                     stage_gen_seq[mask] = mask_id
@@ -381,8 +449,12 @@ class MagnetLMModel(LMModel):
 
             if condition_tensors:
                 # classifier free guidance with annealing
-                cond_logits, uncond_logits = all_logits.split(B, dim=0)  # [B, K, T, card]
-                clsfg_coef = float(mask_p) * max_cfg_coef + (1 - float(mask_p)) * min_cfg_coef
+                cond_logits, uncond_logits = all_logits.split(
+                    B, dim=0
+                )  # [B, K, T, card]
+                clsfg_coef = (
+                    float(mask_p) * max_cfg_coef + (1 - float(mask_p)) * min_cfg_coef
+                )
                 logits = uncond_logits + (cond_logits - uncond_logits) * clsfg_coef
             else:
                 logits = all_logits
@@ -413,12 +485,19 @@ class MagnetLMModel(LMModel):
 
             # span scoring
             if chunk_masking:
-                if span_scoring == 'max':
+                if span_scoring == "max":
                     # max in linear space
-                    scores = 1 - torch.max(sampled_probs.reshape((B, 1, n_chunks, -1)), dim=-1)[0]
-                elif span_scoring == 'prod':
+                    scores = (
+                        1
+                        - torch.max(
+                            sampled_probs.reshape((B, 1, n_chunks, -1)), dim=-1
+                        )[0]
+                    )
+                elif span_scoring == "prod":
                     # prod in log space
-                    scores = torch.sum(-torch.log(sampled_probs).reshape((B, 1, n_chunks, -1)), dim=-1)
+                    scores = torch.sum(
+                        -torch.log(sampled_probs).reshape((B, 1, n_chunks, -1)), dim=-1
+                    )
                 else:
                     raise NotImplementedError
             else:
@@ -437,7 +516,9 @@ class MagnetLMModel(LMModel):
 
         return gen_sequence, curr_step
 
-    def _construct_spans_mask(self, span_starts: torch.Tensor, T: int, device: torch.device) -> torch.Tensor:
+    def _construct_spans_mask(
+        self, span_starts: torch.Tensor, T: int, device: torch.device
+    ) -> torch.Tensor:
         """Build a [1x1xT] boolean mask consists of overlapping spans of True values, where
            span_starts defines the initial index of each span, and the span length is
            defined by self.span_len.
@@ -452,11 +533,16 @@ class MagnetLMModel(LMModel):
         mask[:, :, span_starts] = True
         shifted_mask = mask.clone()
         for _ in range(self.span_len - 1):
-            shifted_mask = torch.concat((torch.full((1, 1, 1), False, device=device), shifted_mask[:, :, :-1]), dim=-1)
+            shifted_mask = torch.concat(
+                (torch.full((1, 1, 1), False, device=device), shifted_mask[:, :, :-1]),
+                dim=-1,
+            )
             mask = torch.logical_or(mask, shifted_mask)
         return mask
 
-    def _least_probable_span_masking(self, scores: torch.Tensor, num_masked_trg: int) -> torch.Tensor:
+    def _least_probable_span_masking(
+        self, scores: torch.Tensor, num_masked_trg: int
+    ) -> torch.Tensor:
         """Construct a [1x1xT] boolean mask, consists of the u least probable spans,
            where the token probability is determined by -scores, and the total
            number of masked tokens is as closest as possible to num_masked_trg.

@@ -31,11 +31,12 @@ class CompressionModel(ABC, nn.Module):
     """
 
     @abstractmethod
-    def forward(self, x: torch.Tensor) -> qt.QuantizedResult:
-        ...
+    def forward(self, x: torch.Tensor) -> qt.QuantizedResult: ...
 
     @abstractmethod
-    def encode(self, x: torch.Tensor) -> tp.Tuple[torch.Tensor, tp.Optional[torch.Tensor]]:
+    def encode(
+        self, x: torch.Tensor
+    ) -> tp.Tuple[torch.Tensor, tp.Optional[torch.Tensor]]:
         """See `EncodecModel.encode`."""
         ...
 
@@ -51,33 +52,27 @@ class CompressionModel(ABC, nn.Module):
 
     @property
     @abstractmethod
-    def channels(self) -> int:
-        ...
+    def channels(self) -> int: ...
 
     @property
     @abstractmethod
-    def frame_rate(self) -> float:
-        ...
+    def frame_rate(self) -> float: ...
 
     @property
     @abstractmethod
-    def sample_rate(self) -> int:
-        ...
+    def sample_rate(self) -> int: ...
 
     @property
     @abstractmethod
-    def cardinality(self) -> int:
-        ...
+    def cardinality(self) -> int: ...
 
     @property
     @abstractmethod
-    def num_codebooks(self) -> int:
-        ...
+    def num_codebooks(self) -> int: ...
 
     @property
     @abstractmethod
-    def total_codebooks(self) -> int:
-        ...
+    def total_codebooks(self) -> int: ...
 
     @abstractmethod
     def set_num_codebooks(self, n: int):
@@ -86,8 +81,8 @@ class CompressionModel(ABC, nn.Module):
 
     @staticmethod
     def get_pretrained(
-            name: str, device: tp.Union[torch.device, str] = 'cpu'
-            ) -> 'CompressionModel':
+        name: str, device: tp.Union[torch.device, str] = "cpu"
+    ) -> "CompressionModel":
         """Instantiate a CompressionModel from a given pretrained model.
 
         Args:
@@ -103,12 +98,13 @@ class CompressionModel(ABC, nn.Module):
         """
 
         from . import builders, loaders
+
         model: CompressionModel
-        if name in ['dac_44khz', 'dac_24khz']:
-            model_type = name.split('_')[1]
+        if name in ["dac_44khz", "dac_24khz"]:
+            model_type = name.split("_")[1]
             logger.info("Getting pretrained compression model from DAC %s", model_type)
             model = DAC(model_type)
-        elif name in ['debug_compression_model']:
+        elif name in ["debug_compression_model"]:
             logger.info("Getting pretrained compression model for debug")
             model = builders.get_debug_compression_model()
         elif Path(name).exists():
@@ -135,21 +131,24 @@ class EncodecModel(CompressionModel):
         causal (bool): Whether to use a causal version of the model.
         renormalize (bool): Whether to renormalize the audio before running the model.
     """
+
     # we need assignment to override the property in the abstract class,
     # I couldn't find a better way...
     frame_rate: float = 0
     sample_rate: int = 0
     channels: int = 0
 
-    def __init__(self,
-                 encoder: nn.Module,
-                 decoder: nn.Module,
-                 quantizer: qt.BaseQuantizer,
-                 frame_rate: int,
-                 sample_rate: int,
-                 channels: int,
-                 causal: bool = False,
-                 renormalize: bool = False):
+    def __init__(
+        self,
+        encoder: nn.Module,
+        decoder: nn.Module,
+        quantizer: qt.BaseQuantizer,
+        frame_rate: int,
+        sample_rate: int,
+        channels: int,
+        causal: bool = False,
+        renormalize: bool = False,
+    ):
         super().__init__()
         self.encoder = encoder
         self.decoder = decoder
@@ -162,7 +161,7 @@ class EncodecModel(CompressionModel):
         if self.causal:
             # we force disabling here to avoid handling linear overlap of segments
             # as supported in original EnCodec codebase.
-            assert not self.renormalize, 'Causal model does not support renormalize'
+            assert not self.renormalize, "Causal model does not support renormalize"
 
     @property
     def total_codebooks(self):
@@ -183,7 +182,9 @@ class EncodecModel(CompressionModel):
         """Cardinality of each codebook."""
         return self.quantizer.bins
 
-    def preprocess(self, x: torch.Tensor) -> tp.Tuple[torch.Tensor, tp.Optional[torch.Tensor]]:
+    def preprocess(
+        self, x: torch.Tensor
+    ) -> tp.Tuple[torch.Tensor, tp.Optional[torch.Tensor]]:
         scale: tp.Optional[torch.Tensor]
         if self.renormalize:
             mono = x.mean(dim=1, keepdim=True)
@@ -195,9 +196,9 @@ class EncodecModel(CompressionModel):
             scale = None
         return x, scale
 
-    def postprocess(self,
-                    x: torch.Tensor,
-                    scale: tp.Optional[torch.Tensor] = None) -> torch.Tensor:
+    def postprocess(
+        self, x: torch.Tensor, scale: tp.Optional[torch.Tensor] = None
+    ) -> torch.Tensor:
         if scale is not None:
             assert self.renormalize
             x = x * scale.view(-1, 1, 1)
@@ -220,7 +221,9 @@ class EncodecModel(CompressionModel):
 
         return q_res
 
-    def encode(self, x: torch.Tensor) -> tp.Tuple[torch.Tensor, tp.Optional[torch.Tensor]]:
+    def encode(
+        self, x: torch.Tensor
+    ) -> tp.Tuple[torch.Tensor, tp.Optional[torch.Tensor]]:
         """Encode the given input tensor to quantized representation along with scale parameter.
 
         Args:
@@ -265,8 +268,10 @@ class DAC(CompressionModel):
         try:
             import dac.utils
         except ImportError:
-            raise RuntimeError("Could not import dac, make sure it is installed, "
-                               "please run `pip install descript-audio-codec`")
+            raise RuntimeError(
+                "Could not import dac, make sure it is installed, "
+                "please run `pip install descript-audio-codec`"
+            )
         self.model = dac.utils.load_model(model_type=model_type)
         self.n_quantizers = self.total_codebooks
         self.model.eval()
@@ -275,9 +280,11 @@ class DAC(CompressionModel):
         # We don't support training with this.
         raise NotImplementedError("Forward and training with DAC not supported.")
 
-    def encode(self, x: torch.Tensor) -> tp.Tuple[torch.Tensor, tp.Optional[torch.Tensor]]:
+    def encode(
+        self, x: torch.Tensor
+    ) -> tp.Tuple[torch.Tensor, tp.Optional[torch.Tensor]]:
         codes = self.model.encode(x, self.n_quantizers)[1]
-        return codes[:, :self.n_quantizers], None
+        return codes[:, : self.n_quantizers], None
 
     def decode(self, codes: torch.Tensor, scale: tp.Optional[torch.Tensor] = None):
         assert scale is None
@@ -313,23 +320,21 @@ class DAC(CompressionModel):
         return self.model.n_codebooks
 
     def set_num_codebooks(self, n: int):
-        """Set the active number of codebooks used by the quantizer.
-        """
+        """Set the active number of codebooks used by the quantizer."""
         assert n >= 1
         assert n <= self.total_codebooks
         self.n_quantizers = n
 
 
 class HFEncodecCompressionModel(CompressionModel):
-    """Wrapper around HuggingFace Encodec.
-    """
+    """Wrapper around HuggingFace Encodec."""
+
     def __init__(self, model: HFEncodecModel):
         super().__init__()
         self.model = model
         bws = self.model.config.target_bandwidths
         num_codebooks = [
-            bw * 1000 / (self.frame_rate * math.log2(self.cardinality))
-            for bw in bws
+            bw * 1000 / (self.frame_rate * math.log2(self.cardinality)) for bw in bws
         ]
         deltas = [nc - int(nc) for nc in num_codebooks]
         # Checking we didn't do some bad maths and we indeed have integers!
@@ -339,9 +344,13 @@ class HFEncodecCompressionModel(CompressionModel):
 
     def forward(self, x: torch.Tensor) -> qt.QuantizedResult:
         # We don't support training with this.
-        raise NotImplementedError("Forward and training with HF EncodecModel not supported.")
+        raise NotImplementedError(
+            "Forward and training with HF EncodecModel not supported."
+        )
 
-    def encode(self, x: torch.Tensor) -> tp.Tuple[torch.Tensor, tp.Optional[torch.Tensor]]:
+    def encode(
+        self, x: torch.Tensor
+    ) -> tp.Tuple[torch.Tensor, tp.Optional[torch.Tensor]]:
         bandwidth_index = self.possible_num_codebooks.index(self.num_codebooks)
         bandwidth = self.model.config.target_bandwidths[bandwidth_index]
         res = self.model.encode(x, None, bandwidth)
@@ -387,10 +396,11 @@ class HFEncodecCompressionModel(CompressionModel):
         return max(self.possible_num_codebooks)
 
     def set_num_codebooks(self, n: int):
-        """Set the active number of codebooks used by the quantizer.
-        """
+        """Set the active number of codebooks used by the quantizer."""
         if n not in self.possible_num_codebooks:
-            raise ValueError(f"Allowed values for num codebooks: {self.possible_num_codebooks}")
+            raise ValueError(
+                f"Allowed values for num codebooks: {self.possible_num_codebooks}"
+            )
         self._num_codebooks = n
 
 
@@ -406,11 +416,14 @@ class InterleaveStereoCompressionModel(CompressionModel):
         per_timestep (bool): Whether to interleave on the timestep dimension
             or on the codebooks dimension.
     """
+
     def __init__(self, model: CompressionModel, per_timestep: bool = False):
         super().__init__()
         self.model = model
         self.per_timestep = per_timestep
-        assert self.model.channels == 1, "Wrapped model is expected to be for monophonic audio"
+        assert (
+            self.model.channels == 1
+        ), "Wrapped model is expected to be for monophonic audio"
 
     @property
     def total_codebooks(self):
@@ -423,7 +436,11 @@ class InterleaveStereoCompressionModel(CompressionModel):
         ..Warning:: this reports the number of codebooks after the interleaving
         of the codebooks!
         """
-        return self.model.num_codebooks if self.per_timestep else self.model.num_codebooks * 2
+        return (
+            self.model.num_codebooks
+            if self.per_timestep
+            else self.model.num_codebooks * 2
+        )
 
     def set_num_codebooks(self, n: int):
         """Set the active number of codebooks used by the quantizer.
@@ -453,16 +470,19 @@ class InterleaveStereoCompressionModel(CompressionModel):
 
     @property
     def cardinality(self):
-        """Cardinality of each codebook.
-        """
+        """Cardinality of each codebook."""
         return self.model.cardinality
 
     def forward(self, x: torch.Tensor) -> qt.QuantizedResult:
         raise NotImplementedError("Not supported, use encode and decode.")
 
-    def encode(self, x: torch.Tensor) -> tp.Tuple[torch.Tensor, tp.Optional[torch.Tensor]]:
+    def encode(
+        self, x: torch.Tensor
+    ) -> tp.Tuple[torch.Tensor, tp.Optional[torch.Tensor]]:
         B, C, T = x.shape
-        assert C == self.channels, f"Expecting stereo audio but audio num channels is {C}"
+        assert (
+            C == self.channels
+        ), f"Expecting stereo audio but audio num channels is {C}"
 
         indices_c0, scales_c0 = self.model.encode(x[:, 0, ...].unsqueeze(1))
         indices_c1, scales_c1 = self.model.encode(x[:, 1, ...].unsqueeze(1))
@@ -472,27 +492,35 @@ class InterleaveStereoCompressionModel(CompressionModel):
             scales = torch.stack([scales_c0, scales_c1], dim=1)
 
         if self.per_timestep:
-            indices = rearrange(indices, 'c b k t -> b k (t c)', c=2)
+            indices = rearrange(indices, "c b k t -> b k (t c)", c=2)
         else:
-            indices = rearrange(indices, 'c b k t -> b (k c) t', c=2)
+            indices = rearrange(indices, "c b k t -> b (k c) t", c=2)
 
         return (indices, scales)
 
-    def get_left_right_codes(self, codes: torch.Tensor) -> tp.Tuple[torch.Tensor, torch.Tensor]:
+    def get_left_right_codes(
+        self, codes: torch.Tensor
+    ) -> tp.Tuple[torch.Tensor, torch.Tensor]:
         if self.per_timestep:
-            codes = rearrange(codes, 'b k (t c) -> c b k t', c=2)
+            codes = rearrange(codes, "b k (t c) -> c b k t", c=2)
         else:
-            codes = rearrange(codes, 'b (k c) t -> c b k t', c=2)
+            codes = rearrange(codes, "b (k c) t -> c b k t", c=2)
         return codes[0], codes[1]
 
     def decode(self, codes: torch.Tensor, scale: tp.Optional[torch.Tensor] = None):
         B, K, T = codes.shape
-        assert T % self.num_virtual_steps == 0, "Provided codes' number of timesteps does not match"
-        assert K == self.num_codebooks, "Provided codes' number of codebooks does not match"
+        assert (
+            T % self.num_virtual_steps == 0
+        ), "Provided codes' number of timesteps does not match"
+        assert (
+            K == self.num_codebooks
+        ), "Provided codes' number of codebooks does not match"
 
         scale_c0, scale_c1 = None, None
         if scale is not None:
-            assert scale.size(0) == B and scale.size(1) == 2, f"Scale has unexpected shape: {scale.shape}"
+            assert (
+                scale.size(0) == B and scale.size(1) == 2
+            ), f"Scale has unexpected shape: {scale.shape}"
             scale_c0 = scale[0, ...]
             scale_c1 = scale[1, ...]
 

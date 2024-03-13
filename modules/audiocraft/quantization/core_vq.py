@@ -56,10 +56,8 @@ def kmeans(samples, num_clusters: int, num_iters: int = 10):
     means = sample_vectors(samples, num_clusters)
 
     for _ in range(num_iters):
-        diffs = rearrange(samples, "n d -> n () d") - rearrange(
-            means, "c d -> () c d"
-        )
-        dists = -(diffs ** 2).sum(dim=-1)
+        diffs = rearrange(samples, "n d -> n () d") - rearrange(means, "c d -> () c d")
+        dists = -(diffs**2).sum(dim=-1)
 
         buckets = dists.max(dim=-1).indices
         bins = torch.bincount(buckets, minlength=num_clusters)
@@ -81,7 +79,7 @@ def orthogonal_loss_fn(t):
     normed_codes = l2norm(t)
     identity = torch.eye(n, device=t.device)
     cosine_sim = einsum("i d, j d -> i j", normed_codes, normed_codes)
-    return ((cosine_sim - identity) ** 2).sum() / (n ** 2)
+    return ((cosine_sim - identity) ** 2).sum() / (n**2)
 
 
 class EuclideanCodebook(nn.Module):
@@ -100,6 +98,7 @@ class EuclideanCodebook(nn.Module):
             that have an exponential moving average cluster size less than the specified threshold with
             randomly selected vector from the current batch.
     """
+
     def __init__(
         self,
         dim: int,
@@ -112,7 +111,9 @@ class EuclideanCodebook(nn.Module):
     ):
         super().__init__()
         self.decay = decay
-        init_fn: tp.Union[tp.Callable[..., torch.Tensor], tp.Any] = uniform_init if not kmeans_init else torch.zeros
+        init_fn: tp.Union[tp.Callable[..., torch.Tensor], tp.Any] = (
+            uniform_init if not kmeans_init else torch.zeros
+        )
         embed = init_fn(codebook_size, dim)
 
         self.codebook_size = codebook_size
@@ -242,6 +243,7 @@ class VectorQuantization(nn.Module):
             that have an exponential moving average cluster size less than the specified threshold with
             randomly selected vector from the current batch.
     """
+
     def __init__(
         self,
         dim: int,
@@ -253,7 +255,7 @@ class VectorQuantization(nn.Module):
         kmeans_iters: int = 10,
         threshold_ema_dead_code: int = 2,
         channels_last: bool = False,
-        commitment_weight: float = 1.,
+        commitment_weight: float = 1.0,
         orthogonal_reg_weight: float = 0.0,
         orthogonal_reg_active_codes_only: bool = False,
         orthogonal_reg_max_codes: tp.Optional[int] = None,
@@ -262,8 +264,12 @@ class VectorQuantization(nn.Module):
         _codebook_dim: int = default(codebook_dim, dim)
 
         requires_projection = _codebook_dim != dim
-        self.project_in = (nn.Linear(dim, _codebook_dim) if requires_projection else nn.Identity())
-        self.project_out = (nn.Linear(_codebook_dim, dim) if requires_projection else nn.Identity())
+        self.project_in = (
+            nn.Linear(dim, _codebook_dim) if requires_projection else nn.Identity()
+        )
+        self.project_out = (
+            nn.Linear(_codebook_dim, dim) if requires_projection else nn.Identity()
+        )
 
         self.epsilon = epsilon
         self.commitment_weight = commitment_weight
@@ -272,10 +278,15 @@ class VectorQuantization(nn.Module):
         self.orthogonal_reg_active_codes_only = orthogonal_reg_active_codes_only
         self.orthogonal_reg_max_codes = orthogonal_reg_max_codes
 
-        self._codebook = EuclideanCodebook(dim=_codebook_dim, codebook_size=codebook_size,
-                                           kmeans_init=kmeans_init, kmeans_iters=kmeans_iters,
-                                           decay=decay, epsilon=epsilon,
-                                           threshold_ema_dead_code=threshold_ema_dead_code)
+        self._codebook = EuclideanCodebook(
+            dim=_codebook_dim,
+            codebook_size=codebook_size,
+            kmeans_init=kmeans_init,
+            kmeans_iters=kmeans_iters,
+            decay=decay,
+            epsilon=epsilon,
+            threshold_ema_dead_code=threshold_ema_dead_code,
+        )
         self.codebook_size = codebook_size
 
         self.channels_last = channels_last
@@ -336,8 +347,13 @@ class VectorQuantization(nn.Module):
                     codebook = codebook[unique_code_ids]
 
                 num_codes = codebook.shape[0]
-                if exists(self.orthogonal_reg_max_codes) and num_codes > self.orthogonal_reg_max_codes:
-                    rand_ids = torch.randperm(num_codes, device=device)[:self.orthogonal_reg_max_codes]
+                if (
+                    exists(self.orthogonal_reg_max_codes)
+                    and num_codes > self.orthogonal_reg_max_codes
+                ):
+                    rand_ids = torch.randperm(num_codes, device=device)[
+                        : self.orthogonal_reg_max_codes
+                    ]
                     codebook = codebook[rand_ids]
 
                 orthogonal_reg_loss = orthogonal_loss_fn(codebook)
@@ -354,6 +370,7 @@ class ResidualVectorQuantization(nn.Module):
 
     Follows Algorithm 1. in https://arxiv.org/pdf/2107.03312.pdf
     """
+
     def __init__(self, *, num_quantizers, **kwargs):
         super().__init__()
         self.layers = nn.ModuleList(

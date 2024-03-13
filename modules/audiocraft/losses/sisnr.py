@@ -53,6 +53,7 @@ class SISNR(nn.Module):
         overlap (float): Overlap between chunks, i.e. 0.5 = 50 % overlap.
         epsilon (float): Epsilon value for numerical stability.
     """
+
     def __init__(
         self,
         sample_rate: int = 16000,

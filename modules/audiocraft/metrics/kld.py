@@ -21,6 +21,7 @@ logger = logging.getLogger(__name__)
 
 class _patch_passt_stft:
     """Decorator to patch torch.stft in PaSST."""
+
     def __init__(self):
         self.old_stft = torch.stft
 
@@ -33,7 +34,9 @@ class _patch_passt_stft:
         torch.stft = self.old_stft
 
 
-def kl_divergence(pred_probs: torch.Tensor, target_probs: torch.Tensor, epsilon: float = 1e-6) -> torch.Tensor:
+def kl_divergence(
+    pred_probs: torch.Tensor, target_probs: torch.Tensor, epsilon: float = 1e-6
+) -> torch.Tensor:
     """Computes the elementwise KL-Divergence loss between probability distributions
     from generated samples and target samples.
 
@@ -46,7 +49,9 @@ def kl_divergence(pred_probs: torch.Tensor, target_probs: torch.Tensor, epsilon:
     Returns:
         kld (torch.Tensor): KLD loss between each generated sample and target pair.
     """
-    kl_div = torch.nn.functional.kl_div((pred_probs + epsilon).log(), target_probs, reduction="none")
+    kl_div = torch.nn.functional.kl_div(
+        (pred_probs + epsilon).log(), target_probs, reduction="none"
+    )
     return kl_div.sum(-1)
 
 
@@ -59,15 +64,17 @@ class KLDivergenceMetric(torchmetrics.Metric):
     have similar acoustic characteristics as the reference audio,
     according to the classifier.
     """
+
     def __init__(self):
         super().__init__()
-        self.add_state("kld_pq_sum", default=torch.tensor(0.), dist_reduce_fx="sum")
-        self.add_state("kld_qp_sum", default=torch.tensor(0.), dist_reduce_fx="sum")
-        self.add_state("kld_all_sum", default=torch.tensor(0.), dist_reduce_fx="sum")
+        self.add_state("kld_pq_sum", default=torch.tensor(0.0), dist_reduce_fx="sum")
+        self.add_state("kld_qp_sum", default=torch.tensor(0.0), dist_reduce_fx="sum")
+        self.add_state("kld_all_sum", default=torch.tensor(0.0), dist_reduce_fx="sum")
         self.add_state("weight", default=torch.tensor(0), dist_reduce_fx="sum")
 
-    def _get_label_distribution(self, x: torch.Tensor, sizes: torch.Tensor,
-                                sample_rates: torch.Tensor) -> tp.Optional[torch.Tensor]:
+    def _get_label_distribution(
+        self, x: torch.Tensor, sizes: torch.Tensor, sample_rates: torch.Tensor
+    ) -> tp.Optional[torch.Tensor]:
         """Get model output given provided input tensor.
 
         Args:
@@ -77,10 +84,17 @@ class KLDivergenceMetric(torchmetrics.Metric):
         Returns:
             probs (torch.Tensor): Probabilities over labels, of shape [B, num_classes].
         """
-        raise NotImplementedError("implement method to extract label distributions from the model.")
+        raise NotImplementedError(
+            "implement method to extract label distributions from the model."
+        )
 
-    def update(self, preds: torch.Tensor, targets: torch.Tensor,
-               sizes: torch.Tensor, sample_rates: torch.Tensor) -> None:
+    def update(
+        self,
+        preds: torch.Tensor,
+        targets: torch.Tensor,
+        sizes: torch.Tensor,
+        sample_rates: torch.Tensor,
+    ) -> None:
         """Calculates running KL-Divergence loss between batches of audio
         preds (generated) and target (ground-truth)
         Args:
@@ -96,7 +110,9 @@ class KLDivergenceMetric(torchmetrics.Metric):
         if preds_probs is not None and targets_probs is not None:
             assert preds_probs.shape == targets_probs.shape
             kld_scores = kl_divergence(preds_probs, targets_probs)
-            assert not torch.isnan(kld_scores).any(), "kld_scores contains NaN value(s)!"
+            assert not torch.isnan(
+                kld_scores
+            ).any(), "kld_scores contains NaN value(s)!"
             self.kld_pq_sum += torch.sum(kld_scores)
             kld_qp_scores = kl_divergence(targets_probs, preds_probs)
             self.kld_qp_sum += torch.sum(kld_qp_scores)
@@ -110,7 +126,7 @@ class KLDivergenceMetric(torchmetrics.Metric):
         kld_pq = self.kld_pq_sum.item() / weight  # type: ignore
         kld_qp = self.kld_qp_sum.item() / weight  # type: ignore
         kld_both = kld_pq + kld_qp
-        return {'kld': kld_pq, 'kld_pq': kld_pq, 'kld_qp': kld_qp, 'kld_both': kld_both}
+        return {"kld": kld_pq, "kld_pq": kld_pq, "kld_qp": kld_qp, "kld_both": kld_both}
 
 
 class PasstKLDivergenceMetric(KLDivergenceMetric):
@@ -128,6 +144,7 @@ class PasstKLDivergenceMetric(KLDivergenceMetric):
     Args:
         pretrained_length (float, optional): Audio duration used for the pretrained model.
     """
+
     def __init__(self, pretrained_length: tp.Optional[float] = None):
         super().__init__()
         self._initialize_model(pretrained_length)
@@ -147,12 +164,15 @@ class PasstKLDivergenceMetric(KLDivergenceMetric):
         try:
             if pretrained_length == 30:
                 from hear21passt.base30sec import get_basic_model  # type: ignore
+
                 max_duration = 30
             elif pretrained_length == 20:
                 from hear21passt.base20sec import get_basic_model  # type: ignore
+
                 max_duration = 20
             else:
                 from hear21passt.base import get_basic_model  # type: ignore
+
                 # Original PASST was trained on AudioSet with 10s-long audio samples
                 max_duration = 10
             min_duration = 0.15
@@ -160,20 +180,24 @@ class PasstKLDivergenceMetric(KLDivergenceMetric):
         except ModuleNotFoundError:
             raise ModuleNotFoundError(
                 "Please install hear21passt to compute KL divergence: ",
-                "pip install 'git+https://github.com/kkoutini/passt_hear21@0.0.19#egg=hear21passt'"
+                "pip install 'git+https://github.com/kkoutini/passt_hear21@0.0.19#egg=hear21passt'",
             )
         model_sample_rate = 32_000
         max_input_frames = int(max_duration * model_sample_rate)
         min_input_frames = int(min_duration * model_sample_rate)
-        with open(os.devnull, 'w') as f, contextlib.redirect_stdout(f):
-            model = get_basic_model(mode='logits')
+        with open(os.devnull, "w") as f, contextlib.redirect_stdout(f):
+            model = get_basic_model(mode="logits")
         return model, model_sample_rate, max_input_frames, min_input_frames
 
-    def _process_audio(self, wav: torch.Tensor, sample_rate: int, wav_len: int) -> tp.List[torch.Tensor]:
+    def _process_audio(
+        self, wav: torch.Tensor, sample_rate: int, wav_len: int
+    ) -> tp.List[torch.Tensor]:
         """Process audio to feed to the pretrained model."""
         wav = wav.unsqueeze(0)
         wav = wav[..., :wav_len]
-        wav = convert_audio(wav, from_rate=sample_rate, to_rate=self.model_sample_rate, to_channels=1)
+        wav = convert_audio(
+            wav, from_rate=sample_rate, to_rate=self.model_sample_rate, to_channels=1
+        )
         wav = wav.squeeze(0)
         # we don't pad but return a list of audio segments as this otherwise affects the KLD computation
         segments = torch.split(wav, self.max_input_frames, dim=-1)
@@ -186,7 +210,9 @@ class PasstKLDivergenceMetric(KLDivergenceMetric):
 
     def _get_model_preds(self, wav: torch.Tensor) -> torch.Tensor:
         """Run the pretrained model and get the predictions."""
-        assert wav.dim() == 3, f"Unexpected number of dims for preprocessed wav: {wav.shape}"
+        assert (
+            wav.dim() == 3
+        ), f"Unexpected number of dims for preprocessed wav: {wav.shape}"
         wav = wav.mean(dim=1)
         # PaSST is printing a lot of garbage that we are not interested in
         with open(os.devnull, "w") as f, contextlib.redirect_stdout(f):
@@ -195,8 +221,9 @@ class PasstKLDivergenceMetric(KLDivergenceMetric):
                 probs = torch.softmax(logits, dim=-1)
                 return probs
 
-    def _get_label_distribution(self, x: torch.Tensor, sizes: torch.Tensor,
-                                sample_rates: torch.Tensor) -> tp.Optional[torch.Tensor]:
+    def _get_label_distribution(
+        self, x: torch.Tensor, sizes: torch.Tensor, sample_rates: torch.Tensor
+    ) -> tp.Optional[torch.Tensor]:
         """Get model output given provided input tensor.
 
         Args:

@@ -13,7 +13,7 @@ from .stftloss import (
     LogSTFTMagnitudeLoss,
     MRSTFTLoss,
     SpectralConvergenceLoss,
-    STFTLoss
+    STFTLoss,
 )
 from .specloss import (
     MelSpectrogramL1Loss,

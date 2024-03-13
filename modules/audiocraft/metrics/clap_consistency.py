@@ -24,8 +24,16 @@ except ImportError:
 class TextConsistencyMetric(torchmetrics.Metric):
     """Text consistency metric measuring consistency between audio and text pairs."""
 
-    def update(self, audio: torch.Tensor, text: tp.List[str], sizes: torch.Tensor, sample_rates: torch.Tensor) -> None:
-        raise NotImplementedError("implement how to update the metric from the audio and text pairs.")
+    def update(
+        self,
+        audio: torch.Tensor,
+        text: tp.List[str],
+        sizes: torch.Tensor,
+        sample_rates: torch.Tensor,
+    ) -> None:
+        raise NotImplementedError(
+            "implement how to update the metric from the audio and text pairs."
+        )
 
     def compute(self):
         raise NotImplementedError("implement how to compute the final metric score.")
@@ -44,37 +52,73 @@ class CLAPTextConsistencyMetric(TextConsistencyMetric):
 
     Model implementation & pre-trained checkpoints: https://github.com/LAION-AI/CLAP
     """
-    def __init__(self, model_path: tp.Union[str, Path], model_arch: str = 'HTSAT-tiny', enable_fusion: bool = False):
+
+    def __init__(
+        self,
+        model_path: tp.Union[str, Path],
+        model_arch: str = "HTSAT-tiny",
+        enable_fusion: bool = False,
+    ):
         super().__init__()
         if laion_clap is None:
-            raise ImportError("Please install CLAP to compute text consistency: 'pip install laion_clap'")
-        self.add_state("cosine_sum", default=torch.tensor(0.), dist_reduce_fx="sum")
-        self.add_state("weight", default=torch.tensor(0.), dist_reduce_fx="sum")
+            raise ImportError(
+                "Please install CLAP to compute text consistency: 'pip install laion_clap'"
+            )
+        self.add_state("cosine_sum", default=torch.tensor(0.0), dist_reduce_fx="sum")
+        self.add_state("weight", default=torch.tensor(0.0), dist_reduce_fx="sum")
         self._initialize_model(model_path, model_arch, enable_fusion)
 
-    def _initialize_model(self, model_path: tp.Union[str, Path], model_arch: str, enable_fusion: bool):
+    def _initialize_model(
+        self, model_path: tp.Union[str, Path], model_arch: str, enable_fusion: bool
+    ):
         model_path = AudioCraftEnvironment.resolve_reference_path(model_path)
-        self.tokenize = RobertaTokenizer.from_pretrained('roberta-base')
-        self.model = laion_clap.CLAP_Module(enable_fusion=enable_fusion, amodel=model_arch)
+        self.tokenize = RobertaTokenizer.from_pretrained("roberta-base")
+        self.model = laion_clap.CLAP_Module(
+            enable_fusion=enable_fusion, amodel=model_arch
+        )
         self.model_sample_rate = 48_000
         load_clap_state_dict(self.model, model_path)
         self.model.eval()
 
     def _tokenizer(self, texts: tp.Union[str, tp.List[str]]) -> dict:
         # we use the default params from CLAP module here as well
-        return self.tokenize(texts, padding="max_length", truncation=True, max_length=77, return_tensors="pt")
+        return self.tokenize(
+            texts,
+            padding="max_length",
+            truncation=True,
+            max_length=77,
+            return_tensors="pt",
+        )
 
-    def update(self, audio: torch.Tensor, text: tp.List[str], sizes: torch.Tensor, sample_rates: torch.Tensor) -> None:
+    def update(
+        self,
+        audio: torch.Tensor,
+        text: tp.List[str],
+        sizes: torch.Tensor,
+        sample_rates: torch.Tensor,
+    ) -> None:
         """Compute cosine similarity between audio and text pairs and accumulate scores over the dataset."""
-        assert audio.size(0) == len(text), "Number of audio and text samples should match"
-        assert torch.all(sample_rates == sample_rates[0].item()), "All items in batch should have the same sample rate"
+        assert audio.size(0) == len(
+            text
+        ), "Number of audio and text samples should match"
+        assert torch.all(
+            sample_rates == sample_rates[0].item()
+        ), "All items in batch should have the same sample rate"
         sample_rate = int(sample_rates[0].item())
         # convert audio batch to 48kHz monophonic audio with no channel dimension: [B, C, T] -> [B, T]
-        audio = convert_audio(audio, from_rate=sample_rate, to_rate=self.model_sample_rate, to_channels=1).mean(dim=1)
-        audio_embeddings = self.model.get_audio_embedding_from_data(audio, use_tensor=True)
-        text_embeddings = self.model.get_text_embedding(text, tokenizer=self._tokenizer, use_tensor=True)
+        audio = convert_audio(
+            audio, from_rate=sample_rate, to_rate=self.model_sample_rate, to_channels=1
+        ).mean(dim=1)
+        audio_embeddings = self.model.get_audio_embedding_from_data(
+            audio, use_tensor=True
+        )
+        text_embeddings = self.model.get_text_embedding(
+            text, tokenizer=self._tokenizer, use_tensor=True
+        )
         # cosine similarity between the text and the audio embedding
-        cosine_sim = torch.nn.functional.cosine_similarity(audio_embeddings, text_embeddings, dim=1, eps=1e-8)
+        cosine_sim = torch.nn.functional.cosine_similarity(
+            audio_embeddings, text_embeddings, dim=1, eps=1e-8
+        )
         self.cosine_sum += cosine_sim.sum(dim=0)
         self.weight += torch.tensor(cosine_sim.size(0))
 

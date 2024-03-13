@@ -35,23 +35,26 @@ class StandardSolver(ABC, flashy.BaseSolver):
     AudioCraft solvers must inherit from the StandardSolver and define the methods
     associated to each stage as well as the show, build_model and build_dataloaders methods.
     """
+
     def __init__(self, cfg: omegaconf.DictConfig):
         super().__init__()
-        self.logger.info(f"Instantiating solver {self.__class__.__name__} for XP {self.xp.sig}")
+        self.logger.info(
+            f"Instantiating solver {self.__class__.__name__} for XP {self.xp.sig}"
+        )
         self.logger.info(f"All XP logs are stored in {self.xp.folder}")
         self.cfg = cfg
         self.device = cfg.device
         self.model: nn.Module
-        self._continue_best_source_keys = ['best_state', 'fsdp_best_state']
+        self._continue_best_source_keys = ["best_state", "fsdp_best_state"]
         self._fsdp_modules: tp.List[fsdp.FSDP] = []
         self._ema_sources: nn.ModuleDict = nn.ModuleDict()
         self.ema: tp.Optional[optim.ModuleDictEMA] = None
         self.dataloaders: tp.Dict[str, torch.utils.data.DataLoader] = dict()
-        self._log_updates = self.cfg.logging.get('log_updates', 10)
+        self._log_updates = self.cfg.logging.get("log_updates", 10)
         if self.cfg.logging.log_tensorboard:
-            self.init_tensorboard(**self.cfg.get('tensorboard'))
+            self.init_tensorboard(**self.cfg.get("tensorboard"))
         if self.cfg.logging.log_wandb and self:
-            self.init_wandb(**self.cfg.get('wandb'))
+            self.init_wandb(**self.cfg.get("wandb"))
         # keep a copy of the best performing state for stateful objects
         # used for evaluation and generation stages
         dtype_best: tp.Optional[torch.dtype] = None
@@ -64,40 +67,58 @@ class StandardSolver(ABC, flashy.BaseSolver):
         self.best_state: BestStateDictManager = BestStateDictManager(dtype=dtype_best)
         # Hacky support for keeping a copy of the full best state in rank0.
         self.fsdp_best_state: tp.Dict[str, tp.Any] = {}
-        self.register_stateful('best_state', 'fsdp_best_state')  # register best_state object to keep it in state_dict
+        self.register_stateful(
+            "best_state", "fsdp_best_state"
+        )  # register best_state object to keep it in state_dict
         self._new_best_state: bool = False  # should save a new checkpoint
         # instantiate datasets and appropriate number of updates per epoch
         self.build_dataloaders()
         if self.cfg.execute_only is None:
-            assert 'train' in self.dataloaders, "The train dataset split must be provided."
-            assert 'valid' in self.dataloaders, "The valid dataset split must be provided."
-        self.train_updates_per_epoch = len(self.dataloaders['train']) if 'train' in self.dataloaders else 0
+            assert (
+                "train" in self.dataloaders
+            ), "The train dataset split must be provided."
+            assert (
+                "valid" in self.dataloaders
+            ), "The valid dataset split must be provided."
+        self.train_updates_per_epoch = (
+            len(self.dataloaders["train"]) if "train" in self.dataloaders else 0
+        )
         if self.cfg.optim.updates_per_epoch:
             self.train_updates_per_epoch = self.cfg.optim.updates_per_epoch
         self.total_updates = self.train_updates_per_epoch * self.cfg.optim.epochs
         # instantiate model & exponential moving average on the model
         self.build_model()
         self.logger.info("Model hash: %s", model_hash(self.model))
-        assert 'model' in self.stateful.sources, \
-            "Please register the model to stateful with self.register_stateful('model') in build_model."
+        assert (
+            "model" in self.stateful.sources
+        ), "Please register the model to stateful with self.register_stateful('model') in build_model."
         self.profiler = Profiler(self.model, **self.cfg.profiler)
         self.initialize_ema()
-        self.register_stateful('ema')
-        assert self.ema is None or 'ema' in self.stateful.sources, \
-            "Please register the ema to stateful with self.register_stateful('ema') in build_model."
+        self.register_stateful("ema")
+        assert (
+            self.ema is None or "ema" in self.stateful.sources
+        ), "Please register the ema to stateful with self.register_stateful('ema') in build_model."
         self.deadlock_detect = DeadlockDetect(**self.cfg.deadlock)
         # basic statistics on the trained model
-        model_size = sum(p.numel() for p in self.model.parameters() if p.requires_grad) / 1e6
+        model_size = (
+            sum(p.numel() for p in self.model.parameters() if p.requires_grad) / 1e6
+        )
         # one copy of grad, one copy of momentum, one copy of denominator and model weights.
         # and 4 bytes for each float!
         mem_usage = model_size * 4 * 4 / 1000
         self.logger.info("Model size: %.2f M params", model_size)
-        self.logger.info("Base memory usage, with model, grad and optim: %.2f GB", mem_usage)
+        self.logger.info(
+            "Base memory usage, with model, grad and optim: %.2f GB", mem_usage
+        )
 
     @property
     def autocast(self):
         """Convenient autocast (or not) using the solver configuration."""
-        return TorchAutocast(enabled=self.cfg.autocast, device_type=self.device, dtype=self.autocast_dtype)
+        return TorchAutocast(
+            enabled=self.cfg.autocast,
+            device_type=self.device,
+            dtype=self.autocast_dtype,
+        )
 
     def _get_state_source(self, name) -> flashy.state.StateDictSource:
         # Internal utility to get a state source from the solver
@@ -121,7 +142,9 @@ class StandardSolver(ABC, flashy.BaseSolver):
         """
         for name in args:
             state_source = self._get_state_source(name)
-            assert name in self.stateful.sources, "Registered states in best should be registered in stateful first!"
+            assert (
+                name in self.stateful.sources
+            ), "Registered states in best should be registered in stateful first!"
             self.best_state.register(name, state_source)
 
     def register_ema(self, *args: str):
@@ -134,7 +157,9 @@ class StandardSolver(ABC, flashy.BaseSolver):
         Usage:
             self.register_ema('model')
         """
-        assert self.ema is None, "Cannot register state source to already instantiated EMA."
+        assert (
+            self.ema is None
+        ), "Cannot register state source to already instantiated EMA."
         for name in args:
             self._ema_sources[name] = getattr(self, name)
 
@@ -144,7 +169,7 @@ class StandardSolver(ABC, flashy.BaseSolver):
             self._fsdp_modules.append(model)
         return model
 
-    def update_best_state_from_stage(self, stage_name: str = 'valid'):
+    def update_best_state_from_stage(self, stage_name: str = "valid"):
         """Update latest best state based on pending metrics of a given stage. This method relies
         on the `BestStateDictManager.update` method to update the best state_dict with latest weights
         if the registered states happen to match to the best performing setup.
@@ -154,9 +179,12 @@ class StandardSolver(ABC, flashy.BaseSolver):
             self._new_best_state = True
             self.logger.info("Updating best state with current state.")
         else:
-            assert stage_name in self._pending_metrics, f"Metrics for stage {stage_name} not found."
-            assert self.best_metric_name in self._pending_metrics[stage_name], \
-                f"Best metric not found in {stage_name} metrics. Cannot register best state"
+            assert (
+                stage_name in self._pending_metrics
+            ), f"Metrics for stage {stage_name} not found."
+            assert (
+                self.best_metric_name in self._pending_metrics[stage_name]
+            ), f"Best metric not found in {stage_name} metrics. Cannot register best state"
             current_score = self._pending_metrics[stage_name][self.best_metric_name]
             all_best_metric_scores = [
                 past_metrics[stage_name][self.best_metric_name]
@@ -166,9 +194,10 @@ class StandardSolver(ABC, flashy.BaseSolver):
             best_score = min(all_best_metric_scores)
             self._new_best_state = current_score == best_score
             if self._new_best_state:
-                old_best = min(all_best_metric_scores[:-1] + [float('inf')])
+                old_best = min(all_best_metric_scores[:-1] + [float("inf")])
                 self.logger.info(
-                    f"New best state with {self.best_metric_name}={current_score:.3f} (was {old_best:.3f})")
+                    f"New best state with {self.best_metric_name}={current_score:.3f} (was {old_best:.3f})"
+                )
 
         if self._new_best_state:
             if self.cfg.fsdp.use:
@@ -196,7 +225,9 @@ class StandardSolver(ABC, flashy.BaseSolver):
 
     @contextmanager
     def swap_best_state(self):
-        self.logger.debug(f"Swapping to best state for: {', '.join(self.best_state.state_dict().keys())}")
+        self.logger.debug(
+            f"Swapping to best state for: {', '.join(self.best_state.state_dict().keys())}"
+        )
         old_states = self._load_new_state_dict(self.best_state.state_dict())
         try:
             yield
@@ -211,8 +242,10 @@ class StandardSolver(ABC, flashy.BaseSolver):
         if self.ema is None:
             yield
         else:
-            ema_state_dict = self.ema.state_dict()['state']
-            self.logger.debug(f"Swapping to EMA state for: {', '.join(ema_state_dict.keys())}")
+            ema_state_dict = self.ema.state_dict()["state"]
+            self.logger.debug(
+                f"Swapping to EMA state for: {', '.join(ema_state_dict.keys())}"
+            )
             old_states = self._load_new_state_dict(ema_state_dict)
             try:
                 yield
@@ -224,12 +257,12 @@ class StandardSolver(ABC, flashy.BaseSolver):
 
     @property
     def is_training(self):
-        return self.current_stage == 'train'
+        return self.current_stage == "train"
 
     def log_model_summary(self, model: nn.Module):
         """Log model summary, architecture and size of the model."""
         self.logger.info(model)
-        mb = sum(p.numel() for p in model.parameters()) * 4 / 2 ** 20
+        mb = sum(p.numel() for p in model.parameters()) * 4 / 2**20
         self.logger.info("Size: %.1f MB", mb)
 
     @abstractmethod
@@ -242,14 +275,15 @@ class StandardSolver(ABC, flashy.BaseSolver):
         EMA object is created if the optim.ema.model.decay value is non-null.
         """
         from .builders import get_ema
+
         self.ema = get_ema(self._ema_sources, self.cfg.optim.ema)
         if self.ema is None:
-            self.logger.info('No EMA on the model.')
+            self.logger.info("No EMA on the model.")
         else:
             assert self.cfg.optim.ema.updates > 0
             self.logger.info(
-                f'Initializing EMA on the model with decay = {self.ema.decay}'
-                f' every {self.cfg.optim.ema.updates} updates'
+                f"Initializing EMA on the model with decay = {self.ema.decay}"
+                f" every {self.cfg.optim.ema.updates} updates"
             )
 
     @abstractmethod
@@ -268,15 +302,15 @@ class StandardSolver(ABC, flashy.BaseSolver):
         return self._log_updates
 
     def checkpoint_path(self, **kwargs):
-        kwargs.setdefault('use_fsdp', self.cfg.fsdp.use)
+        kwargs.setdefault("use_fsdp", self.cfg.fsdp.use)
         return self.folder / checkpoint.checkpoint_name(**kwargs)
 
     def epoch_checkpoint_path(self, epoch: int, **kwargs):
-        kwargs.setdefault('use_fsdp', self.cfg.fsdp.use)
+        kwargs.setdefault("use_fsdp", self.cfg.fsdp.use)
         return self.folder / checkpoint.checkpoint_name(str(epoch), **kwargs)
 
     def checkpoint_path_with_name(self, name: str, **kwargs):
-        kwargs.setdefault('use_fsdp', self.cfg.fsdp.use)
+        kwargs.setdefault("use_fsdp", self.cfg.fsdp.use)
         return self.folder / checkpoint.checkpoint_name(name=name, **kwargs)
 
     def save_checkpoints(self):
@@ -286,19 +320,27 @@ class StandardSolver(ABC, flashy.BaseSolver):
             return
         self.logger.info("Model hash: %s", model_hash(self.model))
         state = self.state_dict()
-        epoch = self.epoch - 1  # pushing metrics will increase the epoch in Flashy, so we do -1 here
+        epoch = (
+            self.epoch - 1
+        )  # pushing metrics will increase the epoch in Flashy, so we do -1 here
 
         # save minimal state_dict as new checkpoint every X epoch
         if self.cfg.checkpoint.save_every:
             if epoch % self.cfg.checkpoint.save_every == 0:
                 minimal_state = state
-                if self.cfg.checkpoint.keep_every_states is not None and len(self.cfg.checkpoint.keep_every_states) > 0:
+                if (
+                    self.cfg.checkpoint.keep_every_states is not None
+                    and len(self.cfg.checkpoint.keep_every_states) > 0
+                ):
                     minimal_state = {
-                        name: source for name, source in state.items()
+                        name: source
+                        for name, source in state.items()
                         if name in self.cfg.checkpoint.keep_every_states
                     }
                 epoch_checkpoint_path = self.epoch_checkpoint_path(epoch)
-                checkpoint.save_checkpoint(minimal_state, epoch_checkpoint_path, is_sharded)
+                checkpoint.save_checkpoint(
+                    minimal_state, epoch_checkpoint_path, is_sharded
+                )
 
         # save checkpoint as latest checkpoint
         if self.cfg.checkpoint.save_last:
@@ -309,9 +351,13 @@ class StandardSolver(ABC, flashy.BaseSolver):
         checkpoint.flush_stale_checkpoints(self.checkpoint_path())
 
     def load_from_pretrained(self, name: str) -> dict:
-        raise NotImplementedError("Solver does not provide a way to load pretrained models.")
+        raise NotImplementedError(
+            "Solver does not provide a way to load pretrained models."
+        )
 
-    def load_checkpoints(self, load_best: bool = False, ignore_state_keys: tp.List[str] = []) -> tp.Optional[dict]:
+    def load_checkpoints(
+        self, load_best: bool = False, ignore_state_keys: tp.List[str] = []
+    ) -> tp.Optional[dict]:
         """Load last checkpoint or the one specified in continue_from.
 
         Args:
@@ -332,69 +378,102 @@ class StandardSolver(ABC, flashy.BaseSolver):
         state: tp.Optional[dict] = None
         rank0_checkpoint_path = self.checkpoint_path(use_fsdp=False)
         current_checkpoint_path = self.checkpoint_path()
-        _pretrained_prefix = '//pretrained/'
-        continue_pretrained = (self.cfg.continue_from or '').startswith(_pretrained_prefix)
+        _pretrained_prefix = "//pretrained/"
+        continue_pretrained = (self.cfg.continue_from or "").startswith(
+            _pretrained_prefix
+        )
         if rank0_checkpoint_path.exists():
             self.logger.info(f"Loading existing checkpoint: {current_checkpoint_path}")
             load_from_path = current_checkpoint_path
-            checkpoint.check_sharded_checkpoint(current_checkpoint_path, rank0_checkpoint_path)
+            checkpoint.check_sharded_checkpoint(
+                current_checkpoint_path, rank0_checkpoint_path
+            )
             checkpoint_source = checkpoint.CheckpointSource.CURRENT_XP
         elif self.cfg.continue_from and not continue_pretrained:
-            self.logger.info(f"Continuing from provided checkpoint: {self.cfg.continue_from}")
+            self.logger.info(
+                f"Continuing from provided checkpoint: {self.cfg.continue_from}"
+            )
             # we're always continuing from consolidated checkpoints: self.cfg.use_fsdp and not continue_best
-            load_from_path = checkpoint.resolve_checkpoint_path(self.cfg.continue_from, use_fsdp=False)
+            load_from_path = checkpoint.resolve_checkpoint_path(
+                self.cfg.continue_from, use_fsdp=False
+            )
             if load_from_path is None:
-                self.logger.error('Could not resolve the continue_from checkpoint %s', self.cfg.continue_from)
-                raise RuntimeError(f'Could not resolve continue_from checkpoint {self.cfg.continue_from}')
+                self.logger.error(
+                    "Could not resolve the continue_from checkpoint %s",
+                    self.cfg.continue_from,
+                )
+                raise RuntimeError(
+                    f"Could not resolve continue_from checkpoint {self.cfg.continue_from}"
+                )
             checkpoint_source = checkpoint.CheckpointSource.OTHER
 
         if load_from_path is not None:
             state = checkpoint.load_checkpoint(load_from_path, is_sharded)
         elif continue_pretrained:
-            self.logger.info("Loading a pretrained model. Ignoring 'load_best' and 'ignore_state_keys' params.")
-            state = self.load_from_pretrained(self.cfg.continue_from[len(_pretrained_prefix):])
+            self.logger.info(
+                "Loading a pretrained model. Ignoring 'load_best' and 'ignore_state_keys' params."
+            )
+            state = self.load_from_pretrained(
+                self.cfg.continue_from[len(_pretrained_prefix) :]
+            )
             checkpoint_source = checkpoint.CheckpointSource.PRETRAINED
             load_best = True
 
         # checkpoints are not from the current xp, we only retrieve the best state
-        if checkpoint_source is not None and checkpoint_source != checkpoint.CheckpointSource.CURRENT_XP:
+        if (
+            checkpoint_source is not None
+            and checkpoint_source != checkpoint.CheckpointSource.CURRENT_XP
+        ):
             assert state is not None
-            self.logger.info("Checkpoint source is not the current xp: Load state_dict from best state.")
+            self.logger.info(
+                "Checkpoint source is not the current xp: Load state_dict from best state."
+            )
             load_best = True
-            state = {key: state[key] for key in self._continue_best_source_keys if key in state}
+            state = {
+                key: state[key]
+                for key in self._continue_best_source_keys
+                if key in state
+            }
             # loaded checkpoints are FSDP checkpoints: we're reading the best state
             # from FSDP and we drop the regular best_state
-            if 'fsdp_best_state' in state and state['fsdp_best_state']:
-                state.pop('best_state', None)
+            if "fsdp_best_state" in state and state["fsdp_best_state"]:
+                state.pop("best_state", None)
                 self.logger.info("... Loaded checkpoint has FSDP best state")
             # FSDP is enabled in the solver, if the loaded checkpoints do not have FSDP support
             # then we're initializing FSDP best state with the regular best state
             elif self.cfg.fsdp.use:
-                if 'fsdp_best_state' not in state or not state['fsdp_best_state']:
+                if "fsdp_best_state" not in state or not state["fsdp_best_state"]:
                     # we swap non-FSDP checkpoints best_state to FSDP-compatible best state
-                    state['fsdp_best_state'] = state.pop('best_state')
-                    self.logger.info("... Loaded checkpoint does not have FSDP best state. Use regular best state")
+                    state["fsdp_best_state"] = state.pop("best_state")
+                    self.logger.info(
+                        "... Loaded checkpoint does not have FSDP best state. Use regular best state"
+                    )
 
         if state is not None:
             if load_best:
-                self.logger.info("Ignoring keys when loading best %r", ignore_state_keys)
+                self.logger.info(
+                    "Ignoring keys when loading best %r", ignore_state_keys
+                )
                 for key in set(ignore_state_keys):
                     if key in state:
                         state.pop(key)
-                has_best_state = 'best_state' in state or 'fsdp_best_state' in state
-                assert has_best_state, ("Trying to load best state but neither 'best_state'",
-                                        " or 'fsdp_best_state' found in checkpoints.")
+                has_best_state = "best_state" in state or "fsdp_best_state" in state
+                assert has_best_state, (
+                    "Trying to load best state but neither 'best_state'",
+                    " or 'fsdp_best_state' found in checkpoints.",
+                )
             self.load_state_dict(state)
 
         # for FSDP, let's make extra sure nothing bad happened with out of sync
         # checkpoints across workers.
         epoch = float(self.epoch)
-        avg_epoch = flashy.distrib.average_metrics({'epoch': epoch})['epoch']
+        avg_epoch = flashy.distrib.average_metrics({"epoch": epoch})["epoch"]
         if avg_epoch != epoch:
             raise RuntimeError(
                 f"Inconsistent loading of checkpoints happened, our epoch is {epoch} "
                 f"but average of epochs is {avg_epoch}, at least one gpu must have a "
-                "different epoch number.")
+                "different epoch number."
+            )
 
         # on load_best, properly reinitialize state_dict, best states and ema
         # otherwise we load from the current xp and don't alter anything
@@ -422,15 +501,21 @@ class StandardSolver(ABC, flashy.BaseSolver):
                 self.initialize_ema()
 
             if self.cfg.fsdp.use:
-                self.logger.info("Re-initializing best state after using FSDP best state.")
+                self.logger.info(
+                    "Re-initializing best state after using FSDP best state."
+                )
                 for name in self.best_state.states.keys():
                     state_source = self._get_state_source(name)
                     self.best_state.update(name, state_source)
 
         return state
 
-    def restore(self, load_best: bool = False, replay_metrics: bool = False,
-                ignore_state_keys: tp.List[str] = []) -> bool:
+    def restore(
+        self,
+        load_best: bool = False,
+        replay_metrics: bool = False,
+        ignore_state_keys: tp.List[str] = [],
+    ) -> bool:
         """Restore the status of a solver for a given xp.
 
         Args:
@@ -449,8 +534,13 @@ class StandardSolver(ABC, flashy.BaseSolver):
                 for stage_name, metrics in stages.items():
                     # We manually log the metrics summary to the result logger
                     # as we don't want to add them to the pending metrics
-                    self.result_logger._log_summary(stage_name, metrics, step=epoch + 1, step_name='epoch',
-                                                    formatter=self.get_formatter(stage_name))
+                    self.result_logger._log_summary(
+                        stage_name,
+                        metrics,
+                        step=epoch + 1,
+                        step_name="epoch",
+                        formatter=self.get_formatter(stage_name),
+                    )
         return restored_checkpoints is not None
 
     def commit(self, save_checkpoints: bool = True):
@@ -474,17 +564,17 @@ class StandardSolver(ABC, flashy.BaseSolver):
                 super().run_epoch()
                 ... # custom code
         """
-        self.run_stage('train', self.train)
+        self.run_stage("train", self.train)
         with torch.no_grad():
             with self.swap_ema_state():
-                self.run_stage('valid', self.valid)
+                self.run_stage("valid", self.valid)
                 # the best state is updated with EMA states if available
-                self.update_best_state_from_stage('valid')
+                self.update_best_state_from_stage("valid")
             with self.swap_best_state():
-                if self.should_run_stage('evaluate'):
-                    self.run_stage('evaluate', self.evaluate)
-                if self.should_run_stage('generate'):
-                    self.run_stage('generate', with_rank_rng()(self.generate))
+                if self.should_run_stage("evaluate"):
+                    self.run_stage("evaluate", self.evaluate)
+                if self.should_run_stage("generate"):
+                    self.run_stage("generate", with_rank_rng()(self.generate))
 
     def run(self):
         """Training loop."""
@@ -504,9 +594,9 @@ class StandardSolver(ABC, flashy.BaseSolver):
 
     def should_run_stage(self, stage_name) -> bool:
         """Check whether we want to run the specified stages."""
-        stage_every = self.cfg[stage_name].get('every', None)
+        stage_every = self.cfg[stage_name].get("every", None)
         is_last_epoch = self.epoch == self.cfg.optim.epochs
-        is_epoch_every = (stage_every and self.epoch % stage_every == 0)
+        is_epoch_every = stage_every and self.epoch % stage_every == 0
         return is_last_epoch or is_epoch_every
 
     @abstractmethod
@@ -520,49 +610,63 @@ class StandardSolver(ABC, flashy.BaseSolver):
 
         loader = self.dataloaders[dataset_split]
         # get a different order for distributed training, otherwise this will get ignored
-        if flashy.distrib.world_size() > 1 \
-           and isinstance(loader.sampler, torch.utils.data.distributed.DistributedSampler):
+        if flashy.distrib.world_size() > 1 and isinstance(
+            loader.sampler, torch.utils.data.distributed.DistributedSampler
+        ):
             loader.sampler.set_epoch(self.epoch)
-        updates_per_epoch = self.train_updates_per_epoch if self.is_training else len(loader)
+        updates_per_epoch = (
+            self.train_updates_per_epoch if self.is_training else len(loader)
+        )
         if self.cfg.benchmark_no_load:
             self.logger.warning("Fake loading for benchmarking: re-using first batch")
             batch = next(iter(loader))
             loader = [batch] * updates_per_epoch  # type: ignore
-        lp = self.log_progress(self.current_stage, loader, total=updates_per_epoch, updates=self.log_updates)
+        lp = self.log_progress(
+            self.current_stage,
+            loader,
+            total=updates_per_epoch,
+            updates=self.log_updates,
+        )
         average = flashy.averager()  # epoch wise average
         instant_average = flashy.averager()  # average between two logging
         metrics: dict = {}
 
         with self.profiler, self.deadlock_detect:  # profiler will only run for the first 20 updates.
             for idx, batch in enumerate(lp):
-                self.deadlock_detect.update('batch')
+                self.deadlock_detect.update("batch")
                 if idx >= updates_per_epoch:
                     break
                 metrics = {}
                 metrics = self.run_step(idx, batch, metrics)
-                self.deadlock_detect.update('step')
+                self.deadlock_detect.update("step")
                 # run EMA step
-                if self.ema is not None and self.is_training and (idx + 1) % self.cfg.optim.ema.updates == 0:
+                if (
+                    self.ema is not None
+                    and self.is_training
+                    and (idx + 1) % self.cfg.optim.ema.updates == 0
+                ):
                     self.logger.debug("EMA model step")
                     self.ema.step()
-                self.deadlock_detect.update('ema')
+                self.deadlock_detect.update("ema")
                 self.profiler.step()
                 instant_metrics = instant_average(metrics)
                 if lp.update(**instant_metrics):
-                    instant_average = flashy.averager()  # reset averager between two logging
+                    instant_average = (
+                        flashy.averager()
+                    )  # reset averager between two logging
                 metrics = average(metrics)  # epoch wise average
-                self.deadlock_detect.update('end_batch')
+                self.deadlock_detect.update("end_batch")
 
         metrics = flashy.distrib.average_metrics(metrics, updates_per_epoch)
         return metrics
 
     def train(self):
         """Train stage."""
-        return self.common_train_valid('train')
+        return self.common_train_valid("train")
 
     def valid(self):
         """Valid stage."""
-        return self.common_train_valid('valid')
+        return self.common_train_valid("valid")
 
     @abstractmethod
     def evaluate(self):
@@ -580,12 +684,12 @@ class StandardSolver(ABC, flashy.BaseSolver):
         or rerun the validation or evaluation stages.
         """
         fn = {
-            'generate': with_rank_rng()(self.generate),
-            'evaluate': self.evaluate,
-            'valid': self.valid,
+            "generate": with_rank_rng()(self.generate),
+            "evaluate": self.evaluate,
+            "valid": self.valid,
         }
         if stage_name not in fn:
-            raise ValueError(f'Trying to run stage {stage_name} is not supported.')
+            raise ValueError(f"Trying to run stage {stage_name} is not supported.")
         assert len(self.state_dict()) > 0
         self._start_epoch()
         with torch.no_grad(), self.swap_best_state():
@@ -594,11 +698,15 @@ class StandardSolver(ABC, flashy.BaseSolver):
             self.commit(save_checkpoints=False)
 
     @staticmethod
-    def get_eval_solver_from_sig(sig: str, dtype: tp.Optional[str] = None,
-                                 device: tp.Optional[str] = None, autocast: bool = True,
-                                 batch_size: tp.Optional[int] = None,
-                                 override_cfg: tp.Optional[tp.Union[dict, omegaconf.DictConfig]] = None,
-                                 **kwargs):
+    def get_eval_solver_from_sig(
+        sig: str,
+        dtype: tp.Optional[str] = None,
+        device: tp.Optional[str] = None,
+        autocast: bool = True,
+        batch_size: tp.Optional[int] = None,
+        override_cfg: tp.Optional[tp.Union[dict, omegaconf.DictConfig]] = None,
+        **kwargs,
+    ):
         """Mostly a convenience function around audiocraft.train.get_solver_from_sig,
         populating all the proper param, deactivating EMA, FSDP, loading the best state,
         basically all you need to get a solver ready to "play" with in single GPU mode
@@ -611,21 +719,27 @@ class StandardSolver(ABC, flashy.BaseSolver):
             override_cfg (dict or omegaconf.DictConfig or None): potential device, as a string, i.e. 'cuda'.
         """
         from audiocraft import train
-        our_override_cfg: tp.Dict[str, tp.Any] = {'optim': {'ema': {'use': False}}}
-        our_override_cfg['autocast'] = autocast
+
+        our_override_cfg: tp.Dict[str, tp.Any] = {"optim": {"ema": {"use": False}}}
+        our_override_cfg["autocast"] = autocast
         if dtype is not None:
-            our_override_cfg['dtype'] = dtype
+            our_override_cfg["dtype"] = dtype
         if device is not None:
-            our_override_cfg['device'] = device
+            our_override_cfg["device"] = device
         if batch_size is not None:
-            our_override_cfg['dataset'] = {'batch_size': batch_size}
+            our_override_cfg["dataset"] = {"batch_size": batch_size}
         if override_cfg is None:
             override_cfg = {}
         override_cfg = omegaconf.OmegaConf.merge(
-            omegaconf.DictConfig(override_cfg), omegaconf.DictConfig(our_override_cfg))  # type: ignore
+            omegaconf.DictConfig(override_cfg), omegaconf.DictConfig(our_override_cfg)
+        )  # type: ignore
         solver = train.get_solver_from_sig(
-            sig, override_cfg=override_cfg,
-            load_best=True, disable_fsdp=True,
-            ignore_state_keys=['optimizer', 'ema'], **kwargs)
+            sig,
+            override_cfg=override_cfg,
+            load_best=True,
+            disable_fsdp=True,
+            ignore_state_keys=["optimizer", "ema"],
+            **kwargs,
+        )
         solver.model.eval()
         return solver

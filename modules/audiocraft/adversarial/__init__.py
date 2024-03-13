@@ -9,7 +9,7 @@
 from .discriminators import (
     MultiPeriodDiscriminator,
     MultiScaleDiscriminator,
-    MultiScaleSTFTDiscriminator
+    MultiScaleSTFTDiscriminator,
 )
 from .losses import (
     AdversarialLoss,
@@ -18,5 +18,5 @@ from .losses import (
     get_fake_criterion,
     get_real_criterion,
     FeatLossType,
-    FeatureMatchingLoss
+    FeatureMatchingLoss,
 )

@@ -16,11 +16,13 @@ import torch.nn as nn
 
 def _get_all_non_persistent_buffers_set(module: nn.Module, root: str = "") -> set:
     names: set = set()
-    for (name, sub_module) in module.named_modules():
-        if name == '':
+    for name, sub_module in module.named_modules():
+        if name == "":
             buffer_names = module._non_persistent_buffers_set
-            buffer_names = {f"{root}.{buff_name}" if len(root) > 0 else buff_name
-                            for buff_name in buffer_names}
+            buffer_names = {
+                f"{root}.{buff_name}" if len(root) > 0 else buff_name
+                for buff_name in buffer_names
+            }
             names.update(buffer_names)
         else:
             sub_name = f"{root}.{name}" if len(root) > 0 else name
@@ -31,8 +33,11 @@ def _get_all_non_persistent_buffers_set(module: nn.Module, root: str = "") -> se
 
 def _get_named_tensors(module: nn.Module):
     non_persistent_buffers_set = _get_all_non_persistent_buffers_set(module)
-    named_buffers = [(name, buffer) for (name, buffer) in module.named_buffers()
-                     if name not in non_persistent_buffers_set]
+    named_buffers = [
+        (name, buffer)
+        for (name, buffer) in module.named_buffers()
+        if name not in non_persistent_buffers_set
+    ]
     named_parameters = list(module.named_parameters())
     return named_parameters + named_buffers
 
@@ -42,8 +47,14 @@ class ModuleDictEMA:
 
     You can switch to the EMA weights temporarily.
     """
-    def __init__(self, module_dict: nn.ModuleDict, decay: float = 0.999,
-                 unbias: bool = True, device: tp.Union[torch.device, str] = 'cpu'):
+
+    def __init__(
+        self,
+        module_dict: nn.ModuleDict,
+        decay: float = 0.999,
+        unbias: bool = True,
+        device: tp.Union[torch.device, str] = "cpu",
+    ):
         self.decay = decay
         self.module_dict = module_dict
         self.state: dict = defaultdict(dict)
@@ -76,10 +87,10 @@ class ModuleDictEMA:
                 self.state[module_name][key].add_(val.detach().to(device), alpha=w)
 
     def state_dict(self):
-        return {'state': self.state, 'count': self.count}
+        return {"state": self.state, "count": self.count}
 
     def load_state_dict(self, state):
-        self.count = state['count']
-        for module_name, module in state['state'].items():
+        self.count = state["count"]
+        for module_name, module in state["state"].items():
             for key, val in module.items():
                 self.state[module_name][key].copy_(val)

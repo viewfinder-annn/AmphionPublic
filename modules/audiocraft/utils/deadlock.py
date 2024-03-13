@@ -16,7 +16,7 @@ logger = logging.getLogger(__name__)
 
 
 class DeadlockDetect:
-    def __init__(self, use: bool = False, timeout: float = 120.):
+    def __init__(self, use: bool = False, timeout: float = 120.0):
         self.use = use
         self.timeout = timeout
         self._queue: Queue = Queue()

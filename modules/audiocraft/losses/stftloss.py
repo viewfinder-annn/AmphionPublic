@@ -14,8 +14,14 @@ from torch.nn import functional as F
 
 
 # TODO: Replace with torchaudio.STFT?
-def _stft(x: torch.Tensor, fft_size: int, hop_length: int, win_length: int,
-          window: tp.Optional[torch.Tensor], normalized: bool) -> torch.Tensor:
+def _stft(
+    x: torch.Tensor,
+    fft_size: int,
+    hop_length: int,
+    win_length: int,
+    window: tp.Optional[torch.Tensor],
+    normalized: bool,
+) -> torch.Tensor:
     """Perform STFT and convert to magnitude spectrogram.
 
     Args:
@@ -31,20 +37,25 @@ def _stft(x: torch.Tensor, fft_size: int, hop_length: int, win_length: int,
     """
     B, C, T = x.shape
     x_stft = torch.stft(
-        x.view(-1, T), fft_size, hop_length, win_length, window,
-        normalized=normalized, return_complex=True,
+        x.view(-1, T),
+        fft_size,
+        hop_length,
+        win_length,
+        window,
+        normalized=normalized,
+        return_complex=True,
     )
     x_stft = x_stft.view(B, C, *x_stft.shape[1:])
     real = x_stft.real
     imag = x_stft.imag
 
     # NOTE(kan-bayashi): clamp is needed to avoid nan or inf
-    return torch.sqrt(torch.clamp(real ** 2 + imag ** 2, min=1e-7)).transpose(2, 1)
+    return torch.sqrt(torch.clamp(real**2 + imag**2, min=1e-7)).transpose(2, 1)
 
 
 class SpectralConvergenceLoss(nn.Module):
-    """Spectral convergence loss.
-    """
+    """Spectral convergence loss."""
+
     def __init__(self, epsilon: float = torch.finfo(torch.float32).eps):
         super().__init__()
         self.epsilon = epsilon
@@ -58,7 +69,9 @@ class SpectralConvergenceLoss(nn.Module):
         Returns:
             torch.Tensor: Spectral convergence loss value.
         """
-        return torch.norm(y_mag - x_mag, p="fro") / (torch.norm(y_mag, p="fro") + self.epsilon)
+        return torch.norm(y_mag - x_mag, p="fro") / (
+            torch.norm(y_mag, p="fro") + self.epsilon
+        )
 
 
 class LogSTFTMagnitudeLoss(nn.Module):
@@ -67,6 +80,7 @@ class LogSTFTMagnitudeLoss(nn.Module):
     Args:
         epsilon (float): Epsilon value for numerical stability.
     """
+
     def __init__(self, epsilon: float = torch.finfo(torch.float32).eps):
         super().__init__()
         self.epsilon = epsilon
@@ -80,7 +94,9 @@ class LogSTFTMagnitudeLoss(nn.Module):
         Returns:
             torch.Tensor: Log STFT magnitude loss value.
         """
-        return F.l1_loss(torch.log(self.epsilon + y_mag), torch.log(self.epsilon + x_mag))
+        return F.l1_loss(
+            torch.log(self.epsilon + y_mag), torch.log(self.epsilon + x_mag)
+        )
 
 
 class STFTLosses(nn.Module):
@@ -94,9 +110,16 @@ class STFTLosses(nn.Module):
         normalized (bool): Whether to use normalized STFT or not.
         epsilon (float): Epsilon for numerical stability.
     """
-    def __init__(self, n_fft: int = 1024, hop_length: int = 120, win_length: int = 600,
-                 window: str = "hann_window", normalized: bool = False,
-                 epsilon: float = torch.finfo(torch.float32).eps):
+
+    def __init__(
+        self,
+        n_fft: int = 1024,
+        hop_length: int = 120,
+        win_length: int = 600,
+        window: str = "hann_window",
+        normalized: bool = False,
+        epsilon: float = torch.finfo(torch.float32).eps,
+    ):
         super().__init__()
         self.n_fft = n_fft
         self.hop_length = hop_length
@@ -106,7 +129,9 @@ class STFTLosses(nn.Module):
         self.spectral_convergenge_loss = SpectralConvergenceLoss(epsilon)
         self.log_stft_magnitude_loss = LogSTFTMagnitudeLoss(epsilon)
 
-    def forward(self, x: torch.Tensor, y: torch.Tensor) -> tp.Tuple[torch.Tensor, torch.Tensor]:
+    def forward(
+        self, x: torch.Tensor, y: torch.Tensor
+    ) -> tp.Tuple[torch.Tensor, torch.Tensor]:
         """Calculate forward propagation.
 
         Args:
@@ -116,10 +141,22 @@ class STFTLosses(nn.Module):
             torch.Tensor: Spectral convergence loss value.
             torch.Tensor: Log STFT magnitude loss value.
         """
-        x_mag = _stft(x, self.n_fft, self.hop_length,
-                      self.win_length, self.window, self.normalized)  # type: ignore
-        y_mag = _stft(y, self.n_fft, self.hop_length,
-                      self.win_length, self.window, self.normalized)  # type: ignore
+        x_mag = _stft(
+            x,
+            self.n_fft,
+            self.hop_length,
+            self.win_length,
+            self.window,
+            self.normalized,
+        )  # type: ignore
+        y_mag = _stft(
+            y,
+            self.n_fft,
+            self.hop_length,
+            self.win_length,
+            self.window,
+            self.normalized,
+        )  # type: ignore
         sc_loss = self.spectral_convergenge_loss(x_mag, y_mag)
         mag_loss = self.log_stft_magnitude_loss(x_mag, y_mag)
 
@@ -139,16 +176,28 @@ class STFTLoss(nn.Module):
         factor_sc (float): Coefficient for the spectral loss.
         factor_mag (float): Coefficient for the magnitude loss.
     """
-    def __init__(self, n_fft: int = 1024, hop_length: int = 120, win_length: int = 600,
-                 window: str = "hann_window", normalized: bool = False,
-                 factor_sc: float = 0.1, factor_mag: float = 0.1,
-                 epsilon: float = torch.finfo(torch.float32).eps):
+
+    def __init__(
+        self,
+        n_fft: int = 1024,
+        hop_length: int = 120,
+        win_length: int = 600,
+        window: str = "hann_window",
+        normalized: bool = False,
+        factor_sc: float = 0.1,
+        factor_mag: float = 0.1,
+        epsilon: float = torch.finfo(torch.float32).eps,
+    ):
         super().__init__()
-        self.loss = STFTLosses(n_fft, hop_length, win_length, window, normalized, epsilon)
+        self.loss = STFTLosses(
+            n_fft, hop_length, win_length, window, normalized, epsilon
+        )
         self.factor_sc = factor_sc
         self.factor_mag = factor_mag
 
-    def forward(self, x: torch.Tensor, y: torch.Tensor) -> tp.Tuple[torch.Tensor, torch.Tensor]:
+    def forward(
+        self, x: torch.Tensor, y: torch.Tensor
+    ) -> tp.Tuple[torch.Tensor, torch.Tensor]:
         """Calculate forward propagation.
 
         Args:
@@ -174,10 +223,18 @@ class MRSTFTLoss(nn.Module):
         normalized (bool): Whether to use normalized STFT or not.
         epsilon (float): Epsilon for numerical stability.
     """
-    def __init__(self, n_ffts: tp.Sequence[int] = [1024, 2048, 512], hop_lengths: tp.Sequence[int] = [120, 240, 50],
-                 win_lengths: tp.Sequence[int] = [600, 1200, 240], window: str = "hann_window",
-                 factor_sc: float = 0.1, factor_mag: float = 0.1,
-                 normalized: bool = False, epsilon: float = torch.finfo(torch.float32).eps):
+
+    def __init__(
+        self,
+        n_ffts: tp.Sequence[int] = [1024, 2048, 512],
+        hop_lengths: tp.Sequence[int] = [120, 240, 50],
+        win_lengths: tp.Sequence[int] = [600, 1200, 240],
+        window: str = "hann_window",
+        factor_sc: float = 0.1,
+        factor_mag: float = 0.1,
+        normalized: bool = False,
+        epsilon: float = torch.finfo(torch.float32).eps,
+    ):
         super().__init__()
         assert len(n_ffts) == len(hop_lengths) == len(win_lengths)
         self.stft_losses = torch.nn.ModuleList()

@@ -33,13 +33,13 @@ from .encodec import CompressionModel
 
 
 def get_audiocraft_cache_dir() -> tp.Optional[str]:
-    return os.environ.get('AUDIOCRAFT_CACHE_DIR', None)
+    return os.environ.get("AUDIOCRAFT_CACHE_DIR", None)
 
 
 def _get_state_dict(
     file_or_url_or_id: tp.Union[Path, str],
     filename: tp.Optional[str] = None,
-    device='cpu',
+    device="cpu",
     cache_dir: tp.Optional[str] = None,
 ):
     if cache_dir is None:
@@ -55,40 +55,60 @@ def _get_state_dict(
         file = f"{file_or_url_or_id}/{filename}"
         return torch.load(file, map_location=device)
 
-    elif file_or_url_or_id.startswith('https://'):
-        return torch.hub.load_state_dict_from_url(file_or_url_or_id, map_location=device, check_hash=True)
+    elif file_or_url_or_id.startswith("https://"):
+        return torch.hub.load_state_dict_from_url(
+            file_or_url_or_id, map_location=device, check_hash=True
+        )
 
     else:
-        assert filename is not None, "filename needs to be defined if using HF checkpoints"
+        assert (
+            filename is not None
+        ), "filename needs to be defined if using HF checkpoints"
 
         file = hf_hub_download(
-            repo_id=file_or_url_or_id, filename=filename, cache_dir=cache_dir,
-            library_name="audiocraft", library_version=audiocraft.__version__)
+            repo_id=file_or_url_or_id,
+            filename=filename,
+            cache_dir=cache_dir,
+            library_name="audiocraft",
+            library_version=audiocraft.__version__,
+        )
         return torch.load(file, map_location=device)
 
 
-def load_compression_model_ckpt(file_or_url_or_id: tp.Union[Path, str], cache_dir: tp.Optional[str] = None):
-    return _get_state_dict(file_or_url_or_id, filename="compression_state_dict.bin", cache_dir=cache_dir)
+def load_compression_model_ckpt(
+    file_or_url_or_id: tp.Union[Path, str], cache_dir: tp.Optional[str] = None
+):
+    return _get_state_dict(
+        file_or_url_or_id, filename="compression_state_dict.bin", cache_dir=cache_dir
+    )
 
 
-def load_compression_model(file_or_url_or_id: tp.Union[Path, str], device='cpu', cache_dir: tp.Optional[str] = None):
+def load_compression_model(
+    file_or_url_or_id: tp.Union[Path, str],
+    device="cpu",
+    cache_dir: tp.Optional[str] = None,
+):
     pkg = load_compression_model_ckpt(file_or_url_or_id, cache_dir=cache_dir)
-    if 'pretrained' in pkg:
-        return CompressionModel.get_pretrained(pkg['pretrained'], device=device)
-    cfg = OmegaConf.create(pkg['xp.cfg'])
+    if "pretrained" in pkg:
+        return CompressionModel.get_pretrained(pkg["pretrained"], device=device)
+    cfg = OmegaConf.create(pkg["xp.cfg"])
     cfg.device = str(device)
     model = builders.get_compression_model(cfg)
-    model.load_state_dict(pkg['best_state'])
+    model.load_state_dict(pkg["best_state"])
     model.eval()
     return model
 
 
-def load_lm_model_ckpt(file_or_url_or_id: tp.Union[Path, str], cache_dir: tp.Optional[str] = None):
-    return _get_state_dict(file_or_url_or_id, filename="state_dict.bin", cache_dir=cache_dir)
+def load_lm_model_ckpt(
+    file_or_url_or_id: tp.Union[Path, str], cache_dir: tp.Optional[str] = None
+):
+    return _get_state_dict(
+        file_or_url_or_id, filename="state_dict.bin", cache_dir=cache_dir
+    )
 
 
 def _delete_param(cfg: DictConfig, full_name: str):
-    parts = full_name.split('.')
+    parts = full_name.split(".")
     for part in parts[:-1]:
         if part in cfg:
             cfg = cfg[part]
@@ -100,35 +120,43 @@ def _delete_param(cfg: DictConfig, full_name: str):
     OmegaConf.set_struct(cfg, True)
 
 
-def load_lm_model(file_or_url_or_id: tp.Union[Path, str], device='cpu', cache_dir: tp.Optional[str] = None):
+def load_lm_model(
+    file_or_url_or_id: tp.Union[Path, str],
+    device="cpu",
+    cache_dir: tp.Optional[str] = None,
+):
     pkg = load_lm_model_ckpt(file_or_url_or_id, cache_dir=cache_dir)
-    cfg = OmegaConf.create(pkg['xp.cfg'])
+    cfg = OmegaConf.create(pkg["xp.cfg"])
     cfg.device = str(device)
-    if cfg.device == 'cpu':
-        cfg.dtype = 'float32'
+    if cfg.device == "cpu":
+        cfg.dtype = "float32"
     else:
-        cfg.dtype = 'float16'
-    _delete_param(cfg, 'conditioners.self_wav.chroma_stem.cache_path')
-    _delete_param(cfg, 'conditioners.args.merge_text_conditions_p')
-    _delete_param(cfg, 'conditioners.args.drop_desc_p')
+        cfg.dtype = "float16"
+    _delete_param(cfg, "conditioners.self_wav.chroma_stem.cache_path")
+    _delete_param(cfg, "conditioners.args.merge_text_conditions_p")
+    _delete_param(cfg, "conditioners.args.drop_desc_p")
     model = builders.get_lm_model(cfg)
-    model.load_state_dict(pkg['best_state'])
+    model.load_state_dict(pkg["best_state"])
     model.eval()
     model.cfg = cfg
     return model
 
 
-def load_lm_model_magnet(file_or_url_or_id: tp.Union[Path, str], compression_model_frame_rate: int,
-                         device='cpu', cache_dir: tp.Optional[str] = None):
+def load_lm_model_magnet(
+    file_or_url_or_id: tp.Union[Path, str],
+    compression_model_frame_rate: int,
+    device="cpu",
+    cache_dir: tp.Optional[str] = None,
+):
     pkg = load_lm_model_ckpt(file_or_url_or_id, cache_dir=cache_dir)
-    cfg = OmegaConf.create(pkg['xp.cfg'])
+    cfg = OmegaConf.create(pkg["xp.cfg"])
     cfg.device = str(device)
-    if cfg.device == 'cpu':
-        cfg.dtype = 'float32'
+    if cfg.device == "cpu":
+        cfg.dtype = "float32"
     else:
-        cfg.dtype = 'float16'
-    _delete_param(cfg, 'conditioners.args.merge_text_conditions_p')
-    _delete_param(cfg, 'conditioners.args.drop_desc_p')
+        cfg.dtype = "float16"
+    _delete_param(cfg, "conditioners.args.merge_text_conditions_p")
+    _delete_param(cfg, "conditioners.args.drop_desc_p")
 
     cfg.transformer_lm.compression_model_framerate = compression_model_frame_rate
     cfg.transformer_lm.segment_duration = cfg.dataset.segment_duration
@@ -136,39 +164,44 @@ def load_lm_model_magnet(file_or_url_or_id: tp.Union[Path, str], compression_mod
 
     # MAGNeT models v1 support only xformers backend.
     from audiocraft.modules.transformer import set_efficient_attention_backend
+
     if cfg.transformer_lm.memory_efficient:
         set_efficient_attention_backend("xformers")
 
     model = builders.get_lm_model(cfg)
-    model.load_state_dict(pkg['best_state'])
+    model.load_state_dict(pkg["best_state"])
     model.eval()
     model.cfg = cfg
     return model
 
 
-def load_mbd_ckpt(file_or_url_or_id: tp.Union[Path, str],
-                  filename: tp.Optional[str] = None,
-                  cache_dir: tp.Optional[str] = None):
+def load_mbd_ckpt(
+    file_or_url_or_id: tp.Union[Path, str],
+    filename: tp.Optional[str] = None,
+    cache_dir: tp.Optional[str] = None,
+):
     return _get_state_dict(file_or_url_or_id, filename=filename, cache_dir=cache_dir)
 
 
-def load_diffusion_models(file_or_url_or_id: tp.Union[Path, str],
-                          device='cpu',
-                          filename: tp.Optional[str] = None,
-                          cache_dir: tp.Optional[str] = None):
+def load_diffusion_models(
+    file_or_url_or_id: tp.Union[Path, str],
+    device="cpu",
+    filename: tp.Optional[str] = None,
+    cache_dir: tp.Optional[str] = None,
+):
     pkg = load_mbd_ckpt(file_or_url_or_id, filename=filename, cache_dir=cache_dir)
     models = []
     processors = []
     cfgs = []
-    sample_rate = pkg['sample_rate']
-    for i in range(pkg['n_bands']):
-        cfg = pkg[i]['cfg']
+    sample_rate = pkg["sample_rate"]
+    for i in range(pkg["n_bands"]):
+        cfg = pkg[i]["cfg"]
         model = builders.get_diffusion_model(cfg)
-        model_dict = pkg[i]['model_state']
+        model_dict = pkg[i]["model_state"]
         model.load_state_dict(model_dict)
         model.to(device)
         processor = builders.get_processor(cfg=cfg.processor, sample_rate=sample_rate)
-        processor_dict = pkg[i]['processor_state']
+        processor_dict = pkg[i]["processor_state"]
         processor.load_state_dict(processor_dict)
         processor.to(device)
         models.append(model)

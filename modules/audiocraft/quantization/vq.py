@@ -32,6 +32,7 @@ class ResidualVectorQuantizer(BaseQuantizer):
         orthogonal_reg_max_codes (optional int): Maximum number of codes to consider.
             for orthogonal regularization.
     """
+
     def __init__(
         self,
         dimension: int = 256,
@@ -70,7 +71,7 @@ class ResidualVectorQuantizer(BaseQuantizer):
             orthogonal_reg_weight=self.orthogonal_reg_weight,
             orthogonal_reg_active_codes_only=self.orthogonal_reg_active_codes_only,
             orthogonal_reg_max_codes=self.orthogonal_reg_max_codes,
-            channels_last=False
+            channels_last=False,
         )
 
     def forward(self, x: torch.Tensor, frame_rate: int):
