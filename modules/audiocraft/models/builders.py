@@ -34,6 +34,7 @@ from ..modules.conditioners import (
     ConditioningProvider,
     LUTConditioner,
     T5Conditioner,
+    MelSpectrogramConditioner
 )
 from .unet import DiffusionUnet
 from .. import quantization as qt
@@ -149,6 +150,12 @@ def get_conditioner_provider(output_dim: int, cfg: omegaconf.DictConfig) -> Cond
             )
         elif model_type == 'clap':
             conditioners[str(cond)] = CLAPEmbeddingConditioner(
+                output_dim=output_dim,
+                device=device,
+                **model_args
+            )
+        elif model_type == 'mel':
+            conditioners[str(cond)] = MelSpectrogramConditioner(
                 output_dim=output_dim,
                 device=device,
                 **model_args

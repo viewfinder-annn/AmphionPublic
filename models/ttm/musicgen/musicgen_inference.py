@@ -6,9 +6,10 @@
 
 import modules.audiocraft.solvers.builders as builders
 import modules.audiocraft.models as models
-from modules.audiocraft.modules.conditioners import ConditioningAttributes
+from modules.audiocraft.modules.conditioners import ConditioningAttributes, WavCondition
 from modules.audiocraft.solvers.compression import CompressionSolver
 from modules.audiocraft.utils.autocast import TorchAutocast
+from modules.audiocraft.data.audio_utils import convert_audio
 import accelerate
 import omegaconf
 import json5
@@ -35,8 +36,8 @@ class MusicGenInference:
         # print(type(cfg))
         # exit()
         # for audiocraft compatibility
-        self.cfg_omega = omegaconf.OmegaConf.create(json5.load(open(cfg_path)))
-        self.device = cfg.device
+        self.cfg_omega = omegaconf.OmegaConf.create(json5.load(open(cfg_path))['audiocraft'])
+        self.device = self.cfg_omega.device
         self.autocast_dtype = {
             'float16': torch.float16, 'bfloat16': torch.bfloat16
         }[self.cfg_omega.autocast_dtype]
@@ -47,7 +48,7 @@ class MusicGenInference:
         self.compression_model.eval()
         
         self.model = self._build_model()
-        max_duration = self.cfg.dataset.segment_duration  # type: ignore
+        max_duration = self.cfg_omega.dataset.segment_duration  # type: ignore
         assert max_duration is not None
         self.max_duration: float = max_duration
         self.duration = self.max_duration
@@ -78,7 +79,7 @@ class MusicGenInference:
             'top_k': 0,
             'top_p': 0,
             'cfg_coef': 3.0,
-            'two_step_cfg': self.cfg.transformer_lm.two_step_cfg,
+            'two_step_cfg': self.cfg_omega.transformer_lm.two_step_cfg,
         }
     
     def _build_model(self):
@@ -157,6 +158,25 @@ class MusicGenInference:
         return self.compression_model.channels
     
     @torch.no_grad()
+    def _prepare_tokens_and_attributes_waveform(
+            self,
+            waveforms,
+    ):
+        """Prepare model inputs.
+
+        Args:
+            waveforms (list of torch.Tensor): A batch of waveforms used for waveform condition.
+        """
+        
+        # C, T -> [1, C, T]
+        attributes = [
+            ConditioningAttributes(wav={'self_wav': WavCondition(wav=waveform.unsqueeze(0).to(self.device), length=torch.tensor([waveform.shape[-1]], device=self.device), sample_rate=[self.sample_rate])})
+            for waveform in waveforms]
+        
+        prompt_tokens = None
+        return attributes, prompt_tokens
+    
+    @torch.no_grad()
     def _prepare_tokens_and_attributes(
             self,
             descriptions,
@@ -182,6 +202,22 @@ class MusicGenInference:
             prompt_tokens = None
         return attributes, prompt_tokens
     
+    def generate_with_waveform(self, waveforms_paths, progress: bool = False, return_tokens: bool = False):
+        """Generate samples conditioned on text.
+
+        Args:
+            waveforms_paths (list of str): A list of strings used as waveform path.
+            progress (bool, optional): Flag to display progress of the generation process. Defaults to False.
+        """
+        waveforms = [torchaudio.load(waveform_path) for waveform_path in waveforms_paths]
+        waveforms_normalized = [convert_audio(waveform[0], waveform[1], self.sample_rate, self.audio_channels) for waveform in waveforms]
+        attributes, prompt_tokens = self._prepare_tokens_and_attributes_waveform(waveforms_normalized)
+        assert prompt_tokens is None
+        tokens = self._generate_tokens(attributes, prompt_tokens, progress)
+        if return_tokens:
+            return self.generate_audio(tokens), tokens
+        return self.generate_audio(tokens)
+
     def generate(self, descriptions, progress: bool = False, return_tokens: bool = False):
         """Generate samples conditioned on text.
 
@@ -273,22 +309,44 @@ class MusicGenInference:
     
     def inference(self):
         audios = []
-        if self.args.text_file != "":
-            with open(self.args.text_file, "r") as f:
-                text = f.readlines()
-                text = [t.strip() for t in text]
-                # print(text)
-            # split according to self.cfg.inference.batch_size
-            for i in tqdm.tqdm(range(0, len(text), self.cfg.inference.batch_size), desc="Generating"):
-                batch = text[i:i+self.cfg.inference.batch_size]
-                audios.extend(self.generate(batch))
+        if not self.args.use_waveform:
+            if self.args.text_file != "":
+                with open(self.args.text_file, "r") as f:
+                    text = f.readlines()
+                    text = [t.strip() for t in text]
+                    # print(text)
+                # split according to self.cfg.inference.batch_size
+                for i in tqdm.tqdm(range(0, len(text), self.cfg.inference.batch_size), desc="Generating"):
+                    batch = text[i:i+self.cfg.inference.batch_size]
+                    audios.extend(self.generate(batch))
+            else:
+                text = [text]
+                audios = self.generate(text)
+            # print(audios.shape)
+            checkpoint_name = os.path.basename(self.checkpoint_path)
+            target_dir = os.path.join(self.args.output_dir, checkpoint_name)
+            os.makedirs(target_dir, exist_ok=True)
+            for i, audio in enumerate(audios):
+                file = os.path.join(target_dir, f"{text[i][:100]}.wav")
+                torchaudio.save(file, audio.cpu(), self.sample_rate)
         else:
-            text = [text]
-            audios = self.generate(text)
-        # print(audios.shape)
-        chechpoint_name = os.path.basename(self.checkpoint_path)
-        target_dir = os.path.join(self.args.output_dir, chechpoint_name)
-        os.makedirs(target_dir, exist_ok=True)
-        for i, audio in enumerate(audios):
-            file = os.path.join(target_dir, f"{text[i][:100]}.wav")
-            torchaudio.save(file, audio.cpu(), self.sample_rate)
+            if self.args.text_file != "":
+                with open(self.args.text_file, "r") as f:
+                    text = f.readlines()
+                    text = [t.strip() for t in text]
+                    print([os.path.basename(text[i]) for i in range(len(text))])
+                # split according to self.cfg.inference.batch_size
+                for i in tqdm.tqdm(range(0, len(text), self.cfg.inference.batch_size), desc="Generating"):
+                    batch = text[i:i+self.cfg.inference.batch_size]
+                    audios.extend(self.generate_with_waveform(batch))
+            else:
+                text = [text]
+                print([os.path.basename(text[i]) for i in range(len(text))])
+                audios = self.generate_with_waveform(text)
+            # print(audios.shape)
+            checkpoint_name = os.path.basename(self.checkpoint_path)
+            target_dir = os.path.join(self.args.output_dir, checkpoint_name)
+            os.makedirs(target_dir, exist_ok=True)
+            for i, audio in enumerate(audios):
+                file = os.path.join(target_dir, f"{os.path.basename(text[i])}.wav")
+                torchaudio.save(file, audio.cpu(), self.sample_rate)

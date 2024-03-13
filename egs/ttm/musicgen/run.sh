@@ -12,7 +12,7 @@ export PYTHONPATH=$work_dir
 export PYTHONIOENCODING=UTF-8
 
 ######## Parse the Given Parameters from the Commond ###########
-options=$(getopt -o c:n:s --long gpu:,config:,name:,stage:,resume:,resume_from_ckpt_path:,resume_type:,infer_expt_dir:,infer_output_dir:,text:,text_file: -- "$@")
+options=$(getopt -o c:n:s --long gpu:,config:,name:,stage:,resume:,resume_from_ckpt_path:,resume_type:,infer_expt_dir:,infer_output_dir:,text:,text_file:,use_waveform: -- "$@")
 eval set -- "$options"
 
 while true; do
@@ -41,6 +41,8 @@ while true; do
     --text) shift; text=$1 ; shift ;;
     # [Only for Inference] The text file you want to convert into audio.
     --text_file) shift; text_file=$1 ; shift ;;
+    # [Only for Inference] Whether to use waveform or not. Its default value is "False".
+    --use_waveform) shift; use_waveform=$1 ; shift ;;
 
     --) shift ; break ;;
     *) echo "Invalid option: $1" exit 1 ;;
@@ -125,12 +127,25 @@ if [ $running_stage -eq 3 ]; then
         text_file = None
     fi
 
-    ######## Run inference ###########
-    CUDA_VISIBLE_DEVICES=$gpu accelerate launch "${work_dir}"/bins/ttm/inference.py \
-        --config "$exp_config" \
-        --infer_expt_dir "$infer_expt_dir" \
-        --output_dir "$infer_output_dir" \
-        --text="$text" \
-        --text_file="$text_file"
-        # --checkpoint_path "$checkpoint_path" \
+    if [ "$use_waveform" = true ]; then
+        ######## Run inference ###########
+        CUDA_VISIBLE_DEVICES=$gpu accelerate launch "${work_dir}"/bins/ttm/inference.py \
+            --config "$exp_config" \
+            --infer_expt_dir "$infer_expt_dir" \
+            --output_dir "$infer_output_dir" \
+            --text="$text" \
+            --text_file="$text_file" \
+            --use_waveform
+            # --checkpoint_path "$checkpoint_path" \
+    else
+        ######## Run inference ###########
+        CUDA_VISIBLE_DEVICES=$gpu accelerate launch "${work_dir}"/bins/ttm/inference.py \
+            --config "$exp_config" \
+            --infer_expt_dir "$infer_expt_dir" \
+            --output_dir "$infer_output_dir" \
+            --text="$text" \
+            --text_file="$text_file"
+            # --checkpoint_path "$checkpoint_path" \
+    fi
+
 fi

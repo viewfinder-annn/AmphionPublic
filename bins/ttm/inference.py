@@ -54,6 +54,7 @@ def build_parser():
         default=None,
         help="Output dir for saving generated results",
     )
+    parser.add_argument("--use_waveform", action="store_true", help="use waveform")
     parser.add_argument("--local_rank", default=-1, type=int)
     return parser
 

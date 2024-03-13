@@ -37,6 +37,10 @@ from ..utils.autocast import TorchAutocast
 from ..utils.cache import EmbeddingCache
 from ..utils.utils import collate, hash_trick, length_to_mask, load_clap_state_dict, warn_once
 
+import librosa
+import types
+from utils.mel import extract_mel_features
+import numpy as np
 
 logger = logging.getLogger(__name__)
 TextCondition = tp.Optional[str]  # a text condition can be a string or None (if doesn't exist)
@@ -150,7 +154,8 @@ def nullify_wav(cond: WavCondition) -> WavCondition:
     Returns:
         WavCondition: Nullified wav condition.
     """
-    null_wav, _ = nullify_condition((cond.wav, torch.zeros_like(cond.wav)), dim=cond.wav.dim() - 1)
+    null_wav = torch.zeros_like(cond.wav)
+    # null_wav, _ = nullify_condition((cond.wav, torch.zeros_like(cond.wav)), dim=cond.wav.dim() - 1)
     return WavCondition(
         wav=null_wav,
         length=torch.tensor([0] * cond.wav.shape[0], device=cond.wav.device),
@@ -506,6 +511,49 @@ class WaveformConditioner(BaseConditioner):
         embeds = (embeds * mask.unsqueeze(-1))
         return embeds, mask
 
+class MelSpectrogramConditioner(WaveformConditioner):
+    """
+    compute mel spectrogram from waveform
+    """
+    def __init__(self, output_dim: int, device: tp.Union[torch.device, str], **kwargs):
+        self.cfg = types.SimpleNamespace(
+            **kwargs
+        )
+        super().__init__(self.cfg.n_mel, output_dim, device)
+        self.sample_rate = self.cfg.sample_rate
+
+    def _get_mel_spectrogram(self, wav: torch.Tensor) -> torch.Tensor:
+        """Get mel spectrogram from waveform."""
+        mel = extract_mel_features(wav, self.cfg)
+        # print(mel.shape)
+        return mel
+
+    def _get_wav_embedding(self, x: WavCondition) -> torch.Tensor:
+        wav, *_ = x
+        batch = wav.shape[0]
+        # print(wav)
+        mels = torch.stack([self._get_mel_spectrogram(wav[i]).cpu().detach()for i in range(batch)])
+        return mels
+
+    def _downsampling_factor(self) -> int:
+        return self.cfg.hop_size
+    
+    def forward(self, x: WavCondition) -> tp.Tuple[torch.Tensor]:
+        """Extract condition embedding and mask from a waveform and its metadata.
+        Args:
+            x (WavCondition): Waveform condition containing raw waveform and metadata.
+        Returns:
+            ConditionType: a dense vector representing the conditioning along with its mask
+        """
+        embeds = self._get_wav_embedding(x)
+        embeds.transpose_(1, 2)
+        embeds = embeds.to(self.output_proj.weight)
+        embeds = self.output_proj(embeds)
+
+        # no mask
+        mask = torch.ones_like(embeds[..., 0])
+        embeds = (embeds * mask.unsqueeze(-1))
+        return embeds, mask
 
 class ChromaStemConditioner(WaveformConditioner):
     """Chroma conditioner based on stems.
@@ -1372,6 +1420,9 @@ class ConditionFuser(StreamingModule):
         """
         B, T, _ = input.shape
 
+        # print("===fuser START===")
+        # print(input.shape)
+
         if 'offsets' in self._streaming_state:
             first_step = False
             offsets = self._streaming_state['offsets']
@@ -1413,4 +1464,7 @@ class ConditionFuser(StreamingModule):
         if self._is_streaming:
             self._streaming_state['offsets'] = offsets + T
 
+        # print(input.shape, cross_attention_output.shape)
+        # print("===fuser END===")
+        
         return input, cross_attention_output
