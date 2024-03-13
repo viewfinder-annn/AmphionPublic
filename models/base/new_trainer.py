@@ -262,7 +262,7 @@ class BaseTrainer(object):
 
             self.accelerator.wait_for_everyone()
             # TODO: what is scheduler?
-            self.scheduler.step(valid_loss)  # FIXME: use epoch track correct?
+            # self.scheduler.step(valid_loss)  # FIXME: use epoch track correct?
 
             # Check if hit save_checkpoint_stride and run_eval
             run_eval = False

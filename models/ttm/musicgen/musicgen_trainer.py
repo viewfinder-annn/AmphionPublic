@@ -12,6 +12,7 @@ import math
 import torch
 import torch.nn as nn
 from torch.nn import functional as F
+from tqdm import tqdm
 
 from models.base.new_trainer import BaseTrainer
 
@@ -37,18 +38,23 @@ class MusicGenTrainer(BaseTrainer):
         # print(type(cfg))
         # exit()
         # for audiocraft compatibility
-        self.cfg_omega = omegaconf.OmegaConf.create(json5.load(open(cfg_path)))
-        self.device = cfg.device
+        self.cfg_omega = omegaconf.OmegaConf.create(json5.load(open(cfg_path))['audiocraft'])
+        self.device = self.cfg_omega.device
         self.autocast_dtype = {
             'float16': torch.float16, 'bfloat16': torch.bfloat16
         }[self.cfg_omega.autocast_dtype]
-        self.autocast = TorchAutocast(enabled=self.cfg_omega.autocast, device_type=self.device, dtype=self.autocast_dtype)
-        # self.scaler = torch.cuda.amp.GradScaler()
 
         self._init_accelerator()
 
         # Super init
         BaseTrainer.__init__(self, args, cfg)
+        
+        self.autocast = TorchAutocast(enabled=self.cfg_omega.autocast, device_type=self.device, dtype=self.autocast_dtype)
+        self.scaler = None
+        need_scaler = self.cfg_omega.autocast and self.autocast_dtype is torch.float16
+        if need_scaler:
+            print("Using GradScaler for autocast with float16")
+            self.accelerator.scaler = torch.cuda.amp.GradScaler()
 
         # Only for TTM tasks
         self.task_type = "TTM"
@@ -73,10 +79,11 @@ class MusicGenTrainer(BaseTrainer):
                     # print(infos[i])
                     f.write(f"{infos[i]}\n")
                     # print(infos[i].to_condition_attributes())
-                    torchaudio.save(f"{debug_sample_dir}/{infos[i].description[:100].replace('/', '-')}.wav", wavs[i], self.cfg.sample_rate)
+                    torchaudio.save(f"{debug_sample_dir}/{infos[i].description[:100].replace('/', '-')}.wav", wavs[i], self.cfg_omega.sample_rate)
+                break
                 
         
-        return dataloader_dict['train'], dataloader_dict['train']
+        return dataloader_dict['train'], dataloader_dict['valid']
     
     def _build_model(self):
         r"""Build the model for training. This function is called in ``__init__`` function."""
@@ -111,10 +118,11 @@ class MusicGenTrainer(BaseTrainer):
             if isinstance(v, T5Conditioner):
                 if v.name == "t5-base":
                     self.logger.info("Using T5-base as the condition provider. (~110M parameters)")
-            
-        if self.cfg_omega.fsdp.use:
-            assert not self.cfg_omega.autocast, "Cannot use autocast with fsdp"
-            self.model = self.wrap_with_fsdp(self.model)
+
+        # TODO: distributed training
+        # if self.cfg_omega.fsdp.use:
+        #     assert not self.cfg_omega.autocast, "Cannot use autocast with fsdp"
+        #     self.model = self.wrap_with_fsdp(self.model)
         
         # ema
         # self.register_ema('model')
@@ -194,9 +202,17 @@ class MusicGenTrainer(BaseTrainer):
         
         # prepare attributes
         attributes = [info.to_condition_attributes() for info in infos]
+        # print(attributes)
         attributes = self.model.cfg_dropout(attributes)
         attributes = self.model.att_dropout(attributes)
         tokenized = self.model.condition_provider.tokenize(attributes)
+        # for k, v in tokenized.items():
+        #     print(k)
+        #     if isinstance(v, dict):
+        #         for key, value in v.items():
+        #             print(f"{key}: {value.shape}")
+        #     else:
+        #         print(v)
 
         if audio_tokens is None:
             with torch.no_grad():
@@ -205,11 +221,14 @@ class MusicGenTrainer(BaseTrainer):
 
         with self.autocast:
             condition_tensors = self.model.condition_provider(tokenized)
+            # for k, v in condition_tensors.items():
+            #     print(k)
+            #     print(v[0].shape, v[1].shape)
 
         # create a padding mask to hold valid vs invalid positions
         padding_mask = torch.ones_like(audio_tokens, dtype=torch.bool, device=audio_tokens.device)
         # replace encodec tokens from padded audio with special_token_id
-        if self.cfg.tokens.padding_with_special_token:
+        if self.cfg_omega.tokens.padding_with_special_token:
             audio_tokens = audio_tokens.clone()
             padding_mask = padding_mask.clone()
             token_sample_rate = self.compression_model.frame_rate
@@ -223,6 +242,70 @@ class MusicGenTrainer(BaseTrainer):
                 padding_mask[i, :, valid_tokens:] = 0
 
         return condition_tensors, audio_tokens, padding_mask
+
+    def _train_epoch(self):
+        r"""Training epoch. Should return average loss of a batch (sample) over
+        one epoch. See ``train_loop`` for usage.
+        """
+        self.model.train()
+        epoch_sum_loss: float = 0.0
+        epoch_step: int = 0
+        for batch in tqdm(
+            self.train_dataloader,
+            desc=f"Training Epoch {self.epoch}",
+            unit="batch",
+            colour="GREEN",
+            leave=False,
+            dynamic_ncols=True,
+            smoothing=0.04,
+            disable=not self.accelerator.is_main_process,
+        ):
+            # Do training step and BP
+            with self.accelerator.accumulate(self.model):
+                loss = self._train_step(batch)
+                # if self.scaler is not None:
+                #     loss = self.scaler.scale(loss)
+
+                self.accelerator.backward(loss)
+                
+                # if self.scaler is not None:
+                #     self.scaler.unscale_(self.optimizer)
+                
+                if self.cfg.train.grad_clip_thresh:
+                    nn.utils.clip_grad_norm_(self.model.parameters(), self.cfg.train.grad_clip_thresh)
+                    
+                self.optimizer.step()
+                # if self.scaler is not None:
+                #     self.optimizer.step()
+                # else:
+                #     self.scaler.step(self.optimizer)
+                #     self.scaler.update()
+                self.optimizer.zero_grad()
+                if self.scheduler:
+                    self.scheduler.step()
+
+            self.batch_count += 1
+
+            # Update info for each step
+            # TODO: step means BP counts or batch counts?
+            if self.batch_count % self.cfg.train.gradient_accumulation_step == 0:
+                epoch_sum_loss += loss
+                self.accelerator.log(
+                    {
+                        "Step/Train Loss": loss,
+                        "Step/Learning Rate": self.optimizer.param_groups[0]["lr"],
+                    },
+                    step=self.step,
+                )
+                self.step += 1
+                epoch_step += 1
+
+        self.accelerator.wait_for_everyone()
+        return (
+            epoch_sum_loss
+            / len(self.train_dataloader)
+            * self.cfg.train.gradient_accumulation_step
+        )
 
     def _forward_step(self, batch):
         r"""Forward step for the model. This function is called in ``_train_step`` and ``_valid_step`` function."""
