@@ -5,7 +5,7 @@
 
 ######## Build Experiment Environment ###########
 exp_dir=$(cd `dirname $0`; pwd)
-work_dir=$(dirname $(dirname $(dirname $exp_dir)))
+work_dir=$(dirname $(dirname $(dirname $(dirname $exp_dir))))
 
 export WORK_DIR=$work_dir
 export PYTHONPATH=$work_dir

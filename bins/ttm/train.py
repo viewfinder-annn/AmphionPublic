@@ -8,12 +8,16 @@ import argparse
 import torch
 
 from models.ttm.musicgen.musicgen_trainer import MusicGenTrainer
+from models.ttm.latentdiffusion.autoencoder_trainer import AutoencoderKLTrainer
+from models.ttm.latentdiffusion.audioldm_trainer import AudioLDMTrainer
 from utils.util import load_config
 
 
 def build_trainer(args, cfg, cfg_path=None):
     supported_trainer = {
         "MusicGen": MusicGenTrainer,
+        "AutoencoderKL": AutoencoderKLTrainer,
+        "AudioLDM": AudioLDMTrainer
     }
 
     trainer_class = supported_trainer[cfg.model_type]
@@ -70,6 +74,7 @@ def main():
         "--log_level", default="warning", help="logging level (debug, info, warning)"
     )
     args = parser.parse_args()
+    # Model saving dir
     cfg = load_config(args.config)
 
     # CUDA settings

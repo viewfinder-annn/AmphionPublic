@@ -1,0 +1,141 @@
+{
+        // amphion-related
+        "model_type": "AudioLDM",
+        "task_type": "ttm",
+        // Specify the output root path to save model ckpts and logs
+        "log_dir": "ckpts/ttm",
+        "dataset": [
+                "musiccaps"
+        ],
+        "dataset_path": {
+                // TODO: Fill in your dataset path
+                "musiccaps": "/home/wangyuancheng.p/zja/music/MusicCaps",
+                // "musdb18": "/nvme/amphion/zhfang/zja/_dataset/musdb18",
+        },
+        "use_custom_dataset": [],
+        "preprocess": {
+                // Specify the output root path to save the processed data 
+                "processed_dir": "data",
+                // Audio / FFT info
+                "sample_rate": 16000,
+                "audio_channels": 1,
+                "segment_duration": 10,
+                "extract_mel": true,
+                "extract_acoustic_token": false,
+                "extract_linear_spec": false,
+                "n_mel": 80,
+                "n_fft": 1024,
+                "win_size": 1024,
+                "hop_size": 256,
+                "fmin": 0,
+                "fmax": 16000,
+                "use_caption": true,
+                "use_ref_wav": false,
+                "use_mel": true,
+                "mel_dir": "mel",
+                "train_file": "train.json",
+                "valid_file": "test.json",
+        },
+        "model": {
+                "audioldm": {
+                        "image_size": 32,
+                        "in_channels": 4,
+                        "out_channels": 4,
+                        "model_channels": 256,
+                        "attention_resolutions": [
+                                4,
+                                2,
+                                1
+                        ],
+                        "num_res_blocks": 2,
+                        "channel_mult": [
+                                1,
+                                2,
+                                4
+                        ],
+                        "num_heads": 8,
+                        "use_spatial_transformer": true,
+                        "transformer_depth": 1,
+                        "context_dim": 768,
+                        "use_checkpoint": true,
+                        "legacy": false
+                },
+                "autoencoderkl": {
+                        "ch": 128,
+                        "ch_mult": [
+                                1,
+                                1,
+                                2,
+                                2,
+                                4
+                        ],
+                        "num_res_blocks": 2,
+                        "in_channels": 1,
+                        "z_channels": 4,
+                        "out_ch": 1,
+                        "double_z": true
+                },
+                "noise_scheduler": {
+                        "num_train_timesteps": 1000,
+                        "beta_start": 0.00085,
+                        "beta_end": 0.012,
+                        "beta_schedule": "scaled_linear",
+                        "clip_sample": false,
+                        "steps_offset": 1,
+                        "set_alpha_to_one": false,
+                        "skip_prk_steps": true,
+                        "prediction_type": "epsilon"
+                },
+                "autoencoder_path": "ckpts/ttm/autoencoderkl_debug_2/checkpoint/epoch-0610_step-0015275_loss-0.138677/pytorch_model.bin",
+                "vocoder_config_path": "pretrained/hifigan/config.json",
+                "vocoder_path": "pretrained/hifigan/g_01250000"
+        },
+        "train": {
+                "use_audiocraft_dataset": false,
+                // -1 means no limit
+                "train_num_samples": 8,
+                // -1 means no limit
+                "valid_num_samples": 4,
+                "batch_size": 4,
+                "gradient_accumulation_step": 1,
+                "tracker": [
+                        "tensorboard"
+                ],
+                "random_seed": 970227,
+                // -1 means no limit
+                "max_epoch": -1,
+                "save_checkpoint_stride": [
+                        10,
+                        100
+                ],
+                // unit is epoch
+                "keep_last": [
+                        1,
+                        1
+                ],
+                // -1 means infinite, if one number will broadcast
+                "run_eval": [
+                        false,
+                        true
+                ],
+                // TODO: EMA
+                "optimizer": "Adam",
+                "adam": {
+                        "lr": 1e-4,
+                        "betas": [
+                                0.9,
+                                0.95,
+                        ],
+                },
+                "scheduler": "cosine",
+                "warmup_steps": 500,
+                "total_training_steps": 1000000,
+                "grad_clip_thresh": 1.0,
+                "ddp": false,
+        },
+        "inference": {
+                "batch_size": 1,
+                "guidance_scale": 1.0,
+                "num_steps": 200,
+        },
+}
