@@ -1702,6 +1702,7 @@ class ConditionFuser(StreamingModule):
 
         # print("===fuser START===")
         # print(input.shape)
+        # print(conditions)
 
         if "offsets" in self._streaming_state:
             first_step = False

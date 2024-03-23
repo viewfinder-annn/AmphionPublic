@@ -91,7 +91,6 @@ class MusicGenTrainer(BaseTrainer):
                     
             return dataloader_dict['train'], dataloader_dict['valid']
         else:
-            self.logger.info("asdsadasdadasdsad")
             Dataset, Collator = self._build_dataset()
             datasets_list = []
             for dataset in self.cfg.dataset:
@@ -118,9 +117,9 @@ class MusicGenTrainer(BaseTrainer):
                     wavs, infos = train_dataset[i]
                     # print(wavs.shape)
                     # print(infos)
-                    f.write(f"{infos.text, infos.wav}\n")
+                    f.write(f"{infos.text, infos.wav_path}\n")
                     # print(infos.to_condition_attributes())
-                    torchaudio.save(f"{debug_sample_dir}/{infos.text['description'][:100].replace('/', '-')}.wav", wavs, self.cfg_omega.sample_rate)
+                    # torchaudio.save(f"{debug_sample_dir}/{infos.text['description'][:100].replace('/', '-')}.wav", wavs, self.cfg.preprocess.sample_rate)
             
             return train_dataloader, valid_dataloader
             

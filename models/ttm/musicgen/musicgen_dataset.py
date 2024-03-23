@@ -27,9 +27,10 @@ from modules.audiocraft.data.audio import audio_read
 from modules.audiocraft.data.audio_utils import convert_audio
 
 class ConditionInfo:
-    def __init__(self, text, wav, device, sample_rate):
+    def __init__(self, text, wav, wav_path, device, sample_rate):
         self.text:dict = text
         self.wav:dict = wav
+        self.wav_path:dict = wav_path
         self.device = device
         self.sample_rate = sample_rate
     # Plugin to the MusicGen Conditioning Mechanism
@@ -37,7 +38,8 @@ class ConditionInfo:
         res = ConditioningAttributes()
         res.text = self.text
         for k, v in self.wav.items():
-            res.wav[k] = WavCondition(wav=v, length=torch.tensor([v.shape[-1]], device=self.device), sample_rate=[self.sample_rate])
+            # unsqueeze: required in audiocraft/modules/conditioners.py, see _collate_wavs
+            res.wav[k] = WavCondition(wav=v.unsqueeze(0), length=torch.tensor([v.shape[-1]], device=self.device), sample_rate=[self.sample_rate])
         return res
 
 class MusicGenDataset:
@@ -68,18 +70,23 @@ class MusicGenDataset:
         with open(self.metafile_path, "r", encoding="utf-8") as f:
             metadata = json.load(f)
 
-        return metadata        
+        return metadata
 
     def __getitem__(self, index):
         utt_info = self.metadata[index]
 
         text_condition = {}
         wav_condition = {}
+        wav_path = {}
         
         # self_wav
         self_wav, sr = audio_read(utt_info["self_wav"])
         self_wav = convert_audio(self_wav, sr, self.sample_rate, self.cfg.preprocess.audio_channels)
+        # for wavs pad to self.cfg.preprocess.segment_duration * self.cfg.preprocess.sample_rate
+        if self_wav.shape[-1] < self.cfg.preprocess.segment_duration * self.sample_rate:
+            self_wav = torch.cat([self_wav, torch.zeros([self.cfg.preprocess.audio_channels, self.cfg.preprocess.segment_duration * self.sample_rate - self_wav.shape[-1]], dtype=self_wav.dtype, device=self_wav.device)], dim=-1)
         wav_condition["self_wav"] = self_wav
+        wav_path["self_wav"] = utt_info["self_wav"]
 
         # caption
         if self.cfg.preprocess.use_caption:
@@ -89,10 +96,13 @@ class MusicGenDataset:
         # ref_wav
         if self.cfg.preprocess.use_ref_wav:
             ref_wav, sr = audio_read(utt_info["ref_wav"])
-            ref_wav = convert_audio(ref_wav, sr, self.sample_rate, self.preprocess.audio_channels)
+            ref_wav = convert_audio(ref_wav, sr, self.sample_rate, self.cfg.preprocess.audio_channels)
+            if ref_wav.shape[-1] < self.cfg.preprocess.segment_duration * self.sample_rate:
+                ref_wav = torch.cat([ref_wav, torch.zeros([self.cfg.preprocess.audio_channels, self.cfg.preprocess.segment_duration * self.sample_rate - ref_wav.shape[-1]], dtype=ref_wav.dtype, device=ref_wav.device)], dim=-1)
             wav_condition["ref_wav"] = ref_wav
+            wav_path["ref_wav"] = utt_info["ref_wav"]
 
-        condition_info = ConditionInfo(text_condition, wav_condition, self.device, self.sample_rate)
+        condition_info = ConditionInfo(text_condition, wav_condition, wav_path, self.device, self.sample_rate)
         
         return self_wav, condition_info
 

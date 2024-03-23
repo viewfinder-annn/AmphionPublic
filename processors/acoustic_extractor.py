@@ -92,6 +92,8 @@ def extract_utt_acoustic_features_serial(metadata, dataset_output, cfg):
             extract_utt_acoustic_features_vocoder(dataset_output, cfg, utt)
         if cfg.task_type == "tta":
             extract_utt_acoustic_features_tta(dataset_output, cfg, utt)
+        if cfg.task_type == "ttm":
+            extract_utt_acoustic_features_ttm(dataset_output, cfg, utt)
 
 
 def __extract_utt_acoustic_features(dataset_output, cfg, utt):
@@ -372,6 +374,47 @@ def extract_utt_acoustic_features_svc(dataset_output, cfg, utt):
 def extract_utt_acoustic_features_tta(dataset_output, cfg, utt):
     __extract_utt_acoustic_features(dataset_output, cfg, utt)
 
+def extract_utt_acoustic_features_ttm(dataset_output, cfg, utt:dict):
+    """Extract acoustic features from utterances (in single process)
+
+    Args:
+        dataset_output (str): directory to store acoustic features
+        cfg (dict): dictionary that stores configurations
+        utt (dict): utterance info including dataset, singer, uid:{singer}_{song}_{index},
+                    path to utternace, duration, utternace index
+
+    """
+    from utils import audio, f0, world, duration
+
+    wav_paths = [item for item in utt.values() if isinstance(item, str) and item.endswith(".wav")]
+    assert len(wav_paths) > 0, "No wav file found in the utterance."
+
+    for wav_path in wav_paths:
+        with torch.no_grad():
+            uid = os.path.splitext(os.path.basename(wav_path))[0]
+            # Load audio data into tensor with sample rate of the config file
+            wav_torch, _ = audio.load_audio_torch(wav_path, cfg.preprocess.sample_rate)
+            wav = wav_torch.cpu().numpy()
+
+            if cfg.preprocess.extract_linear_spec:
+                from utils.mel import extract_linear_features
+
+                linear = extract_linear_features(wav_torch.unsqueeze(0), cfg.preprocess)
+                save_feature(
+                    dataset_output, cfg.preprocess.linear_dir, uid, linear.cpu().numpy()
+                )
+
+            if cfg.preprocess.extract_mel:
+                from utils.mel import extract_mel_features
+                mel = extract_mel_features(wav_torch.unsqueeze(0), cfg.preprocess)
+                save_feature(dataset_output, cfg.preprocess.mel_dir, uid, mel.cpu().numpy())
+
+            if cfg.preprocess.extract_acoustic_token:
+                if cfg.preprocess.acoustic_token_extractor == "Encodec":
+                    codes = extract_encodec_token(wav_path)
+                    save_feature(
+                        dataset_output, cfg.preprocess.acoustic_token_dir, uid, codes
+                    )
 
 def extract_utt_acoustic_features_vocoder(dataset_output, cfg, utt):
     """Extract acoustic features from utterances (in single process)
