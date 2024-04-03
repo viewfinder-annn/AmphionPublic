@@ -10,6 +10,7 @@ import torch
 from models.ttm.musicgen.musicgen_trainer import MusicGenTrainer
 from models.ttm.latentdiffusion.autoencoder_trainer import AutoencoderKLTrainer
 from models.ttm.latentdiffusion.audioldm_trainer import AudioLDMTrainer
+from models.ttm.sing2song.sing2song_trainer import Sing2SongTrainer
 from utils.util import load_config
 
 
@@ -17,7 +18,8 @@ def build_trainer(args, cfg, cfg_path=None):
     supported_trainer = {
         "MusicGen": MusicGenTrainer,
         "AutoencoderKL": AutoencoderKLTrainer,
-        "AudioLDM": AudioLDMTrainer
+        "AudioLDM": AudioLDMTrainer,
+        "Sing2Song": Sing2SongTrainer
     }
 
     trainer_class = supported_trainer[cfg.model_type]

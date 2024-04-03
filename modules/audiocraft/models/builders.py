@@ -35,6 +35,7 @@ from ..modules.conditioners import (
     LUTConditioner,
     T5Conditioner,
     MelSpectrogramConditioner,
+    CategoryConditioner
 )
 from .unet import DiffusionUnet
 from .. import quantization as qt
@@ -169,6 +170,10 @@ def get_conditioner_provider(
         elif model_type == "mel":
             conditioners[str(cond)] = MelSpectrogramConditioner(
                 output_dim=output_dim, device=device, **model_args
+            )
+        elif model_type == "category":
+            conditioners[str(cond)] = CategoryConditioner(
+                output_dim=output_dim, **model_args
             )
         else:
             raise ValueError(f"Unrecognized conditioning model: {model_type}")

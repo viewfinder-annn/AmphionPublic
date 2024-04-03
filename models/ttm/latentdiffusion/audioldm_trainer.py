@@ -31,19 +31,22 @@ class AudioLDMTrainer(BaseTrainer):
         self.build_textencoder()
         self.nosie_scheduler = self.build_noise_scheduler()
         
-        self.debug_autoencoderkl()
+        self.debug_autoencoderkl_vocoder()
 
         # self.save_config_file()
     
-    def debug_autoencoderkl(self):
+    def debug_autoencoderkl_vocoder(self):
         import json
         from models.ttm.latentdiffusion.audioldm_inference import AttrDict
         from models.tta.ldm.inference_utils.vocoder import Generator
         import numpy as np
         # DEBUG
-        debug_sample_dir = f"{self.exp_dir}/debug_vae_sample"
-        shutil.rmtree(debug_sample_dir, ignore_errors=True)
-        os.makedirs(debug_sample_dir, exist_ok=True)
+        debug_vae_dir = f"{self.exp_dir}/debug_vae_sample"
+        shutil.rmtree(debug_vae_dir, ignore_errors=True)
+        os.makedirs(debug_vae_dir, exist_ok=True)
+        debug_vocoder_dir = f"{self.exp_dir}/debug_vocoder_sample"
+        shutil.rmtree(debug_vocoder_dir, ignore_errors=True)
+        os.makedirs(debug_vocoder_dir, exist_ok=True)
         config_file = os.path.join(self.cfg.model.vocoder_config_path)
         with open(config_file) as f:
             data = f.read()
@@ -60,6 +63,11 @@ class AudioLDMTrainer(BaseTrainer):
             single_features = self.train_dataset[i]
             melspec = single_features["mel"][:, :624].unsqueeze(0).unsqueeze(1)
             melspec = melspec.to(self.accelerator.device)
+            y_vocoder = self.vocoder(melspec.squeeze(0))
+            audio_vocoder = y_vocoder.squeeze()
+            audio_vocoder = audio_vocoder.cpu()
+            audio_vocoder.unsqueeze_(0)
+            torchaudio.save(f"{debug_vocoder_dir}/{single_features['caption'][:100].replace('/', '-')}_vocoder.wav", audio_vocoder, self.cfg.preprocess.sample_rate)
             latent = self.mel_to_latent(melspec)
             with torch.no_grad():
                 mel_out = self.autoencoderkl.decode(latent)
@@ -71,7 +79,7 @@ class AudioLDMTrainer(BaseTrainer):
                 # audio = audio * 32768.0
                 audio = audio.cpu()
                 audio.unsqueeze_(0)
-                torchaudio.save(f"{debug_sample_dir}/{single_features['caption'][:100].replace('/', '-')}_recon.wav", audio, self.cfg.preprocess.sample_rate)
+                torchaudio.save(f"{debug_vae_dir}/{single_features['caption'][:100].replace('/', '-')}_recon.wav", audio, self.cfg.preprocess.sample_rate)
 
     def build_autoencoderkl(self):
         self.autoencoderkl = AutoencoderKL(self.cfg.model.autoencoderkl)

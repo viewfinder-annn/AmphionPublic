@@ -1,0 +1,14 @@
+nohup sh egs/ttm/sing2song/run.sh --stage 2 --config egs/ttm/sing2song/exp_config_debug.json --name sing2song_debug_1 --gpu "0" >> /home/wangyuancheng.p/zja/Amphion/egs/ttm/sing2song/train_debug.log &
+
+nohup sh egs/ttm/sing2song/run.sh --stage 3 --config egs/ttm/sing2song/exp_config_debug.json --gpu "5" \
+    --infer_expt_dir "ckpts/ttm/sing2song_debug_1" \
+    --text /home/wangyuancheng.p/zja/Amphion/egs/ttm/sing2song/infer_file.json\
+    --file_list true \
+    >> /home/wangyuancheng.p/zja/Amphion/egs/ttm/sing2song/infer.log &
+
+nohup sh egs/ttm/sing2song/run.sh --stage 2 --config egs/ttm/sing2song/exp_config_musdb18.json --name sing2song_musdb18 --gpu "0,1,2,3,4,5" >> /home/wangyuancheng.p/zja/Amphion/egs/ttm/sing2song/train_musdb18.log &
+nohup sh egs/ttm/sing2song/run.sh --stage 3 --config egs/ttm/sing2song/exp_config_musdb18.json --gpu "7" \
+    --infer_expt_dir "ckpts/ttm/sing2song_musdb18" \
+    --text /home/wangyuancheng.p/zja/Amphion/egs/ttm/sing2song/infer_file.json\
+    --file_list true \
+    >> /home/wangyuancheng.p/zja/Amphion/egs/ttm/sing2song/infer.log &

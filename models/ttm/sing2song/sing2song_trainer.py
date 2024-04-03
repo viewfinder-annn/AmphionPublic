@@ -17,7 +17,7 @@ from tqdm import tqdm
 import logging
 
 from models.base.new_trainer import BaseTrainer
-from models.ttm.musicgen.musicgen_dataset import MusicGenDataset, MusicGenCollator
+from models.ttm.sing2song.sing2song_dataset import Sing2SongDataset, Sing2SongCollator
 import modules.audiocraft.solvers.builders as builders
 import modules.audiocraft.models as models
 from modules.audiocraft.solvers.compression import CompressionSolver
@@ -29,7 +29,7 @@ import torchaudio
 
 logging.basicConfig(level=logging.INFO)
 
-class MusicGenTrainer(BaseTrainer):
+class Sing2SongTrainer(BaseTrainer):
 
     DATASET_TYPE = builders.DatasetType.MUSIC
 
@@ -61,7 +61,7 @@ class MusicGenTrainer(BaseTrainer):
         self.logger.info("Task type: {}".format(self.task_type))
 
     def _build_dataset(self):
-        return MusicGenDataset, MusicGenCollator
+        return Sing2SongDataset, Sing2SongCollator
 
     ### Following are methods only for TTM tasks ###
     def _build_dataloader(self):
@@ -112,7 +112,7 @@ class MusicGenTrainer(BaseTrainer):
             os.makedirs(debug_sample_dir, exist_ok=True)
             with open(f"{debug_sample_dir}/info", "w") as f:
                 for i in range(8):
-                    wavs, infos = train_dataset[i]
+                    _, _, infos = train_dataset[i]
                     # print(wavs.shape)
                     # print(infos)
                     f.write(f"{infos.text, infos.wav_path}\n")
@@ -157,9 +157,6 @@ class MusicGenTrainer(BaseTrainer):
                     self.logger.info("Using T5-base as the condition provider. (~110M parameters)")
 
         # TODO: distributed training
-        # if self.cfg_omega.fsdp.use:
-        #     assert not self.cfg_omega.autocast, "Cannot use autocast with fsdp"
-        #     self.model = self.wrap_with_fsdp(self.model)
         
         # ema
         # self.register_ema('model')
@@ -229,9 +226,11 @@ class MusicGenTrainer(BaseTrainer):
             Padding mask (torch.Tensor): Mask with valid positions in the tokens tensor, of shape [B, K, T_s].
         """
         # TODO: cached dataset support
-        audio, infos = batch
+        audio, prompt, infos = batch
         audio = audio.to(self.device)
+        prompt = prompt.to(self.device)
         audio_tokens = None
+        assert audio.size(2) == prompt.size(2), "Audio and prompt should have the same length."
         assert audio.size(0) == len(infos), (
             f"Mismatch between number of items in audio batch ({audio.size(0)})",
             f" and in metadata ({len(infos)})"
@@ -240,9 +239,9 @@ class MusicGenTrainer(BaseTrainer):
         # prepare attributes
         attributes = [info.to_condition_attributes() for info in infos]
         # print(attributes)
-        attributes = self.model.cfg_dropout(attributes)
-        attributes = self.model.att_dropout(attributes)
-        tokenized = self.model.condition_provider.tokenize(attributes)
+        attributes = self.accelerator.unwrap_model(self.model).cfg_dropout(attributes)
+        attributes = self.accelerator.unwrap_model(self.model).att_dropout(attributes)
+        tokenized = self.accelerator.unwrap_model(self.model).condition_provider.tokenize(attributes)
         # for k, v in tokenized.items():
         #     print(k)
         #     if isinstance(v, dict):
@@ -255,9 +254,12 @@ class MusicGenTrainer(BaseTrainer):
             with torch.no_grad():
                 audio_tokens, scale = self.compression_model.encode(audio)
                 assert scale is None, "Scaled compression model not supported with LM."
+                prompt_tokens, _ = self.compression_model.encode(prompt)
+                assert prompt_tokens.shape == audio_tokens.shape, "Prompt and audio tokens should have the same shape."
+                audio_tokens = torch.cat([prompt_tokens, audio_tokens], dim=2)
 
         with self.autocast:
-            condition_tensors = self.model.condition_provider(tokenized)
+            condition_tensors = self.accelerator.unwrap_model(self.model).condition_provider(tokenized)
             # for k, v in condition_tensors.items():
             #     print(k)
             #     print(v[0].shape, v[1].shape)
@@ -349,9 +351,19 @@ class MusicGenTrainer(BaseTrainer):
         condition_tensors, audio_tokens, padding_mask = self._prepare_tokens_and_attributes(batch)
         
         with self.autocast:
-            model_output = self.model.compute_predictions(audio_tokens, [], condition_tensors)  # type: ignore
+            model_output = self.accelerator.unwrap_model(self.model).compute_predictions(audio_tokens, [], condition_tensors)  # type: ignore
             logits = model_output.logits
+            # print("logits", logits.shape)
+            mask = model_output.mask
+            # remove the prompt tokens from the logits, leave the second half [B, K, 2T, num_cards] -> [B, K, T, num_cards]
+            logits = logits[:, :, logits.shape[2] // 2:]
+            # print("logits", logits.shape)
             mask = padding_mask & model_output.mask
+            # print("mask", mask.shape)
+            mask = mask[:, :, mask.shape[-1] // 2:]
+            # print("mask", mask.shape)
+            # print("audio_tokens", audio_tokens.shape)
+            audio_tokens = audio_tokens[:, :, audio_tokens.shape[-1] // 2:]
             ce, ce_per_codebook = self._compute_cross_entropy(logits, audio_tokens, mask)
             loss = ce
 

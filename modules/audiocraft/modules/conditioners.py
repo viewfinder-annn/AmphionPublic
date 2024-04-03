@@ -519,6 +519,41 @@ class T5Conditioner(TextConditioner):
         embeds = embeds * mask.unsqueeze(-1)
         return embeds, mask
 
+# Sing2Song added module
+class CategoryConditioner(TextConditioner):
+    """Category-based TextConditioner.
+
+    Args:
+        n_bins (int): Number of bins.
+        dim (int): Hidden dim of the model (text-encoder/LUT).
+        output_dim (int): Output dim of the conditioner.
+        pad_idx (int, optional): Index for padding token. Defaults to 0.
+    """
+
+    def __init__(
+        self, n_bins: int, dim: int, output_dim: int, pad_idx: int = 0
+    ):
+        super().__init__(dim, output_dim)
+        self.embed = nn.Embedding(n_bins, dim)
+        self.tokenizer = NoopTokenizer(n_bins, pad_idx=pad_idx)
+
+    def tokenize(
+        self, x: tp.List[tp.Optional[str]]
+    ) -> tp.Tuple[torch.Tensor, torch.Tensor]:
+        device = self.embed.weight.device
+        # replace None into ""
+        x = [xi if xi is not None else "" for xi in x]
+        tokens, mask = self.tokenizer(x)
+        # print(x, tokens)
+        tokens, mask = tokens.to(device), mask.to(device)
+        return tokens, mask
+
+    def forward(self, inputs: tp.Tuple[torch.Tensor, torch.Tensor]) -> ConditionType:
+        tokens, mask = inputs
+        embeds = self.embed(tokens)
+        embeds = self.output_proj(embeds)
+        embeds = embeds * mask.unsqueeze(-1)
+        return embeds, mask
 
 class WaveformConditioner(BaseConditioner):
     """Base class for all conditioners that take a waveform as input.
@@ -1717,6 +1752,7 @@ class ConditionFuser(StreamingModule):
         )
         cross_attention_output = None
         for cond_type, (cond, cond_mask) in conditions.items():
+            # print(cond_type, cond.shape, cond_mask.shape)
             op = self.cond2fuse[cond_type]
             if op == "sum":
                 input += cond

@@ -9,6 +9,7 @@ import os
 
 from models.ttm.musicgen.musicgen_inference import MusicGenInference
 from models.ttm.latentdiffusion.audioldm_inference import AudioLDMInference
+from models.ttm.sing2song.sing2song_inference import Sing2SongInference
 from utils.util import save_config, load_model_config, load_config
 import numpy as np
 import torch
@@ -18,6 +19,7 @@ def build_inference(args, cfg, cfg_path=None):
     supported_inference = {
         "MusicGen": MusicGenInference,
         "AudioLDM": AudioLDMInference,
+        "Sing2Song": Sing2SongInference,
     }
 
     inference_class = supported_inference[cfg.model_type]

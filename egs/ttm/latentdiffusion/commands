@@ -1,0 +1,3 @@
+nohup sh egs/ttm/latentdiffusion/autoencoderkl/run.sh --stage 2 --config egs/ttm/latentdiffusion/autoencoderkl/exp_config_musiccaps.json --name autoencoderkl_musiccaps --gpu "1" >> /home/wangyuancheng.p/zja/Amphion/egs/ttm/latentdiffusion/autoencoderkl_musiccaps.log &
+nohup sh egs/ttm/latentdiffusion/audioldm/run.sh --stage 2 --config egs/ttm/latentdiffusion/audioldm/exp_config_musiccaps.json --name audioldm_musiccaps --gpu "3" >> /home/wangyuancheng.p/zja/Amphion/egs/ttm/latentdiffusion/audioldm_musiccaps.log &
+nohup sh egs/ttm/latentdiffusion/audioldm/run.sh --stage 2 --config egs/ttm/latentdiffusion/audioldm/exp_config_musiccaps.json --name audioldm_musiccaps_2 --gpu "4" >> /home/wangyuancheng.p/zja/Amphion/egs/ttm/latentdiffusion/audioldm_musiccaps_2.log &

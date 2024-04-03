@@ -1,0 +1,58 @@
+[
+    {
+        "dataset": "musdb18",
+        "action": "add",
+        "category": "other",
+        "ref_wav": "/nvme/amphion/zhfang/zja/_datase_utils/preprocessor/musdb18/wavs/Skelpolu - Together Alone_24_drums.wav",
+        "self_wav": "/nvme/amphion/zhfang/zja/_datase_utils/preprocessor/musdb18/wavs/Skelpolu - Together Alone_24_other.wav"
+    },
+    {
+        "dataset": "musdb18",
+        "action": "add",
+        "category": "drums",
+        "ref_wav": "/nvme/amphion/zhfang/zja/_datase_utils/preprocessor/musdb18/wavs/Skelpolu - Together Alone_24_other.wav",
+        "self_wav": "/nvme/amphion/zhfang/zja/_datase_utils/preprocessor/musdb18/wavs/Skelpolu - Together Alone_24_drums.wav"
+    },
+    {
+        "dataset": "musdb18",
+        "action": "extract",
+        "category": "drums",
+        "ref_wav": "/nvme/amphion/zhfang/zja/_datase_utils/preprocessor/musdb18/wavs/Skelpolu - Together Alone_24_drums_other.wav",
+        "self_wav": "/nvme/amphion/zhfang/zja/_datase_utils/preprocessor/musdb18/wavs/Skelpolu - Together Alone_24_drums.wav"
+    },
+    {
+        "dataset": "musdb18",
+        "action": "remove",
+        "category": "drums",
+        "ref_wav": "/nvme/amphion/zhfang/zja/_datase_utils/preprocessor/musdb18/wavs/Skelpolu - Together Alone_24_drums_other.wav",
+        "self_wav": "/nvme/amphion/zhfang/zja/_datase_utils/preprocessor/musdb18/wavs/Skelpolu - Together Alone_24_other.wav"
+    },
+    {
+        "dataset": "musdb18",
+        "action": "extract",
+        "category": "other",
+        "ref_wav": "/nvme/amphion/zhfang/zja/_datase_utils/preprocessor/musdb18/wavs/Skelpolu - Together Alone_24_drums_other.wav",
+        "self_wav": "/nvme/amphion/zhfang/zja/_datase_utils/preprocessor/musdb18/wavs/Skelpolu - Together Alone_24_other.wav"
+    },
+    {
+        "dataset": "musdb18",
+        "action": "remove",
+        "category": "other",
+        "ref_wav": "/nvme/amphion/zhfang/zja/_datase_utils/preprocessor/musdb18/wavs/Skelpolu - Together Alone_24_drums_other.wav",
+        "self_wav": "/nvme/amphion/zhfang/zja/_datase_utils/preprocessor/musdb18/wavs/Skelpolu - Together Alone_24_drums.wav"
+    },
+    {
+        "dataset": "musdb18",
+        "action": "add",
+        "category": "other",
+        "ref_wav": "/nvme/amphion/zhfang/zja/_datase_utils/preprocessor/musdb18/wavs/Skelpolu - Together Alone_32_drums.wav",
+        "self_wav": "/nvme/amphion/zhfang/zja/_datase_utils/preprocessor/musdb18/wavs/Skelpolu - Together Alone_32_other.wav"
+    },
+    {
+        "dataset": "musdb18",
+        "action": "add",
+        "category": "drums",
+        "ref_wav": "/nvme/amphion/zhfang/zja/_datase_utils/preprocessor/musdb18/wavs/Skelpolu - Together Alone_32_other.wav",
+        "self_wav": "/nvme/amphion/zhfang/zja/_datase_utils/preprocessor/musdb18/wavs/Skelpolu - Together Alone_32_drums.wav"
+    }
+]
