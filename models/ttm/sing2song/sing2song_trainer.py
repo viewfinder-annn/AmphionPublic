@@ -5,6 +5,7 @@
 # Code adapted from https://github.com/facebookresearch/audiocraft/blob/main/audiocraft/solvers/musicgen.py
 
 import json5
+import json
 import os
 import shutil
 import math
@@ -96,7 +97,7 @@ class Sing2SongTrainer(BaseTrainer):
                 datasets_list.append(subdataset)
             train_dataset = ConcatDataset(datasets_list)
             train_collate = Collator(self.cfg)
-            train_dataloader = DataLoader(train_dataset, collate_fn=train_collate, batch_size=self.cfg.train.batch_size, shuffle=True)
+            train_dataloader = DataLoader(train_dataset, collate_fn=train_collate, batch_size=self.cfg.train.batch_size, shuffle=False, pin_memory=True)
 
             datasets_list = []
             for dataset in self.cfg.dataset:
@@ -104,21 +105,29 @@ class Sing2SongTrainer(BaseTrainer):
                 datasets_list.append(subdataset)
             valid_dataset = ConcatDataset(datasets_list)
             valid_collate = Collator(self.cfg)
-            valid_dataloader = DataLoader(valid_dataset, collate_fn=valid_collate, batch_size=self.cfg.train.batch_size, shuffle=False)
+            valid_dataloader = DataLoader(valid_dataset, collate_fn=valid_collate, batch_size=self.cfg.train.batch_size, shuffle=False, pin_memory=True)
             
             # DEBUG
-            debug_sample_dir = f"{self.exp_dir}/debug_train_sample"
-            shutil.rmtree(debug_sample_dir, ignore_errors=True)
-            os.makedirs(debug_sample_dir, exist_ok=True)
-            with open(f"{debug_sample_dir}/info", "w") as f:
-                for i in range(8):
-                    _, _, infos = train_dataset[i]
-                    # print(wavs.shape)
-                    # print(infos)
-                    f.write(f"{infos.text, infos.wav_path}\n")
-                    # print(infos.to_condition_attributes())
-                    # torchaudio.save(f"{debug_sample_dir}/{infos.text['description'][:100].replace('/', '-')}.wav", wavs, self.cfg.preprocess.sample_rate)
-            
+            # debug_sample_dir = f"{self.exp_dir}/debug_train_sample"
+            # shutil.rmtree(debug_sample_dir, ignore_errors=True)
+            # os.makedirs(debug_sample_dir, exist_ok=True)
+            # debug_infos = []
+            # for i in range(8):
+            #     self_wav, ref_wav, infos = train_dataset[i]
+            #     # print(wavs.shape)
+            #     # print(infos)
+            #     # print(infos.to_condition_attributes())
+            #     torchaudio.save(f"{debug_sample_dir}/{i}_self.wav", self_wav, self.cfg_omega.sample_rate)
+            #     torchaudio.save(f"{debug_sample_dir}/{i}_ref.wav", ref_wav, self.cfg_omega.sample_rate)
+            #     debug_infos.append({
+            #         "dataset": "debug",
+            #         "action": infos.text["action"],
+            #         "category": infos.text["category"],
+            #         "ref_wav": f"{debug_sample_dir}/{i}_ref.wav",
+            #         "self_wav": f"{debug_sample_dir}/{i}_self.wav",
+            #     })
+            # with open(f"{debug_sample_dir}/info.json", "w") as f:
+            #     json.dump(debug_infos, f)
             return train_dataloader, valid_dataloader
             
     
@@ -176,6 +185,8 @@ class Sing2SongTrainer(BaseTrainer):
                 num_training_steps=self.cfg.train.total_training_steps
                 * self.accelerator.num_processes,
             )
+        else:
+            scheduler = None
         return scheduler
 
     def _compute_cross_entropy(
