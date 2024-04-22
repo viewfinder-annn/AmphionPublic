@@ -54,6 +54,9 @@ TextCondition = tp.Optional[
 ]  # a text condition can be a string or None (if doesn't exist)
 ConditionType = tp.Tuple[torch.Tensor, torch.Tensor]  # condition, mask
 
+# lyric2song added module
+from transformers import AutoTokenizer, AutoModelForMaskedLM
+from modules.transformer.attentions import Encoder
 
 class WavCondition(tp.NamedTuple):
     wav: torch.Tensor
@@ -517,6 +520,141 @@ class T5Conditioner(TextConditioner):
             embeds = self.t5(**inputs).last_hidden_state
         embeds = self.output_proj(embeds.to(self.output_proj.weight))
         embeds = embeds * mask.unsqueeze(-1)
+        return embeds, mask
+
+# lyric2song added module
+class BertConditioner(TextConditioner):
+    """BERT-based TextConditioner.
+
+    Args:
+        name (str): Name of the BERT model.
+        output_dim (int): Output dim of the conditioner.
+        finetune (bool): Whether to fine-tune BERT at train time.
+        device (str): Device for BERT Conditioner.
+        autocast_dtype (tp.Optional[str], optional): Autocast dtype.
+        word_dropout (float, optional): Word dropout probability.
+        normalize_text (bool, optional): Whether to apply text normalization.
+    """
+
+    MODELS = [
+        "bert-base-uncased",
+        "bert-large-uncased",
+        "bert-base-cased",
+        "bert-large-cased",
+        "bert-base-chinese",
+        "bert-base-english",
+    ]
+    
+    MODELS_DIMS = {
+        "bert-base-uncased": 768,
+        "bert-large-uncased": 1024,
+        "bert-base-cased": 768,
+        "bert-large-cased": 1024,
+        "bert-base-chinese": 768,
+        "bert-base-english": 768,
+    }
+    
+    def __init__(
+        self,
+        name: str,
+        output_dim: int,
+        finetune: bool,
+        device: str,
+        autocast_dtype: tp.Optional[str] = "float32",
+        word_dropout: float = 0.0,
+        normalize_text: bool = False,
+    ):
+        assert (
+            name in self.MODELS
+        ), f"Unrecognized bert model name (should in {self.MODELS})"
+        super().__init__(self.MODELS_DIMS[name], output_dim)
+        self.device = device
+        self.name = name
+        self.finetune = finetune
+        self.word_dropout = word_dropout
+        if autocast_dtype is None or self.device == "cpu":
+            self.autocast = TorchAutocast(enabled=False)
+            if self.device != "cpu":
+                logger.warning("BERT has no autocast, this might lead to NaN")
+        else:
+            dtype = getattr(torch, autocast_dtype)
+            assert isinstance(dtype, torch.dtype)
+            logger.info(f"BERT will be evaluated with autocast as {autocast_dtype}")
+            self.autocast = TorchAutocast(
+                enabled=True, device_type=self.device, dtype=dtype
+            )
+        # Let's disable logging temporarily because BERT will vomit some errors otherwise.
+        # thanks https://gist.github.com/simon-weber/7853144
+        previous_level = logging.root.manager.disable
+        logging.disable(logging.ERROR)
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore")
+            try:
+                self.bert_tokenizer = AutoTokenizer.from_pretrained(name)
+                bert = AutoModelForMaskedLM.from_pretrained(name).train(mode=finetune)
+            finally:
+                logging.disable(previous_level)
+        if finetune:
+            self.bert = bert
+        else:
+            # this makes sure that the bert models is not part
+            # of the saved checkpoint
+            self.__dict__["bert"] = bert.to(device)
+
+        self.normalize_text = normalize_text
+        if normalize_text:
+            self.text_normalizer = WhiteSpaceTokenizer(1, lemma=True, stopwords=True)
+        
+        # embedding from original bert tokenizer
+        self.emb_token = nn.Embedding(self.bert_tokenizer.vocab_size, self.dim)
+        self.encoder = Encoder(hidden_channels=self.dim, filter_channels=self.dim, n_heads=4, n_layers=6)
+        self.output_proj_token = nn.Linear(self.dim, output_dim)
+    
+    def tokenize(self, x: tp.List[tp.Optional[str]]) -> tp.Dict[str, torch.Tensor]:
+        # if current sample doesn't have a certain attribute, replace with empty string
+        entries: tp.List[str] = [xi if xi is not None else "" for xi in x]
+        # print(entries)
+        if self.normalize_text:
+            _, _, entries = self.text_normalizer(entries, return_text=True)
+        if self.word_dropout > 0.0 and self.training:
+            new_entries = []
+            for entry in entries:
+                words = [
+                    word
+                    for word in entry.split(" ")
+                    if random.random() >= self.word_dropout
+                ]
+                new_entries.append(" ".join(words))
+            entries = new_entries
+
+        empty_idx = torch.LongTensor([i for i, xi in enumerate(entries) if xi == ""])
+
+        inputs = self.bert_tokenizer(entries, return_tensors="pt", padding=True, max_length=512, truncation=True).to(
+            self.device
+        )
+        mask = inputs["attention_mask"]
+        mask[empty_idx, :] = 0
+    
+        return inputs
+    
+    def forward(self, inputs: tp.Dict[str, torch.Tensor]) -> ConditionType:
+        mask = inputs["attention_mask"]
+        with torch.set_grad_enabled(self.finetune), self.autocast:
+            embeds = self.bert(**inputs, output_hidden_states=True).hidden_states[-1]
+            # print(embeds.shape)
+            # print(embeds)
+        embeds = self.output_proj(embeds.to(self.output_proj.weight))
+        
+        embeds_token = self.emb_token(inputs['input_ids']) # [B, T, D]
+        # print(embeds_token.shape, mask.shape)
+        embeds_transformer = self.encoder(embeds_token.transpose(1, 2), mask.unsqueeze(1)) # [B, D, T]
+        # print(embeds_transformer.shape)
+        embeds_token = embeds_token + embeds_transformer.transpose(1, 2)
+        embeds_token = self.output_proj_token(embeds_token)
+        
+        embeds = embeds + embeds_token
+        embeds = embeds * mask.unsqueeze(-1)
+        # print(embeds, mask)
         return embeds, mask
 
 # Sing2Song added module
