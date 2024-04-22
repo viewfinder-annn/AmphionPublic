@@ -75,14 +75,7 @@ class Sing2SongInference:
         self.model.eval()
         self.accelerator.wait_for_everyone()
         
-        self.generation_params = {
-            'use_sampling': False,
-            'temp': 0,
-            'top_k': 0,
-            'top_p': 0,
-            'cfg_coef': 3.0,
-            'two_step_cfg': self.cfg_omega.transformer_lm.two_step_cfg,
-        }
+        self.generation_params = self.cfg.inference.generation_params
     
     def _build_model(self):
         r"""Build the model for training. This function is called in ``__init__`` function."""
@@ -195,6 +188,8 @@ class Sing2SongInference:
         action, category = meta['action'], meta['category']
         waveform_tensor, waveform_sr = torchaudio.load(meta['ref_wav'])
         waveform_tensor = convert_audio(waveform_tensor, waveform_sr, self.sample_rate, self.audio_channels)
+        if waveform_tensor.shape[-1] < self.cfg.preprocess.segment_duration * self.sample_rate:
+            waveform_tensor = torch.cat([waveform_tensor, torch.zeros([self.cfg.preprocess.audio_channels, self.cfg.preprocess.segment_duration * self.sample_rate - waveform_tensor.shape[-1]], dtype=waveform_tensor.dtype, device=waveform_tensor.device)], dim=-1)
         # add batch dimension
         waveform_tensor = waveform_tensor.unsqueeze(0)
         attributes, prompt_tokens = self._prepare_tokens_and_attributes(action, category, waveform_tensor)
@@ -286,14 +281,18 @@ class Sing2SongInference:
         """
         texts = json5.load(open(self.args.text))
         checkpoint_name = os.path.basename(self.checkpoint_path)
-        target_dir = os.path.join(self.args.output_dir, checkpoint_name)
+        target_dir = os.path.join(self.args.output_dir, f"{checkpoint_name}_{self.generation_params.use_sampling}_{self.generation_params.temp}_{self.generation_params.top_k}_{self.generation_params.top_p}")
         os.makedirs(target_dir, exist_ok=True)
         gt_dir = os.path.join(target_dir, "gt")
         os.makedirs(gt_dir, exist_ok=True)
         origin_dir = os.path.join(target_dir, "origin")
         os.makedirs(origin_dir, exist_ok=True)
+        gt_mix_dir = os.path.join(target_dir, "gt_mix")
+        os.makedirs(gt_mix_dir, exist_ok=True)
         mix_dir = os.path.join(target_dir, "mix")
         os.makedirs(mix_dir, exist_ok=True)
+        output_dir = os.path.join(target_dir, "output")
+        os.makedirs(output_dir, exist_ok=True)
         
         # TODO: batched inference
         for meta in tqdm(texts, desc="Generating"):
@@ -305,17 +304,24 @@ class Sing2SongInference:
             ref_file = os.path.join(origin_dir, f"{os.path.splitext(os.path.basename(meta['ref_wav']))[0]}.wav")
             torchaudio.save(ref_file, prompt_audio.cpu(), self.sample_rate)
             
-            file = os.path.join(target_dir, f"{os.path.splitext(os.path.basename(meta['ref_wav']))[0] + '+' + meta['action'] + '_' + meta['category']}.wav")
+            file = os.path.join(output_dir, f"{os.path.splitext(os.path.basename(meta['ref_wav']))[0] + '+' + meta['action'] + '_' + meta['category']}.wav")
             torchaudio.save(file, audio.cpu(), self.sample_rate)
             
             gt_file = os.path.join(gt_dir, f"{os.path.splitext(os.path.basename(meta['ref_wav']))[0] + '+' + meta['action'] + '_' + meta['category']}_gt.wav")
-            shutil.copy(meta["self_wav"], gt_file)
+            gt_audio, gt_sr = torchaudio.load(meta['self_wav'])
+            gt_audio_converted = convert_audio(gt_audio, gt_sr, self.sample_rate, self.audio_channels)
+            torchaudio.save(gt_file, gt_audio_converted, self.sample_rate)
             
             if meta["action"] == "add":
                 mix = prompt_audio.cpu() + audio.cpu()
+                gt_mix = prompt_audio.cpu() + gt_audio_converted
             elif meta["action"] == "extract":
                 mix = prompt_audio.cpu() - audio.cpu()
+                gt_mix = prompt_audio.cpu() - gt_audio_converted
             elif meta["action"] == "remove":
                 mix = audio.cpu()
+                gt_mix = gt_audio_converted
             file = os.path.join(mix_dir, f"{os.path.splitext(os.path.basename(meta['ref_wav']))[0] + '+' + meta['action'] + '_' + meta['category']}_mix.wav")
             torchaudio.save(file, mix.cpu(), self.sample_rate)
+            gt_file = os.path.join(gt_mix_dir, f"{os.path.splitext(os.path.basename(meta['ref_wav']))[0] + '+' + meta['action'] + '_' + meta['category']}_gt_mix.wav")
+            torchaudio.save(gt_file, gt_mix.cpu(), self.sample_rate)
