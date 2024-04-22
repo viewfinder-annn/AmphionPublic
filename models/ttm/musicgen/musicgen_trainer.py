@@ -5,6 +5,7 @@
 # Code adapted from https://github.com/facebookresearch/audiocraft/blob/main/audiocraft/solvers/musicgen.py
 
 import json5
+import json
 import os
 import shutil
 import math
@@ -59,6 +60,14 @@ class MusicGenTrainer(BaseTrainer):
         # Only for TTM tasks
         self.task_type = "TTM"
         self.logger.info("Task type: {}".format(self.task_type))
+        
+        # TODO: resume
+        self.checkpoints_path_step = [
+            [] for _ in range(len(self.cfg.train.save_checkpoint_stride_step))
+        ]
+        self.keep_last_step = [
+            i if i > 0 else float("inf") for i in self.cfg.train.keep_last_step
+        ]
 
     def _build_dataset(self):
         return MusicGenDataset, MusicGenCollator
@@ -240,9 +249,9 @@ class MusicGenTrainer(BaseTrainer):
         # prepare attributes
         attributes = [info.to_condition_attributes() for info in infos]
         # print(attributes)
-        attributes = self.model.cfg_dropout(attributes)
-        attributes = self.model.att_dropout(attributes)
-        tokenized = self.model.condition_provider.tokenize(attributes)
+        attributes = self.accelerator.unwrap_model(self.model).cfg_dropout(attributes)
+        attributes = self.accelerator.unwrap_model(self.model).att_dropout(attributes)
+        tokenized = self.accelerator.unwrap_model(self.model).condition_provider.tokenize(attributes)
         # for k, v in tokenized.items():
         #     print(k)
         #     if isinstance(v, dict):
@@ -257,7 +266,7 @@ class MusicGenTrainer(BaseTrainer):
                 assert scale is None, "Scaled compression model not supported with LM."
 
         with self.autocast:
-            condition_tensors = self.model.condition_provider(tokenized)
+            condition_tensors = self.accelerator.unwrap_model(self.model).condition_provider(tokenized)
             # for k, v in condition_tensors.items():
             #     print(k)
             #     print(v[0].shape, v[1].shape)
@@ -336,6 +345,57 @@ class MusicGenTrainer(BaseTrainer):
                 )
                 self.step += 1
                 epoch_step += 1
+            
+            if self.accelerator.is_main_process:
+                save_checkpoint = False
+                hit_dix = []
+                for i, num in enumerate(self.cfg.train.save_checkpoint_stride_step):
+                    if self.step % num == 0:
+                        save_checkpoint = True
+                        hit_dix.append(i)
+
+            self.accelerator.wait_for_everyone()
+            train_loss = epoch_sum_loss / epoch_step if epoch_step > 0 else 0.0
+            if self.accelerator.is_main_process and save_checkpoint:
+                path = os.path.join(
+                    self.checkpoint_dir,
+                    "epoch-{:04d}_step-{:07d}_loss-{:.6f}".format(
+                        self.epoch, self.step, train_loss
+                    ),
+                )
+                self.tmp_checkpoint_save_path = path
+                self.accelerator.save_state(path)
+                print(f"save checkpoint in {path}")
+                json.dump(
+                    self.checkpoints_path_step,
+                    open(os.path.join(path, "ckpts.json"), "w"),
+                    ensure_ascii=False,
+                    indent=4,
+                )
+                self._save_auxiliary_states()
+
+                # Remove old checkpoints
+                to_remove = []
+                for idx in hit_dix:
+                    self.checkpoints_path_step[idx].append(path)
+                    while len(self.checkpoints_path_step[idx]) > self.keep_last_step[idx]:
+                        to_remove.append((idx, self.checkpoints_path_step[idx].pop(0)))
+
+                # Search conflicts
+                total = set()
+                for i in self.checkpoints_path_step:
+                    total |= set(i)
+                do_remove = set()
+                for idx, path in to_remove[::-1]:
+                    if path in total:
+                        self.checkpoints_path_step[idx].insert(0, path)
+                    else:
+                        do_remove.add(path)
+                
+                # Remove old checkpoints
+                for path in do_remove:
+                    shutil.rmtree(path, ignore_errors=True)
+                    self.logger.debug(f"Remove old checkpoint: {path}")
 
         self.accelerator.wait_for_everyone()
         return (
@@ -349,7 +409,7 @@ class MusicGenTrainer(BaseTrainer):
         condition_tensors, audio_tokens, padding_mask = self._prepare_tokens_and_attributes(batch)
         
         with self.autocast:
-            model_output = self.model.compute_predictions(audio_tokens, [], condition_tensors)  # type: ignore
+            model_output = self.accelerator.unwrap_model(self.model).compute_predictions(audio_tokens, [], condition_tensors)  # type: ignore
             logits = model_output.logits
             mask = padding_mask & model_output.mask
             ce, ce_per_codebook = self._compute_cross_entropy(logits, audio_tokens, mask)

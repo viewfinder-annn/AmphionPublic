@@ -31,6 +31,7 @@ pip install black==24.1.1
 # Uninstall nvidia-cublas-cu11 if there exist some bugs about CUDA version
 # pip uninstall nvidia-cublas-cu11
 
-# musicgen
-pip install flashy xformers==0.0.22 num2words spacy>=3.6.1
+# musicgen bug: output be =3.6.1
+pip install flashy xformers==0.0.22 num2words av spacy==3.6.1 sentencepiece
 # TODO: transformers - frechet_audio_distance ...
+# pip uninstall laion-clap

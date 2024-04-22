@@ -56,6 +56,7 @@ class Sing2SongDataset:
         self.metadata = self.get_metadata()
         num_samples = cfg.train.valid_num_samples if is_valid else cfg.train.train_num_samples
         if num_samples != -1:
+            random.shuffle(self.metadata)
             self.metadata = self.metadata[:min(num_samples, len(self.metadata))]
         
         """

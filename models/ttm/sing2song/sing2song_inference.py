@@ -187,6 +187,7 @@ class Sing2SongInference:
         """
         action, category = meta['action'], meta['category']
         waveform_tensor, waveform_sr = torchaudio.load(meta['ref_wav'])
+        # pad using 0
         waveform_tensor = convert_audio(waveform_tensor, waveform_sr, self.sample_rate, self.audio_channels)
         if waveform_tensor.shape[-1] < self.cfg.preprocess.segment_duration * self.sample_rate:
             waveform_tensor = torch.cat([waveform_tensor, torch.zeros([self.cfg.preprocess.audio_channels, self.cfg.preprocess.segment_duration * self.sample_rate - waveform_tensor.shape[-1]], dtype=waveform_tensor.dtype, device=waveform_tensor.device)], dim=-1)
