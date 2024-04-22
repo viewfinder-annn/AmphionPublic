@@ -176,7 +176,7 @@ class MusicGenInference:
         print(waveforms)
         if descriptions is not None:
             attributes = [
-                ConditioningAttributes(text={'description': description})
+                ConditioningAttributes(text={'description': description, 'lyric': description})
                 for description in descriptions]
             if waveforms is not None:
                 waveforms_tensor = [torchaudio.load(waveform_path) for waveform_path in waveforms]
@@ -257,6 +257,7 @@ class MusicGenInference:
             callback = _progress_callback
 
         if self.duration <= self.max_duration:
+            print(111)
             # generate by sampling from LM, simple case.
             with self.autocast:
                 gen_tokens = self.model.generate(
@@ -264,6 +265,7 @@ class MusicGenInference:
                     callback=callback, max_gen_len=total_gen_len, **self.generation_params)
 
         else:
+            print(222)
             assert self.extend_stride is not None, "Stride should be defined to generate beyond max_duration"
             assert self.extend_stride < self.max_duration, "Cannot stride by more than max generation duration."
             all_tokens = []

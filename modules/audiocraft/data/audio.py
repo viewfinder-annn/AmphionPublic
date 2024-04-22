@@ -102,10 +102,13 @@ def _av_read(filepath: tp.Union[str, Path], seek_time: float = 0, duration: floa
             length += buf.shape[1]
             if num_frames > 0 and length >= num_frames:
                 break
-        assert frames
+        # assert frames
         # If the above assert fails, it is likely because we seeked past the end of file point,
         # in which case ffmpeg returns a single frame with only zeros, and a weird timestamp.
         # This will need proper debugging, in due time.
+        if not frames:
+            # return empty tensor if no frames were read
+            return torch.zeros(stream.channels, 0), sr
         wav = torch.cat(frames, dim=1)
         assert wav.shape[0] == stream.channels
         if num_frames > 0:

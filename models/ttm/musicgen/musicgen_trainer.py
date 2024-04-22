@@ -11,6 +11,7 @@ import shutil
 import math
 
 import torch
+torch.cuda.manual_seed_all(114514)
 import torch.nn as nn
 from torch.nn import functional as F
 from torch.utils.data import ConcatDataset, DataLoader
@@ -188,6 +189,8 @@ class MusicGenTrainer(BaseTrainer):
                 num_training_steps=self.cfg.train.total_training_steps
                 * self.accelerator.num_processes,
             )
+        else:
+            scheduler = None
         return scheduler
 
     def _compute_cross_entropy(
@@ -357,6 +360,8 @@ class MusicGenTrainer(BaseTrainer):
             self.accelerator.wait_for_everyone()
             train_loss = epoch_sum_loss / epoch_step if epoch_step > 0 else 0.0
             if self.accelerator.is_main_process and save_checkpoint:
+                if torch.isnan(train_loss):
+                    raise ValueError("NaN loss encountered during training, aborting.")
                 path = os.path.join(
                     self.checkpoint_dir,
                     "epoch-{:04d}_step-{:07d}_loss-{:.6f}".format(

@@ -57,7 +57,7 @@ class MusicGenDataset:
         self.metadata = self.get_metadata()
         num_samples = cfg.train.valid_num_samples if is_valid else cfg.train.train_num_samples
         if num_samples != -1:
-            self.metadata = self.metadata[:min(num_samples, len(self.metadata))]
+            self.metadata = random.sample(self.metadata, min(num_samples, len(self.metadata)))
         
         """
         metadata: a list contains dict, each dict contains:
@@ -81,16 +81,22 @@ class MusicGenDataset:
         wav_path = {}
         
         # self_wav, comply with msd data
-        self_wav, sr = librosa.load(utt_info["self_wav"], sr=None, mono=False)
-        self_wav = torch.tensor(self_wav, dtype=torch.float32, device=self.device)
+        # self_wav, sr = librosa.load(utt_info["self_wav"], sr=None, mono=False)
+        # self_wav = torch.tensor(self_wav, dtype=torch.float32, device=self.device)
+        # if self_wav.dim() == 1:
+        #     self_wav = self_wav.unsqueeze(0)
+        if "start" in utt_info:
+            self_wav, sr = audio_read(utt_info["self_wav"], seek_time=utt_info["start"], duration=self.cfg.preprocess.segment_duration, pad=True)
+        else:
+            self_wav, sr = audio_read(utt_info["self_wav"], duration=self.cfg.preprocess.segment_duration, pad=True)
         if self_wav.dim() == 1:
             self_wav = self_wav.unsqueeze(0)
         self_wav = convert_audio(self_wav, sr, self.sample_rate, self.cfg.preprocess.audio_channels)
         # for wavs pad to self.cfg.preprocess.segment_duration * self.cfg.preprocess.sample_rate
-        if self_wav.shape[-1] <= self.cfg.preprocess.segment_duration * self.sample_rate:
-            self_wav = torch.cat([self_wav, torch.zeros([self.cfg.preprocess.audio_channels, self.cfg.preprocess.segment_duration * self.sample_rate - self_wav.shape[-1]], dtype=self_wav.dtype, device=self_wav.device)], dim=-1)
-        else:
-            self_wav = self_wav[:, :self.cfg.preprocess.segment_duration * self.sample_rate]
+        # if self_wav.shape[-1] < self.cfg.preprocess.segment_duration * self.sample_rate:
+        #     self_wav = torch.cat([self_wav, torch.zeros([self.cfg.preprocess.audio_channels, self.cfg.preprocess.segment_duration * self.sample_rate - self_wav.shape[-1]], dtype=self_wav.dtype, device=self_wav.device)], dim=-1)
+        # else:
+        #     self_wav = self_wav[:, :self.cfg.preprocess.segment_duration * self.sample_rate]
         wav_condition["self_wav"] = self_wav
         wav_path["self_wav"] = utt_info["self_wav"]
 
@@ -98,6 +104,10 @@ class MusicGenDataset:
         if self.cfg.preprocess.use_caption:
             caption = utt_info["caption"]
             text_condition["description"] = caption
+        
+        if self.cfg.preprocess.use_lyric:
+            lyric = utt_info["lyric"]
+            text_condition["lyric"] = lyric
 
         # ref_wav
         if self.cfg.preprocess.use_ref_wav:
