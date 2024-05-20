@@ -7,7 +7,9 @@
 set -e
 
 # Install ffmpeg in Linux
-conda install -c conda-forge ffmpeg
+# conda install -c conda-forge ffmpeg
+# change pip mirror
+pip config set global.index-url https://pypi.tuna.tsinghua.edu.cn/simple
 
 # Pip packages
 pip install setuptools ruamel.yaml tqdm colorama easydict tabulate loguru json5 Cython unidecode inflect argparse g2p_en tgt librosa==0.9.1 matplotlib typeguard einops omegaconf==2.2 hydra-core humanfriendly pandas
@@ -34,4 +36,4 @@ pip install black==24.1.1
 # musicgen bug: output be =3.6.1
 pip install flashy xformers==0.0.22 num2words av spacy==3.6.1 sentencepiece
 # TODO: transformers - frechet_audio_distance ...
-# pip uninstall laion-clap
+pip uninstall laion-clap

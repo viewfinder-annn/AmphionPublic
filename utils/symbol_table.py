@@ -195,6 +195,8 @@ class SymbolTable(Generic[Symbol]):
         if isinstance(k, int):
             return self._id2sym[k]
         else:
+            if k not in self._sym2id:
+                return len(self._id2sym)
             return self._sym2id[k]
 
     def merge(self, other: "SymbolTable") -> "SymbolTable":

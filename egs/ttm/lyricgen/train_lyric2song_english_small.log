@@ -1,0 +1,41 @@
+Exprimental Configuration File: egs/ttm/lyricgen/exp_config_english_small.json
+Exprimental Name: lyric2song_english_small
+Start a new experiment...
+Using GradScaler for autocast with float16Using GradScaler for autocast with float16Using GradScaler for autocast with float16
+
+
+Using GradScaler for autocast with float16
+Exprimental Configuration File: egs/ttm/lyricgen/exp_config_english_small.json
+Exprimental Name: lyric2song_english_small
+Start a new experiment...
+Using GradScaler for autocast with float16Using GradScaler for autocast with float16
+
+Using GradScaler for autocast with float16
+Using GradScaler for autocast with float16
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_english_small/checkpoint/epoch-0000_step-0000500_loss-6.815333
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_english_small/checkpoint/epoch-0000_step-0001000_loss-6.730495
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_english_small/checkpoint/epoch-0000_step-0001042_loss-6.723138
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_english_small/checkpoint/epoch-0001_step-0001500_loss-6.591375
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_english_small/checkpoint/epoch-0001_step-0002000_loss-6.537939
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_english_small/checkpoint/epoch-0001_step-0002084_loss-6.523075
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_english_small/checkpoint/epoch-0002_step-0002500_loss-6.376054
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_english_small/checkpoint/epoch-0002_step-0003000_loss-6.330192
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_english_small/checkpoint/epoch-0002_step-0003126_loss-6.305888
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_english_small/checkpoint/epoch-0003_step-0003500_loss-6.170363
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_english_small/checkpoint/epoch-0003_step-0004000_loss-6.131880
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_english_small/checkpoint/epoch-0003_step-0004168_loss-6.111955
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_english_small/checkpoint/epoch-0004_step-0004500_loss-6.029006
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_english_small/checkpoint/epoch-0004_step-0005000_loss-5.989278
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_english_small/checkpoint/epoch-0004_step-0005210_loss-5.970739
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_english_small/checkpoint/epoch-0005_step-0005500_loss-5.905377
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_english_small/checkpoint/epoch-0005_step-0006000_loss-5.871280
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_english_small/checkpoint/epoch-0005_step-0006252_loss-5.857691
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_english_small/checkpoint/epoch-0006_step-0006500_loss-5.813017
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_english_small/checkpoint/epoch-0006_step-0007000_loss-5.777682
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_english_small/checkpoint/epoch-0006_step-0007294_loss-5.759065
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_english_small/checkpoint/epoch-0007_step-0007500_loss-5.712440
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_english_small/checkpoint/epoch-0007_step-0008000_loss-5.685049
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_english_small/checkpoint/epoch-0007_step-0008336_loss-5.662003
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_english_small/checkpoint/epoch-0008_step-0008500_loss-5.631166
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_english_small/checkpoint/epoch-0008_step-0009000_loss-5.601412
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_english_small/checkpoint/epoch-0008_step-0009378_loss-5.577159

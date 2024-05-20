@@ -1,0 +1,18 @@
+Exprimental Configuration File: egs/ttm/sing2song_stem_v1/exp_config.json
+egs/ttm/sing2song_stem_v1/run.sh: line 126: waveform: command not found
+The following values were not passed to `accelerate launch` and had defaults used instead:
+	`--num_processes` was set to a value of `1`
+	`--num_machines` was set to a value of `1`
+	`--mixed_precision` was set to a value of `'no'`
+	`--dynamo_backend` was set to a value of `'no'`
+To avoid this warning pass in values for each of the problematic parameters or run `accelerate config`.
+2024-04-12 20:59:52,770 : ==========================New Starting Here==============================
+2024-04-12 20:59:57,736 : Compression model has 4 codebooks with 2048 cardinality, and a framerate of 50
+2024-04-12 20:59:58,289 : Initializing accelerate...
+Detected kernel version 3.10.0, which is below the recommended minimum of 5.5.0; this can cause the process to hang. It is recommended to upgrade the kernel to the minimum version or higher.
+2024-04-12 20:59:58,297 : Initializing accelerate done in 8.276ms
+2024-04-12 20:59:58,297 : Loading checkpoint...
+2024-04-12 20:59:58,859 : Load checkpoint from ckpts/ttm/sing2song_stem_v1/checkpoint/epoch-0192_step-0000772_loss-0.007812
+2024-04-12 20:59:58,860 : Loading checkpoint done in 562.286ms
+args:  Namespace(config='egs/ttm/sing2song_stem_v1/exp_config.json', text='/home/wangyuancheng.p/zja/Amphion/ckpts/ttm/sing2song_stem_v1/debug_train_sample/info.json', waveform='', infer_expt_dir='ckpts/ttm/sing2song_stem_v1', output_dir='ckpts/ttm/sing2song_stem_v1/result', file_list=True, mix=False, local_rank=device(type='cuda'))
+Generating:   0%|          | 0/8 [00:00<?, ?it/s]Generating:  12%|█▎        | 1/8 [00:07<00:55,  7.98s/it]Generating:  25%|██▌       | 2/8 [00:14<00:42,  7.13s/it]Generating:  38%|███▊      | 3/8 [00:21<00:34,  6.84s/it]Generating:  50%|█████     | 4/8 [00:27<00:26,  6.72s/it]Generating:  62%|██████▎   | 5/8 [00:33<00:19,  6.62s/it]Generating:  75%|███████▌  | 6/8 [00:40<00:13,  6.57s/it]Generating:  88%|████████▊ | 7/8 [00:46<00:06,  6.54s/it]Generating: 100%|██████████| 8/8 [00:53<00:00,  6.53s/it]Generating: 100%|██████████| 8/8 [00:53<00:00,  6.68s/it]

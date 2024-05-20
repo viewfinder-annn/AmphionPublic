@@ -1,0 +1,6 @@
+nohup sh egs/ttm/sing2song_stem_v1/run.sh --stage 2 --config egs/ttm/sing2song_stem_v1/exp_config.json --name sing2song_stem_v1 --gpu "0,1" >> /home/wangyuancheng.p/zja/Amphion/egs/ttm/sing2song_stem_v1/train_stem_v1.log &
+nohup sh egs/ttm/sing2song_stem_v1/run.sh --stage 3 --config egs/ttm/sing2song_stem_v1/exp_config.json --gpu "7" \
+    --infer_expt_dir "ckpts/ttm/sing2song_stem_v1" \
+    --text /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/sing2song_stem_v1/debug_train_sample/info.json\
+    --file_list true \
+    >> /home/wangyuancheng.p/zja/Amphion/egs/ttm/sing2song_stem_v1/infer.log &

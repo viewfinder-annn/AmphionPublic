@@ -30,6 +30,9 @@ import torchaudio
 
 logging.basicConfig(level=logging.INFO)
 
+import datetime
+torch.manual_seed(datetime.datetime.now().microsecond)
+
 class Sing2SongTrainer(BaseTrainer):
 
     DATASET_TYPE = builders.DatasetType.MUSIC
@@ -60,6 +63,14 @@ class Sing2SongTrainer(BaseTrainer):
         # Only for TTM tasks
         self.task_type = "TTM"
         self.logger.info("Task type: {}".format(self.task_type))
+        
+        # TODO: resume
+        self.checkpoints_path_step = [
+            [] for _ in range(len(self.cfg.train.save_checkpoint_stride_step))
+        ]
+        self.keep_last_step = [
+            i if i > 0 else float("inf") for i in self.cfg.train.keep_last_step
+        ]
 
     def _build_dataset(self):
         return Sing2SongDataset, Sing2SongCollator
@@ -97,7 +108,7 @@ class Sing2SongTrainer(BaseTrainer):
                 datasets_list.append(subdataset)
             train_dataset = ConcatDataset(datasets_list)
             train_collate = Collator(self.cfg)
-            train_dataloader = DataLoader(train_dataset, collate_fn=train_collate, batch_size=self.cfg.train.batch_size, shuffle=False, pin_memory=True)
+            train_dataloader = DataLoader(train_dataset, collate_fn=train_collate, batch_size=self.cfg.train.batch_size, shuffle=True, pin_memory=True)
 
             datasets_list = []
             for dataset in self.cfg.dataset:
@@ -108,26 +119,26 @@ class Sing2SongTrainer(BaseTrainer):
             valid_dataloader = DataLoader(valid_dataset, collate_fn=valid_collate, batch_size=self.cfg.train.batch_size, shuffle=False, pin_memory=True)
             
             # DEBUG
-            # debug_sample_dir = f"{self.exp_dir}/debug_train_sample"
-            # shutil.rmtree(debug_sample_dir, ignore_errors=True)
-            # os.makedirs(debug_sample_dir, exist_ok=True)
-            # debug_infos = []
-            # for i in range(8):
-            #     self_wav, ref_wav, infos = train_dataset[i]
-            #     # print(wavs.shape)
-            #     # print(infos)
-            #     # print(infos.to_condition_attributes())
-            #     torchaudio.save(f"{debug_sample_dir}/{i}_self.wav", self_wav, self.cfg_omega.sample_rate)
-            #     torchaudio.save(f"{debug_sample_dir}/{i}_ref.wav", ref_wav, self.cfg_omega.sample_rate)
-            #     debug_infos.append({
-            #         "dataset": "debug",
-            #         "action": infos.text["action"],
-            #         "category": infos.text["category"],
-            #         "ref_wav": f"{debug_sample_dir}/{i}_ref.wav",
-            #         "self_wav": f"{debug_sample_dir}/{i}_self.wav",
-            #     })
-            # with open(f"{debug_sample_dir}/info.json", "w") as f:
-            #     json.dump(debug_infos, f)
+            debug_sample_dir = f"{self.exp_dir}/debug_train_sample"
+            shutil.rmtree(debug_sample_dir, ignore_errors=True)
+            os.makedirs(debug_sample_dir, exist_ok=True)
+            debug_infos = []
+            for i in range(8):
+                self_wav, ref_wav, infos = train_dataset[i]
+                # print(wavs.shape)
+                # print(infos)
+                # print(infos.to_condition_attributes())
+                torchaudio.save(f"{debug_sample_dir}/{i}_self.wav", self_wav, self.cfg_omega.sample_rate)
+                torchaudio.save(f"{debug_sample_dir}/{i}_ref.wav", ref_wav, self.cfg_omega.sample_rate)
+                debug_infos.append({
+                    "dataset": "debug",
+                    "action": infos.text["action"] if "action" in infos.text else "add",
+                    "category": infos.text["category"] if "category" in infos.text else "accom",
+                    "ref_wav": f"{debug_sample_dir}/{i}_ref.wav",
+                    "self_wav": f"{debug_sample_dir}/{i}_self.wav",
+                })
+            with open(f"{debug_sample_dir}/info.json", "w") as f:
+                json.dump(debug_infos, f)
             return train_dataloader, valid_dataloader
             
     
@@ -349,7 +360,59 @@ class Sing2SongTrainer(BaseTrainer):
                 )
                 self.step += 1
                 epoch_step += 1
+            
+            if self.accelerator.is_main_process:
+                save_checkpoint = False
+                hit_dix = []
+                for i, num in enumerate(self.cfg.train.save_checkpoint_stride_step):
+                    if self.step % num == 0:
+                        save_checkpoint = True
+                        hit_dix.append(i)
 
+            self.accelerator.wait_for_everyone()
+            train_loss = epoch_sum_loss / epoch_step if epoch_step > 0 else 0.0
+            if self.accelerator.is_main_process and save_checkpoint:
+                if torch.isnan(train_loss):
+                    raise ValueError("NaN loss encountered during training, aborting.")
+                path = os.path.join(
+                    self.checkpoint_dir,
+                    "epoch-{:04d}_step-{:07d}_loss-{:.6f}".format(
+                        self.epoch, self.step, train_loss
+                    ),
+                )
+                self.tmp_checkpoint_save_path = path
+                self.accelerator.save_state(path)
+                print(f"save checkpoint in {path}")
+                json.dump(
+                    self.checkpoints_path_step,
+                    open(os.path.join(path, "ckpts.json"), "w"),
+                    ensure_ascii=False,
+                    indent=4,
+                )
+                self._save_auxiliary_states()
+
+                # Remove old checkpoints
+                to_remove = []
+                for idx in hit_dix:
+                    self.checkpoints_path_step[idx].append(path)
+                    while len(self.checkpoints_path_step[idx]) > self.keep_last_step[idx]:
+                        to_remove.append((idx, self.checkpoints_path_step[idx].pop(0)))
+
+                # Search conflicts
+                total = set()
+                for i in self.checkpoints_path_step:
+                    total |= set(i)
+                do_remove = set()
+                for idx, path in to_remove[::-1]:
+                    if path in total:
+                        self.checkpoints_path_step[idx].insert(0, path)
+                    else:
+                        do_remove.add(path)
+                
+                # Remove old checkpoints
+                for path in do_remove:
+                    shutil.rmtree(path, ignore_errors=True)
+                    self.logger.debug(f"Remove old checkpoint: {path}")
         self.accelerator.wait_for_everyone()
         return (
             epoch_sum_loss

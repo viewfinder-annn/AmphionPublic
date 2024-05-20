@@ -1,0 +1,21 @@
+nohup sh egs/ttm/lyricgen/run.sh --stage 2 --config egs/ttm/lyricgen/exp_config_chinese.json --name lyric2song_chinese --gpu "2,3,4,5,6,7" --resume true >> /home/wangyuancheng.p/zja/Amphion/egs/ttm/lyricgen/train_lyric2song_chinese.log &
+sh egs/ttm/lyricgen/run.sh --stage 2 --config egs/ttm/lyricgen/exp_config_chinese.json --name lyric2song_chinese --gpu "0,1,2,3,4,5,6,7" >> /home/wangyuancheng.p/zja/Amphion/egs/ttm/lyricgen/train_lyric2song_chinese.log
+sh egs/ttm/lyricgen/run.sh --stage 2 --config egs/ttm/lyricgen/exp_config_chinese.json --name lyric2song_chinese --gpu "0,1,2,3" --resume true >> /home/wangyuancheng.p/zja/Amphion/egs/ttm/lyricgen/train_lyric2song_chinese.log
+nohup sh egs/ttm/lyricgen/run.sh --stage 3 --config egs/ttm/lyricgen/exp_config_chinese.json --gpu "7" \
+    --infer_expt_dir "ckpts/ttm/lyric2song_chinese" \
+    --text /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/debug_train_sample/info.txt\
+    --file_list true \
+    >> /home/wangyuancheng.p/zja/Amphion/egs/ttm/lyricgen/infer.log &
+
+nohup sh egs/ttm/lyricgen/run.sh --stage 2 --config egs/ttm/lyricgen/exp_config_chinese_debug.json --name lyric2song_chinese_debug --gpu "0" >> /home/wangyuancheng.p/zja/Amphion/egs/ttm/lyricgen/train_lyric2song_chinese_debug.log &
+nohup sh egs/ttm/lyricgen/run.sh --stage 3 --config egs/ttm/lyricgen/exp_config_chinese_debug.json --gpu "1" \
+    --infer_expt_dir "ckpts/ttm/lyric2song_chinese_debug" \
+    --text /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese_debug/debug_train_sample/infer_text\
+    --file_list true \
+    >> /home/wangyuancheng.p/zja/Amphion/egs/ttm/lyricgen/infer.log &
+
+# 0507
+sh egs/ttm/lyricgen/run.sh --stage 2 --config egs/ttm/lyricgen/exp_config_english_small.json --name lyric2song_english_small --gpu "0,1,2,3" >> /home/wangyuancheng.p/zja/Amphion/egs/ttm/lyricgen/train_lyric2song_english_small.log
+
+# 0508
+sh egs/ttm/lyricgen/run.sh --stage 2 --config egs/ttm/lyricgen/exp_config_chinese_clean.json --name lyric2song_chinese_clean --gpu "0,1,2,3,6,7" >> /home/wangyuancheng.p/zja/Amphion/egs/ttm/lyricgen/train_lyric2song_chinese_clean.log

@@ -5,7 +5,7 @@
 
 ######## Build Experiment Environment ###########
 exp_dir=$(cd `dirname $0`; pwd)
-work_dir=$(dirname $(dirname $(dirname $(dirname $exp_dir))))
+work_dir=$(dirname $(dirname $(dirname $exp_dir)))
 
 export WORK_DIR=$work_dir
 export PYTHONPATH=$work_dir
@@ -91,7 +91,7 @@ if [ $running_stage -eq 2 ]; then
 
     if [ "$resume" = true ]; then
         echo "Resume from the existing experiment..."
-        CUDA_VISIBLE_DEVICES="$gpu" accelerate launch --main_process_port 29502 "${work_dir}"/bins/ttm/train.py \
+        CUDA_VISIBLE_DEVICES="$gpu" accelerate launch --main_process_port 29501 "${work_dir}"/bins/ttm/train.py \
             --config "$exp_config" \
             --exp_name "$exp_name" \
             --log_level info \
@@ -100,7 +100,7 @@ if [ $running_stage -eq 2 ]; then
             --resume_type "$resume_type"
     else
         echo "Start a new experiment..."
-        CUDA_VISIBLE_DEVICES="$gpu" accelerate launch --main_process_port 29502 "${work_dir}"/bins/ttm/train.py \
+        CUDA_VISIBLE_DEVICES="$gpu" accelerate launch --main_process_port 29501 "${work_dir}"/bins/ttm/train.py \
             --config "$exp_config" \
             --exp_name "$exp_name" \
             --log_level info

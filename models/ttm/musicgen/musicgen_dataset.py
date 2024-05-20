@@ -106,7 +106,8 @@ class MusicGenDataset:
             text_condition["description"] = caption
         
         if self.cfg.preprocess.use_lyric:
-            lyric = utt_info["lyric"]
+            # lyric = utt_info["lyric"]
+            lyric = utt_info["phone"]
             text_condition["lyric"] = lyric
 
         # ref_wav

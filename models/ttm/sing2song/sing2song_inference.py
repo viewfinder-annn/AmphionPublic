@@ -50,7 +50,7 @@ class Sing2SongInference:
         
         self.model = self._build_model()
         # TODO: remove omega
-        max_duration = self.cfg_omega.dataset.segment_duration  # type: ignore
+        max_duration = self.cfg.preprocess.segment_duration  # type: ignore
         assert max_duration is not None
         self.max_duration: float = max_duration
         self.duration = self.max_duration

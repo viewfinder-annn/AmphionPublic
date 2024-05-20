@@ -37,6 +37,7 @@ from ..modules.conditioners import (
     MelSpectrogramConditioner,
     CategoryConditioner,
     BertConditioner,
+    PhonemeConditioner
 )
 from .unet import DiffusionUnet
 from .. import quantization as qt
@@ -179,6 +180,10 @@ def get_conditioner_provider(
         elif model_type == "bert":
             conditioners[str(cond)] = BertConditioner(
                 output_dim=output_dim, device=device, **model_args
+            )
+        elif model_type == "phoneme":
+            conditioners[str(cond)] = PhonemeConditioner(
+                output_dim=output_dim, **model_args
             )
         else:
             raise ValueError(f"Unrecognized conditioning model: {model_type}")

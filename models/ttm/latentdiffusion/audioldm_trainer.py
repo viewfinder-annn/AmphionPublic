@@ -19,6 +19,8 @@ from diffusers import DDPMScheduler
 import os
 import shutil
 import torchaudio
+import json
+from tqdm import tqdm
 
 
 class AudioLDMTrainer(BaseTrainer):
@@ -28,11 +30,24 @@ class AudioLDMTrainer(BaseTrainer):
         self.cfg = cfg
 
         self.build_autoencoderkl()
-        self.build_textencoder()
+        if self.cfg.preprocess.use_caption:
+            self.build_textencoder()
         self.nosie_scheduler = self.build_noise_scheduler()
         
         self.debug_autoencoderkl_vocoder()
 
+        # Only for TTM tasks
+        self.task_type = "TTM"
+        self.logger.info("Task type: {}".format(self.task_type))
+        
+        # TODO: resume
+        self.checkpoints_path_step = [
+            [] for _ in range(len(self.cfg.train.save_checkpoint_stride_step))
+        ]
+        self.keep_last_step = [
+            i if i > 0 else float("inf") for i in self.cfg.train.keep_last_step
+        ]
+        
         # self.save_config_file()
     
     def debug_autoencoderkl_vocoder(self):
@@ -59,15 +74,22 @@ class AudioLDMTrainer(BaseTrainer):
         self.vocoder.load_state_dict(checkpoint_dict["generator"])
         self.vocoder.eval()
         self.vocoder.remove_weight_norm()
-        for i in range(min(8, len(self.train_dataset))):
+        import random
+        debug_indices = random.sample(range(len(self.train_dataset)), min(50, len(self.train_dataset)))
+        for i in debug_indices:
             single_features = self.train_dataset[i]
-            melspec = single_features["mel"][:, :624].unsqueeze(0).unsqueeze(1)
+            if "ref_mel" in single_features:
+                melspec = single_features["self_mel"][:, :624].unsqueeze(0).unsqueeze(1)
+                melspec_2 = single_features["ref_mel"][:, :624].unsqueeze(0).unsqueeze(1)
+            else:
+                melspec = single_features["mel"][:, :624].unsqueeze(0).unsqueeze(1)
+                melspec_2 = None
             melspec = melspec.to(self.accelerator.device)
             y_vocoder = self.vocoder(melspec.squeeze(0))
             audio_vocoder = y_vocoder.squeeze()
             audio_vocoder = audio_vocoder.cpu()
             audio_vocoder.unsqueeze_(0)
-            torchaudio.save(f"{debug_vocoder_dir}/{single_features['caption'][:100].replace('/', '-')}_vocoder.wav", audio_vocoder, self.cfg.preprocess.sample_rate)
+            torchaudio.save(f"{debug_vocoder_dir}/{i}_vocoder.wav", audio_vocoder, self.cfg.preprocess.sample_rate)
             latent = self.mel_to_latent(melspec)
             with torch.no_grad():
                 mel_out = self.autoencoderkl.decode(latent)
@@ -79,14 +101,35 @@ class AudioLDMTrainer(BaseTrainer):
                 # audio = audio * 32768.0
                 audio = audio.cpu()
                 audio.unsqueeze_(0)
-                torchaudio.save(f"{debug_vae_dir}/{single_features['caption'][:100].replace('/', '-')}_recon.wav", audio, self.cfg.preprocess.sample_rate)
+                torchaudio.save(f"{debug_vae_dir}/{i}_recon.wav", audio, self.cfg.preprocess.sample_rate)
+            if melspec_2 is not None:
+                melspec_2 = melspec_2.to(self.accelerator.device)
+                y_vocoder = self.vocoder(melspec_2.squeeze(0))
+                audio_vocoder = y_vocoder.squeeze()
+                audio_vocoder = audio_vocoder.cpu()
+                audio_vocoder.unsqueeze_(0)
+                torchaudio.save(f"{debug_vocoder_dir}/{i}_vocoder_2.wav", audio_vocoder, self.cfg.preprocess.sample_rate)
+                latent = self.mel_to_latent(melspec_2)
+                with torch.no_grad():
+                    mel_out = self.autoencoderkl.decode(latent)
+                    melspec = mel_out[0, 0].cpu().detach().numpy()
+                    melspec = np.expand_dims(melspec, 0)
+                    melspec = torch.FloatTensor(melspec).to(self.accelerator.device)
+                    y = self.vocoder(melspec)
+                    audio = y.squeeze()
+                    # audio = audio * 32768.0
+                    audio = audio.cpu()
+                    audio.unsqueeze_(0)
+                    torchaudio.save(f"{debug_vae_dir}/{i}_recon_2.wav", audio, self.cfg.preprocess.sample_rate)
 
     def build_autoencoderkl(self):
         self.autoencoderkl = AutoencoderKL(self.cfg.model.autoencoderkl)
         self.autoencoder_path = self.cfg.model.autoencoder_path
         # load model
         ckpt = torch.load(os.path.join(self.autoencoder_path))
+        # print(ckpt)
         self.autoencoderkl.load_state_dict(ckpt)
+        # self.autoencoderkl.load_state_dict(ckpt["model"])
         self.autoencoderkl.to(self.accelerator.device)
         self.autoencoderkl.requires_grad_(requires_grad=False)
         self.autoencoderkl.eval()
@@ -128,14 +171,28 @@ class AudioLDMTrainer(BaseTrainer):
         debug_sample_dir = f"{self.exp_dir}/debug_train_sample"
         shutil.rmtree(debug_sample_dir, ignore_errors=True)
         os.makedirs(debug_sample_dir, exist_ok=True)
-        with open(f"{debug_sample_dir}/info", "w") as f:
-            for i in range(min(8, len(train_dataset))):
-                single_features = train_dataset[i]
-                # print(wavs.shape)
-                # print(infos)
-                f.write(f"{single_features['caption']}\n")
-                # print(infos.to_condition_attributes())
-                torchaudio.save(f"{debug_sample_dir}/{single_features['caption'][:100].replace('/', '-')}.wav", single_features['wav'], self.cfg.preprocess.sample_rate)
+        import random
+        random_indices = random.sample(range(len(train_dataset)), min(50, len(train_dataset)))
+        train_samples = []
+            # for i in range(min(8, len(train_dataset))):
+            #     single_features = train_dataset[i]
+            #     # print(wavs.shape)
+            #     # print(infos)
+            #     f.write(f"{single_features['caption']}\n")
+            #     # print(infos.to_condition_attributes())
+            #     torchaudio.save(f"{debug_sample_dir}/{single_features['caption'][:100].replace('/', '-')}.wav", single_features['wav'], self.cfg.preprocess.sample_rate)
+        for i in random_indices:
+            single_features = train_dataset[i]
+            sample = {}
+            if "self_wav" in single_features:
+                sample["self_wav"] = os.path.abspath(f"{debug_sample_dir}/{i}_self.wav")
+                torchaudio.save(sample["self_wav"], single_features["self_wav"], self.cfg.preprocess.sample_rate)
+            if "ref_wav" in single_features:
+                sample["ref_wav"] = os.path.abspath(f"{debug_sample_dir}/{i}_ref.wav")
+                torchaudio.save(sample["ref_wav"], single_features["ref_wav"], self.cfg.preprocess.sample_rate)
+            train_samples.append(sample)
+        with open(f"{debug_sample_dir}/info.json", "w") as f:
+            json.dump(train_samples, f, indent=4)
 
         train_collate = Collator(self.cfg)
 
@@ -145,24 +202,23 @@ class AudioLDMTrainer(BaseTrainer):
             collate_fn=train_collate,
             batch_size=self.cfg.train.batch_size,
             pin_memory=False,
+            shuffle=True,
         )
-        if not self.cfg.train.ddp or self.args.local_rank == 0:
-            datasets_list = []
-            for dataset in self.cfg.dataset:
-                subdataset = Dataset(self.cfg, dataset, is_valid=True)
-                datasets_list.append(subdataset)
-            valid_dataset = ConcatDataset(datasets_list)
-            valid_collate = Collator(self.cfg)
+        
+        # if not self.cfg.train.ddp or self.args.local_rank == 0:
+        datasets_list = []
+        for dataset in self.cfg.dataset:
+            subdataset = Dataset(self.cfg, dataset, is_valid=True)
+            datasets_list.append(subdataset)
+        valid_dataset = ConcatDataset(datasets_list)
+        valid_collate = Collator(self.cfg)
 
-            valid_loader = DataLoader(
-                valid_dataset,
-                collate_fn=valid_collate,
-                batch_size=self.cfg.train.batch_size,
-            )
-        else:
-            raise NotImplementedError("DDP is not supported yet.")
-            # valid_loader = None
-        data_loader = {"train": train_loader, "valid": valid_loader}
+        valid_loader = DataLoader(
+            valid_dataset,
+            collate_fn=valid_collate,
+            batch_size=self.cfg.train.batch_size,
+        )
+        
         return train_loader, valid_loader
 
     def _build_optimizer(self):
@@ -232,31 +288,140 @@ class AudioLDMTrainer(BaseTrainer):
         ).last_hidden_state
         return text_embedding  # (B, T, 768)
 
-    def _train_step(self, data):
+    # add step checkpoint
+    def _train_epoch(self):
+        r"""Training epoch. Should return average loss of a batch (sample) over
+        one epoch. See ``train_loop`` for usage.
+        """
+        self.model.train()
+        epoch_sum_loss: float = 0.0
+        epoch_step: int = 0
+        for batch in tqdm(
+            self.train_dataloader,
+            desc=f"Training Epoch {self.epoch}",
+            unit="batch",
+            colour="GREEN",
+            leave=False,
+            dynamic_ncols=True,
+            smoothing=0.04,
+            disable=not self.accelerator.is_main_process,
+        ):
+            # Do training step and BP
+            with self.accelerator.accumulate(self.model):
+                loss = self._train_step(batch)
+                self.accelerator.backward(loss)
+                self.optimizer.step()
+                self.optimizer.zero_grad()
+            self.batch_count += 1
 
-        melspec = data["mel"].unsqueeze(1)  # (B, 80, T) -> (B, 1, 80, T)
-        latents = self.mel_to_latent(melspec)
+            # Update info for each step
+            # TODO: step means BP counts or batch counts?
+            if self.batch_count % self.cfg.train.gradient_accumulation_step == 0:
+                epoch_sum_loss += loss
+                self.accelerator.log(
+                    {
+                        "Step/Train Loss": loss,
+                        "Step/Learning Rate": self.optimizer.param_groups[0]["lr"],
+                    },
+                    step=self.step,
+                )
+                self.step += 1
+                epoch_step += 1
+            
+            if self.accelerator.is_main_process:
+                save_checkpoint = False
+                hit_dix = []
+                for i, num in enumerate(self.cfg.train.save_checkpoint_stride_step):
+                    if self.step % num == 0:
+                        save_checkpoint = True
+                        hit_dix.append(i)
 
-        text_embedding = self.get_text_embedding(
-            data["text_input_ids"], data["text_attention_mask"]
+            self.accelerator.wait_for_everyone()
+            train_loss = epoch_sum_loss / epoch_step if epoch_step > 0 else 0.0
+            if self.accelerator.is_main_process and save_checkpoint:
+                if torch.isnan(torch.tensor(train_loss)):
+                    raise ValueError("NaN loss encountered during training, aborting.")
+                path = os.path.join(
+                    self.checkpoint_dir,
+                    "epoch-{:04d}_step-{:07d}_loss-{:.6f}".format(
+                        self.epoch, self.step, train_loss
+                    ),
+                )
+                self.tmp_checkpoint_save_path = path
+                self.accelerator.save_state(path)
+                print(f"save checkpoint in {path}")
+                json.dump(
+                    self.checkpoints_path_step,
+                    open(os.path.join(path, "ckpts.json"), "w"),
+                    ensure_ascii=False,
+                    indent=4,
+                )
+                self._save_auxiliary_states()
+
+                # Remove old checkpoints
+                to_remove = []
+                for idx in hit_dix:
+                    self.checkpoints_path_step[idx].append(path)
+                    while len(self.checkpoints_path_step[idx]) > self.keep_last_step[idx]:
+                        to_remove.append((idx, self.checkpoints_path_step[idx].pop(0)))
+
+                # Search conflicts
+                total = set()
+                for i in self.checkpoints_path_step:
+                    total |= set(i)
+                do_remove = set()
+                for idx, path in to_remove[::-1]:
+                    if path in total:
+                        self.checkpoints_path_step[idx].insert(0, path)
+                    else:
+                        do_remove.add(path)
+                
+                # Remove old checkpoints
+                for path in do_remove:
+                    shutil.rmtree(path, ignore_errors=True)
+                    self.logger.debug(f"Remove old checkpoint: {path}")
+
+        self.accelerator.wait_for_everyone()
+        return (
+            epoch_sum_loss
+            / len(self.train_dataloader)
+            * self.cfg.train.gradient_accumulation_step
         )
 
-        noise = torch.randn_like(latents).float()
+    def _train_step(self, data):
 
-        bsz = latents.shape[0]
+        if "ref_mel" in data:
+            self_melspec = data["self_mel"].unsqueeze(1)  # (B, 80, T) -> (B, 1, 80, T)
+            ref_melspec = data["ref_mel"].unsqueeze(1)
+            self_latents = self.mel_to_latent(self_melspec)
+            ref_latents = self.mel_to_latent(ref_melspec)
+            context = None
+        else:
+            melspec = data["mel"].unsqueeze(1)  # (B, 80, T) -> (B, 1, 80, T)
+            self_latents = self.mel_to_latent(melspec)
+            context = self.get_text_embedding(
+                data["text_input_ids"], data["text_attention_mask"]
+            )
+
+        noise = torch.randn_like(self_latents).float()
+
+        bsz = self_latents.shape[0]
         timesteps = torch.randint(
             0,
             self.cfg.model.noise_scheduler.num_train_timesteps,
             (bsz,),
-            device=latents.device,
+            device=self_latents.device,
         )
         timesteps = timesteps.long()
 
         with torch.no_grad():
-            noisy_latents = self.nosie_scheduler.add_noise(latents, noise, timesteps)
+            noisy_latents = self.nosie_scheduler.add_noise(self_latents, noise, timesteps)
+            if "ref_mel" in data:
+                noisy_latents = torch.cat([noisy_latents, ref_latents], dim=1)
+
 
         model_pred = self.model(
-            noisy_latents, timesteps=timesteps, context=text_embedding
+            noisy_latents, timesteps=timesteps, context=context
         )
 
         loss = self.criterion(model_pred, noise)
@@ -266,28 +431,36 @@ class AudioLDMTrainer(BaseTrainer):
     # TODO: eval step
     @torch.no_grad()
     def _valid_step(self, data):
+        if "ref_mel" in data:
+            self_melspec = data["self_mel"].unsqueeze(1)  # (B, 80, T) -> (B, 1, 80, T)
+            ref_melspec = data["ref_mel"].unsqueeze(1)
+            self_latents = self.mel_to_latent(self_melspec)
+            ref_latents = self.mel_to_latent(ref_melspec)
+            context = None
+        else:
+            melspec = data["mel"].unsqueeze(1)  # (B, 80, T) -> (B, 1, 80, T)
+            self_latents = self.mel_to_latent(melspec)
+            context = self.get_text_embedding(
+                data["text_input_ids"], data["text_attention_mask"]
+            )
 
-        melspec = data["mel"].unsqueeze(1)  # (B, 80, T) -> (B, 1, 80, T)
-        latents = self.mel_to_latent(melspec)
+        noise = torch.randn_like(self_latents).float()
 
-        text_embedding = self.get_text_embedding(
-            data["text_input_ids"], data["text_attention_mask"]
-        )
-
-        noise = torch.randn_like(latents).float()
-
-        bsz = latents.shape[0]
+        bsz = self_latents.shape[0]
         timesteps = torch.randint(
             0,
             self.cfg.model.noise_scheduler.num_train_timesteps,
             (bsz,),
-            device=latents.device,
+            device=self_latents.device,
         )
         timesteps = timesteps.long()
 
-        noisy_latents = self.nosie_scheduler.add_noise(latents, noise, timesteps)
+        with torch.no_grad():
+            noisy_latents = self.nosie_scheduler.add_noise(self_latents, noise, timesteps)
+            if "ref_mel" in data:
+                noisy_latents = torch.cat([noisy_latents, ref_latents], dim=1)
 
-        model_pred = self.model(noisy_latents, timesteps, text_embedding)
+        model_pred = self.model(noisy_latents, timesteps, context)
 
         loss = self.criterion(model_pred, noise)
 

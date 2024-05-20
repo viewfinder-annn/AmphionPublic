@@ -1,3 +1,43 @@
 nohup sh egs/ttm/latentdiffusion/autoencoderkl/run.sh --stage 2 --config egs/ttm/latentdiffusion/autoencoderkl/exp_config_musiccaps.json --name autoencoderkl_musiccaps --gpu "1" >> /home/wangyuancheng.p/zja/Amphion/egs/ttm/latentdiffusion/autoencoderkl_musiccaps.log &
 nohup sh egs/ttm/latentdiffusion/audioldm/run.sh --stage 2 --config egs/ttm/latentdiffusion/audioldm/exp_config_musiccaps.json --name audioldm_musiccaps --gpu "3" >> /home/wangyuancheng.p/zja/Amphion/egs/ttm/latentdiffusion/audioldm_musiccaps.log &
 nohup sh egs/ttm/latentdiffusion/audioldm/run.sh --stage 2 --config egs/ttm/latentdiffusion/audioldm/exp_config_musiccaps.json --name audioldm_musiccaps_2 --gpu "4" >> /home/wangyuancheng.p/zja/Amphion/egs/ttm/latentdiffusion/audioldm_musiccaps_2.log &
+
+
+
+# 0514
+nohup sh egs/ttm/latentdiffusion/autoencoderkl/run.sh --stage 2 --config egs/ttm/latentdiffusion/autoencoderkl/sing2song_source_sep_debug.json --name sing2song_autoencoderkl_debug --gpu "1" >> /home/wangyuancheng.p/zja/Amphion/egs/ttm/latentdiffusion/sing2song_autoencoderkl.log &
+
+# demucs, 29501
+sh egs/ttm/latentdiffusion/autoencoderkl/run.sh --stage 2 --config egs/ttm/latentdiffusion/autoencoderkl/sing2song_source_sep.json --name sing2song_autoencoderkl --gpu "4,5,6,7" >> /home/wangyuancheng.p/zja/Amphion/egs/ttm/latentdiffusion/sing2song_autoencoderkl.log
+# no demucs, 29502
+sh egs/ttm/latentdiffusion/autoencoderkl/run.sh --stage 2 --config egs/ttm/latentdiffusion/autoencoderkl/sing2song_source_sep.json --name sing2song_autoencoderkl_nodemucs --gpu "0,1,2,3" >> /home/wangyuancheng.p/zja/Amphion/egs/ttm/latentdiffusion/sing2song_autoencoderkl_no_demucs.log
+
+# can be used to test vae reconstruct sample
+sh egs/ttm/latentdiffusion/audioldm/run.sh --stage 2 --config egs/ttm/latentdiffusion/audioldm/sing2song_source_sep_vae.json --name sing2song_source_sep_vae --gpu "4" >> /home/wangyuancheng.p/zja/Amphion/egs/ttm/latentdiffusion/sing2song_source_sep_vae.log
+
+# debug exp
+sh egs/ttm/latentdiffusion/audioldm/run.sh --stage 2 --config egs/ttm/latentdiffusion/audioldm/sing2song_source_sep_debug.json --name sing2song_audioldm_debug --gpu "4,5,6,7" >> /home/wangyuancheng.p/zja/Amphion/egs/ttm/latentdiffusion/sing2song_audioldm.log
+nohup sh egs/ttm/latentdiffusion/audioldm/run.sh --stage 3 --config egs/ttm/latentdiffusion/audioldm/sing2song_source_sep_debug.json --gpu "1" \
+    --infer_expt_dir "/nvme/data/zja/diffusion/ckpts/sing2song_audioldm_debug" \
+    --text /nvme/data/zja/diffusion/ckpts/sing2song_audioldm_debug/debug_train_sample/info.json\
+    --file_list true \
+    >> /home/wangyuancheng.p/zja/Amphion/egs/ttm/latentdiffusion/infer.log &
+
+nohup sh egs/ttm/latentdiffusion/audioldm/run.sh --stage 3 --config egs/ttm/latentdiffusion/audioldm/sing2song_source_sep_debug.json --gpu "1" \
+    --infer_expt_dir "/nvme/data/zja/diffusion/ckpts/sing2song_audioldm_debug" \
+    --text /nvme/data/zja/diffusion/ckpts/sing2song_audioldm_debug/debug_train_sample/info_demo.json\
+    --file_list true \
+    >> /home/wangyuancheng.p/zja/Amphion/egs/ttm/latentdiffusion/infer.log &
+
+# 0517
+sh egs/ttm/latentdiffusion/audioldm/run.sh --stage 2 --config egs/ttm/latentdiffusion/audioldm/sing2song_source_sep.json --name sing2song_audioldm --gpu "0,1,2,3,4,5,6,7" >> /home/wangyuancheng.p/zja/Amphion/egs/ttm/latentdiffusion/sing2song_audioldm.log
+nohup sh egs/ttm/latentdiffusion/audioldm/run.sh --stage 3 --config egs/ttm/latentdiffusion/audioldm/sing2song_source_sep.json --gpu "0" \
+    --infer_expt_dir "/nvme/data/zja/diffusion/ckpts/sing2song_audioldm" \
+    --text /nvme/data/zja/diffusion/ckpts/sing2song_audioldm_debug/debug_train_sample/info.json\
+    --file_list true \
+    >> /home/wangyuancheng.p/zja/Amphion/egs/ttm/latentdiffusion/infer.log &
+nohup sh egs/ttm/latentdiffusion/audioldm/run.sh --stage 3 --config egs/ttm/latentdiffusion/audioldm/sing2song_source_sep.json --gpu "1" \
+    --infer_expt_dir "/nvme/data/zja/diffusion/ckpts/sing2song_audioldm" \
+    --text /nvme/data/zja/diffusion/sing2song_comparison_sample/_info.json\
+    --file_list true \
+    >> /home/wangyuancheng.p/zja/Amphion/egs/ttm/latentdiffusion/infer.log &

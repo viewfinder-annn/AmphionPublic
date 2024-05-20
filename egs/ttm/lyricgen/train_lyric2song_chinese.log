@@ -1,0 +1,756 @@
+Using GradScaler for autocast with float16Using GradScaler for autocast with float16Using GradScaler for autocast with float16
+
+
+Using GradScaler for autocast with float16
+Exprimental Configuration File: egs/ttm/lyricgen/exp_config_chinese.json
+Exprimental Name: lyric2song_chinese
+Start a new experiment...
+Exprimental Configuration File: egs/ttm/lyricgen/exp_config_chinese.json
+Exprimental Name: lyric2song_chinese
+Start a new experiment...
+Exprimental Configuration File: egs/ttm/lyricgen/exp_config_chinese.json
+Exprimental Name: lyric2song_chinese
+Start a new experiment...
+Exprimental Configuration File: egs/ttm/lyricgen/exp_config_chinese.json
+Exprimental Name: lyric2song_chinese
+Start a new experiment...
+Exprimental Configuration File: egs/ttm/lyricgen/exp_config_chinese.json
+Exprimental Name: lyric2song_chinese
+Start a new experiment...
+Using GradScaler for autocast with float16Using GradScaler for autocast with float16Using GradScaler for autocast with float16
+
+
+Using GradScaler for autocast with float16
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0000_step-0002000_loss-6.801677
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0000_step-0004000_loss-6.745666
+Exprimental Configuration File: egs/ttm/lyricgen/exp_config_chinese.json
+Exprimental Name: lyric2song_chinese
+Resume from the existing experiment...
+Using GradScaler for autocast with float16
+Using GradScaler for autocast with float16
+Using GradScaler for autocast with float16
+Using GradScaler for autocast with float16
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0001_step-0006000_loss-6.483127
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0001_step-0008000_loss-6.360955
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0001_step-0010000_loss-6.269006
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0001_step-0012000_loss-6.196553
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0002_step-0014000_loss-5.855574
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0002_step-0016000_loss-5.826948
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0002_step-0018000_loss-5.788413
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0002_step-0020000_loss-5.757258
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0002_step-0022000_loss-5.723828
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0003_step-0024000_loss-5.536923
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0003_step-0026000_loss-5.507709
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0003_step-0028000_loss-5.477988
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0003_step-0030000_loss-5.453050
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0003_step-0032000_loss-5.428710
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0004_step-0034000_loss-5.275622
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0004_step-0036000_loss-5.254665
+Exprimental Configuration File: egs/ttm/lyricgen/exp_config_chinese.json
+Exprimental Name: lyric2song_chinese
+Resume from the existing experiment...
+Using GradScaler for autocast with float16
+Using GradScaler for autocast with float16
+Using GradScaler for autocast with float16
+Using GradScaler for autocast with float16
+Exprimental Configuration File: egs/ttm/lyricgen/exp_config_chinese.json
+Exprimental Name: lyric2song_chinese
+Resume from the existing experiment...
+Using GradScaler for autocast with float16
+Using GradScaler for autocast with float16
+Using GradScaler for autocast with float16
+Using GradScaler for autocast with float16
+Using GradScaler for autocast with float16
+Using GradScaler for autocast with float16
+Exprimental Configuration File: egs/ttm/lyricgen/exp_config_chinese.json
+Exprimental Name: lyric2song_chinese
+Resume from the existing experiment...
+Using GradScaler for autocast with float16
+Using GradScaler for autocast with float16
+Using GradScaler for autocast with float16
+Using GradScaler for autocast with float16
+Using GradScaler for autocast with float16
+Using GradScaler for autocast with float16
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0005_step-0038000_loss-5.184311
+Exprimental Configuration File: egs/ttm/lyricgen/exp_config_chinese.json
+Exprimental Name: lyric2song_chinese
+Resume from the existing experiment...
+Exprimental Configuration File: egs/ttm/lyricgen/exp_config_chinese.json
+Exprimental Name: lyric2song_chinese
+Resume from the existing experiment...
+Using GradScaler for autocast with float16
+Using GradScaler for autocast with float16
+Using GradScaler for autocast with float16
+Using GradScaler for autocast with float16
+Using GradScaler for autocast with float16
+Using GradScaler for autocast with float16
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0006_step-0040000_loss-5.098295
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0006_step-0042000_loss-5.112106
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0006_step-0044000_loss-5.097970
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0006_step-0044260_loss-5.097340
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0007_step-0046000_loss-4.991363
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0007_step-0048000_loss-4.990380
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0007_step-0050000_loss-4.974820
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0007_step-0050519_loss-4.972513
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0008_step-0052000_loss-4.888986
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0008_step-0054000_loss-4.884296
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0008_step-0056000_loss-4.869724
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0008_step-0056778_loss-4.866839
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0009_step-0058000_loss-4.800323
+Exprimental Configuration File: egs/ttm/lyricgen/exp_config_chinese.json
+Exprimental Name: lyric2song_chinese
+Start a new experiment...
+Exprimental Configuration File: egs/ttm/lyricgen/exp_config_chinese.json
+Exprimental Name: lyric2song_chinese
+Start a new experiment...
+Using GradScaler for autocast with float16Using GradScaler for autocast with float16Using GradScaler for autocast with float16Using GradScaler for autocast with float16Using GradScaler for autocast with float16Using GradScaler for autocast with float16Using GradScaler for autocast with float16
+
+
+
+
+
+
+Using GradScaler for autocast with float16
+Exprimental Configuration File: egs/ttm/lyricgen/exp_config_chinese.json
+Exprimental Name: lyric2song_chinese
+Start a new experiment...
+Using GradScaler for autocast with float16Using GradScaler for autocast with float16Using GradScaler for autocast with float16Using GradScaler for autocast with float16
+Using GradScaler for autocast with float16Using GradScaler for autocast with float16
+
+
+
+
+Using GradScaler for autocast with float16
+Using GradScaler for autocast with float16
+Exprimental Configuration File: egs/ttm/lyricgen/exp_config_chinese.json
+Exprimental Name: lyric2song_chinese
+Start a new experiment...
+Using GradScaler for autocast with float16Using GradScaler for autocast with float16Using GradScaler for autocast with float16Using GradScaler for autocast with float16Using GradScaler for autocast with float16Using GradScaler for autocast with float16
+
+
+
+
+
+Using GradScaler for autocast with float16
+Using GradScaler for autocast with float16
+Exprimental Configuration File: egs/ttm/lyricgen/exp_config_chinese.json
+Exprimental Name: lyric2song_chinese
+Start a new experiment...
+Using GradScaler for autocast with float16Using GradScaler for autocast with float16Using GradScaler for autocast with float16Using GradScaler for autocast with float16Using GradScaler for autocast with float16Using GradScaler for autocast with float16
+
+Using GradScaler for autocast with float16
+
+
+
+
+Using GradScaler for autocast with float16
+Exprimental Configuration File: egs/ttm/lyricgen/exp_config_chinese.json
+Exprimental Name: lyric2song_chinese
+Start a new experiment...
+Using GradScaler for autocast with float16Using GradScaler for autocast with float16Using GradScaler for autocast with float16Using GradScaler for autocast with float16Using GradScaler for autocast with float16Using GradScaler for autocast with float16Using GradScaler for autocast with float16
+
+
+
+
+
+
+Using GradScaler for autocast with float16
+Exprimental Configuration File: egs/ttm/lyricgen/exp_config_chinese.json
+Exprimental Name: lyric2song_chinese
+Start a new experiment...
+Exprimental Configuration File: egs/ttm/lyricgen/exp_config_chinese.json
+Exprimental Name: lyric2song_chinese
+Start a new experiment...
+Using GradScaler for autocast with float16Using GradScaler for autocast with float16Using GradScaler for autocast with float16Using GradScaler for autocast with float16Using GradScaler for autocast with float16Using GradScaler for autocast with float16
+Using GradScaler for autocast with float16
+
+
+
+
+
+Using GradScaler for autocast with float16
+Exprimental Configuration File: egs/ttm/lyricgen/exp_config_chinese.json
+Exprimental Name: lyric2song_chinese
+Start a new experiment...
+Using GradScaler for autocast with float16Using GradScaler for autocast with float16Using GradScaler for autocast with float16Using GradScaler for autocast with float16Using GradScaler for autocast with float16Using GradScaler for autocast with float16Using GradScaler for autocast with float16
+
+
+
+
+
+
+Using GradScaler for autocast with float16
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0000_step-0000500_loss-7.035156
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0000_step-0001000_loss-6.954922
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0000_step-0001500_loss-6.903729
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0000_step-0001655_loss-6.890389
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0001_step-0002000_loss-6.703030
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0001_step-0002500_loss-6.652806
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0001_step-0003000_loss-6.599444
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0001_step-0003310_loss-6.568046
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0002_step-0003500_loss-6.406222
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0002_step-0004000_loss-6.344195
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0002_step-0004500_loss-6.296133
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0002_step-0004965_loss-6.261440
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0003_step-0005000_loss-6.179100
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0003_step-0005500_loss-6.127171
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0003_step-0006000_loss-6.096418
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0003_step-0006500_loss-6.074406
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0003_step-0006620_loss-6.069978
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0004_step-0007000_loss-5.994592
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0004_step-0007500_loss-5.969103
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0004_step-0008000_loss-5.948159
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0004_step-0008275_loss-5.936686
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0005_step-0008500_loss-5.875248
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0005_step-0009000_loss-5.849206
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0005_step-0009500_loss-5.821205
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0005_step-0009930_loss-5.803075
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0006_step-0010000_loss-5.752503
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0006_step-0010500_loss-5.726311
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0006_step-0011000_loss-5.702617
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0006_step-0011500_loss-5.684834
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0006_step-0011585_loss-5.682726
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0007_step-0012000_loss-5.631862
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0007_step-0012500_loss-5.608645
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0007_step-0013000_loss-5.593381
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0007_step-0013240_loss-5.586852
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0008_step-0013500_loss-5.546794
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0008_step-0014000_loss-5.529925
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0008_step-0014500_loss-5.510274
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0008_step-0014895_loss-5.498975
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0009_step-0015000_loss-5.465602
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0009_step-0015500_loss-5.441870
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0009_step-0016000_loss-5.422807
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0009_step-0016500_loss-5.408452
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0009_step-0016550_loss-5.407557
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0010_step-0017000_loss-5.359448
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0010_step-0017500_loss-5.340737
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0010_step-0018000_loss-5.328297
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0010_step-0018205_loss-5.323267
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0011_step-0018500_loss-5.285958
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0011_step-0019000_loss-5.272896
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0011_step-0019500_loss-5.256732
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0011_step-0019860_loss-5.247454
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0012_step-0020000_loss-5.219992
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0012_step-0020500_loss-5.203649
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0012_step-0021000_loss-5.185328
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0012_step-0021500_loss-5.175457
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0012_step-0021515_loss-5.175726
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0013_step-0022000_loss-5.139797
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0013_step-0022500_loss-5.123353
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0013_step-0023000_loss-5.112725
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0013_step-0023170_loss-5.110602
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0014_step-0023500_loss-5.084177
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0014_step-0024000_loss-5.067963
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0014_step-0024500_loss-5.056894
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0014_step-0024825_loss-5.050467
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0015_step-0025000_loss-5.029388
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0015_step-0025500_loss-5.015471
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0015_step-0026000_loss-5.004311
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0015_step-0026480_loss-4.996543
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0016_step-0026500_loss-4.993000
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0016_step-0027000_loss-4.969777
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0016_step-0027500_loss-4.955570
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0016_step-0028000_loss-4.948521
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0016_step-0028135_loss-4.947876
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0017_step-0028500_loss-4.930176
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0017_step-0029000_loss-4.917165
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0017_step-0029500_loss-4.908543
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0017_step-0029790_loss-4.903785
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0018_step-0030000_loss-4.893824
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0018_step-0030500_loss-4.880297
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0018_step-0031000_loss-4.868302
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0018_step-0031445_loss-4.863224
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0019_step-0031500_loss-4.850705
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0019_step-0032000_loss-4.846156
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0019_step-0032500_loss-4.831824
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0019_step-0033000_loss-4.826140
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0019_step-0033100_loss-4.825477
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0020_step-0033500_loss-4.814649
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0020_step-0034000_loss-4.799969
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0020_step-0034500_loss-4.792929
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0020_step-0034755_loss-4.790133
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0021_step-0035000_loss-4.782547
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0021_step-0035500_loss-4.771888
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0021_step-0036000_loss-4.760707
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0021_step-0036410_loss-4.756890
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0022_step-0036500_loss-4.755096
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0022_step-0037000_loss-4.742730
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0022_step-0037500_loss-4.731442
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0022_step-0038000_loss-4.726516
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0022_step-0038065_loss-4.726484
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0023_step-0038500_loss-4.718569
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0023_step-0039000_loss-4.704667
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0023_step-0039500_loss-4.699838
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0023_step-0039720_loss-4.698796
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0024_step-0040000_loss-4.691407
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0024_step-0040500_loss-4.684859
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0024_step-0041000_loss-4.675003
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0024_step-0041375_loss-4.672489
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0025_step-0041500_loss-4.665281
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0025_step-0042000_loss-4.660906
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0025_step-0042500_loss-4.650403
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0025_step-0043000_loss-4.647429
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0025_step-0043030_loss-4.647727
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0026_step-0043500_loss-4.636993
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0026_step-0044000_loss-4.628281
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0026_step-0044500_loss-4.624981
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0026_step-0044685_loss-4.624406
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0027_step-0045000_loss-4.616827
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0027_step-0045500_loss-4.611153
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0027_step-0046000_loss-4.605708
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0027_step-0046340_loss-4.603269
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0028_step-0046500_loss-4.601309
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0028_step-0047000_loss-4.593217
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0028_step-0047500_loss-4.585056
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0028_step-0047995_loss-4.583777
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0029_step-0048000_loss-4.485095
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0029_step-0048500_loss-4.579018
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0029_step-0049000_loss-4.568508
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0029_step-0049500_loss-4.564818
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0029_step-0049650_loss-4.565503
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0030_step-0050000_loss-4.563529
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0030_step-0050500_loss-4.556252
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0030_step-0051000_loss-4.550225
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0030_step-0051305_loss-4.548396
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0031_step-0051500_loss-4.554603
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0031_step-0052000_loss-4.540278
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0031_step-0052500_loss-4.532395
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0031_step-0052960_loss-4.531838
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0032_step-0053000_loss-4.524724
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0032_step-0053500_loss-4.527098
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0032_step-0054000_loss-4.516468
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0032_step-0054500_loss-4.515892
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0032_step-0054615_loss-4.516105
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0033_step-0055000_loss-4.517426
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0033_step-0055500_loss-4.506095
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0033_step-0056000_loss-4.502326
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0033_step-0056270_loss-4.501210
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0034_step-0056500_loss-4.499463
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0034_step-0057000_loss-4.495987
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0034_step-0057500_loss-4.487928
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0034_step-0057925_loss-4.486629
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0035_step-0058000_loss-4.484474
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0035_step-0058500_loss-4.484124
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0035_step-0059000_loss-4.473683
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0035_step-0059500_loss-4.472064
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0035_step-0059580_loss-4.472242
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0036_step-0060000_loss-4.476347
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0036_step-0060500_loss-4.462378
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0036_step-0061000_loss-4.459593
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0036_step-0061235_loss-4.458764
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0037_step-0061500_loss-4.458564
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0037_step-0062000_loss-4.455375
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0037_step-0062500_loss-4.447503
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0037_step-0062890_loss-4.446043
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0038_step-0063000_loss-4.448516
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0038_step-0063500_loss-4.443542
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0038_step-0064000_loss-4.436219
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0038_step-0064500_loss-4.434150
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0038_step-0064545_loss-4.434342
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0039_step-0065000_loss-4.435358
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0039_step-0065500_loss-4.426039
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0039_step-0066000_loss-4.423244
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0039_step-0066200_loss-4.423183
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0040_step-0066500_loss-4.424935
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0040_step-0067000_loss-4.419336
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0040_step-0067500_loss-4.412991
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0040_step-0067855_loss-4.411270
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0041_step-0068000_loss-4.415727
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0041_step-0068500_loss-4.410189
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0041_step-0069000_loss-4.400662
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0041_step-0069500_loss-4.399493
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0041_step-0069510_loss-4.400138
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0042_step-0070000_loss-4.400796
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0042_step-0070500_loss-4.390676
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0042_step-0071000_loss-4.388581
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0042_step-0071165_loss-4.389222
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0043_step-0071500_loss-4.393958
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0043_step-0072000_loss-4.384129
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0043_step-0072500_loss-4.380351
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0043_step-0072820_loss-4.379799
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0044_step-0073000_loss-4.386096
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0044_step-0073500_loss-4.377000
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0044_step-0074000_loss-4.370575
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0044_step-0074475_loss-4.369458
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0045_step-0074500_loss-4.384139
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0045_step-0075000_loss-4.371445
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0045_step-0075500_loss-4.360363
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0045_step-0076000_loss-4.358859
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0045_step-0076130_loss-4.359547
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0046_step-0076500_loss-4.365336
+Exprimental Configuration File: egs/ttm/lyricgen/exp_config_chinese.json
+Exprimental Name: lyric2song_chinese
+Resume from the existing experiment...
+Using GradScaler for autocast with float16
+Using GradScaler for autocast with float16
+Using GradScaler for autocast with float16
+Using GradScaler for autocast with float16
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0047_step-0077000_loss-4.764044
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0047_step-0077500_loss-4.772952
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0047_step-0078000_loss-4.786037
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0047_step-0078500_loss-4.785882
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0047_step-0079000_loss-4.788915
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0047_step-0079500_loss-4.788712
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0047_step-0079811_loss-4.788275
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0048_step-0080000_loss-4.748483
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0048_step-0080500_loss-4.722744
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0048_step-0081000_loss-4.726070
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0048_step-0081500_loss-4.729116
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0048_step-0082000_loss-4.727819
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0048_step-0082500_loss-4.729292
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0048_step-0083000_loss-4.728651
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0048_step-0083121_loss-4.728948
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0049_step-0083500_loss-4.695693
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0049_step-0084000_loss-4.691558
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0049_step-0084500_loss-4.691275
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0049_step-0085000_loss-4.691510
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0049_step-0085500_loss-4.692585
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0049_step-0086000_loss-4.693846
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0049_step-0086431_loss-4.693339
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0050_step-0086500_loss-4.668230
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0050_step-0087000_loss-4.669672
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0050_step-0087500_loss-4.667045
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0050_step-0088000_loss-4.668815
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0050_step-0088500_loss-4.665349
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0050_step-0089000_loss-4.667222
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0050_step-0089500_loss-4.666933
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0050_step-0089741_loss-4.667111
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0051_step-0090000_loss-4.652234
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0051_step-0090500_loss-4.645913
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0051_step-0091000_loss-4.647288
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0051_step-0091500_loss-4.646891
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0051_step-0092000_loss-4.645740
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0051_step-0092500_loss-4.647349
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0051_step-0093000_loss-4.646346
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0051_step-0093051_loss-4.646583
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0052_step-0093500_loss-4.634659
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0052_step-0094000_loss-4.631003
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0052_step-0094500_loss-4.632215
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0052_step-0095000_loss-4.628724
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0052_step-0095500_loss-4.629574
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0052_step-0096000_loss-4.629870
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0052_step-0096361_loss-4.629341
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0053_step-0096500_loss-4.620546
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0053_step-0097000_loss-4.618746
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0053_step-0097500_loss-4.616562
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0053_step-0098000_loss-4.616776
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0053_step-0098500_loss-4.614671
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0053_step-0099000_loss-4.615034
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0053_step-0099500_loss-4.614183
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0053_step-0099671_loss-4.614052
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0054_step-0100000_loss-4.609747
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0054_step-0100500_loss-4.605004
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0054_step-0101000_loss-4.600737
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0054_step-0101500_loss-4.601325
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0054_step-0102000_loss-4.600295
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0054_step-0102500_loss-4.601905
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0054_step-0102981_loss-4.600776
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0055_step-0103000_loss-4.562473
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0055_step-0103500_loss-4.596599
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0055_step-0104000_loss-4.592258
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0055_step-0104500_loss-4.593854
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0055_step-0105000_loss-4.588524
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0055_step-0105500_loss-4.589867
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0055_step-0106000_loss-4.589439
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0055_step-0106291_loss-4.589043
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0056_step-0106500_loss-4.595599
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0056_step-0107000_loss-4.582748
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0056_step-0107500_loss-4.580091
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0056_step-0108000_loss-4.581692
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0056_step-0108500_loss-4.579417
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0056_step-0109000_loss-4.580195
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0056_step-0109500_loss-4.578863
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0056_step-0109601_loss-4.578765
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0057_step-0110000_loss-4.577080
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0057_step-0110500_loss-4.573569
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0057_step-0111000_loss-4.571625
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0057_step-0111500_loss-4.569600
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0057_step-0112000_loss-4.570107
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0057_step-0112500_loss-4.570783
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0057_step-0112911_loss-4.569645
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0058_step-0113000_loss-4.560746
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0058_step-0113500_loss-4.569149
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0058_step-0114000_loss-4.565762
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0058_step-0114500_loss-4.565534
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0058_step-0115000_loss-4.561416
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0058_step-0115500_loss-4.562535
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0058_step-0116000_loss-4.561102
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0058_step-0116221_loss-4.561145
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0059_step-0116500_loss-4.563162
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0059_step-0117000_loss-4.557246
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0059_step-0117500_loss-4.556829
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0059_step-0118000_loss-4.554981
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0059_step-0118500_loss-4.553321
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0059_step-0119000_loss-4.554557
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0059_step-0119500_loss-4.553142
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0059_step-0119531_loss-4.553361
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0060_step-0120000_loss-4.553981
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0060_step-0120500_loss-4.549072
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0060_step-0121000_loss-4.549723
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0060_step-0121500_loss-4.545773
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0060_step-0122000_loss-4.546640
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0060_step-0122500_loss-4.546415
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0060_step-0122841_loss-4.545611
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0061_step-0123000_loss-4.553559
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0061_step-0123500_loss-4.547526
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0061_step-0124000_loss-4.542242
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0061_step-0124500_loss-4.541229
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0061_step-0125000_loss-4.539271
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0061_step-0125500_loss-4.539838
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0061_step-0126000_loss-4.538475
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0061_step-0126151_loss-4.538326
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0062_step-0126500_loss-4.539685
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0062_step-0127000_loss-4.537426
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0062_step-0127500_loss-4.532869
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0062_step-0128000_loss-4.532524
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0062_step-0128500_loss-4.531893
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0062_step-0129000_loss-4.532608
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0062_step-0129461_loss-4.531462
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0063_step-0129500_loss-4.526364
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0063_step-0130000_loss-4.533265
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0063_step-0130500_loss-4.529338
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0063_step-0131000_loss-4.529990
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0063_step-0131500_loss-4.524609
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0063_step-0132000_loss-4.525739
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0063_step-0132500_loss-4.525438
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0063_step-0132771_loss-4.525091
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0064_step-0133000_loss-4.532330
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0064_step-0133500_loss-4.524670
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0064_step-0134000_loss-4.521647
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0064_step-0134500_loss-4.521670
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0064_step-0135000_loss-4.519361
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0064_step-0135500_loss-4.520658
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0064_step-0136000_loss-4.518581
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0064_step-0136081_loss-4.518799
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0065_step-0136500_loss-4.523032
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0065_step-0137000_loss-4.518060
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0065_step-0137500_loss-4.515935
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0065_step-0138000_loss-4.513291
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0065_step-0138500_loss-4.513638
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0065_step-0139000_loss-4.513680
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0065_step-0139391_loss-4.512830
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0066_step-0139500_loss-4.509482
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0066_step-0140000_loss-4.514750
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0066_step-0140500_loss-4.511945
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0066_step-0141000_loss-4.511067
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0066_step-0141500_loss-4.507800
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0066_step-0142000_loss-4.508672
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0066_step-0142500_loss-4.507252
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0066_step-0142701_loss-4.507117
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0067_step-0143000_loss-4.512781
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0067_step-0143500_loss-4.505686
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0067_step-0144000_loss-4.503601
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0067_step-0144500_loss-4.502822
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0067_step-0145000_loss-4.501355
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0067_step-0145500_loss-4.502810
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0067_step-0146000_loss-4.501509
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0067_step-0146011_loss-4.501544
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0068_step-0146500_loss-4.506935
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0068_step-0147000_loss-4.500445
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0068_step-0147500_loss-4.500349
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0068_step-0148000_loss-4.496472
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0068_step-0148500_loss-4.497311
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0068_step-0149000_loss-4.496940
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0068_step-0149321_loss-4.496251
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0069_step-0149500_loss-4.508466
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0069_step-0150000_loss-4.496633
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0069_step-0150500_loss-4.494355
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0069_step-0151000_loss-4.494452
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0069_step-0151500_loss-4.491762
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0069_step-0152000_loss-4.492341
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0069_step-0152500_loss-4.490853
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0069_step-0152631_loss-4.491058
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0070_step-0153000_loss-4.494602
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0070_step-0153500_loss-4.491169
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0070_step-0154000_loss-4.487230
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0070_step-0154500_loss-4.486517
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0070_step-0155000_loss-4.486900
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0070_step-0155500_loss-4.487041
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0070_step-0155941_loss-4.486084
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0071_step-0156000_loss-4.480171
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0071_step-0156500_loss-4.488840
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0071_step-0157000_loss-4.484777
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0071_step-0157500_loss-4.485804
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0071_step-0158000_loss-4.480945
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0071_step-0158500_loss-4.482024
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0071_step-0159000_loss-4.481442
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0071_step-0159251_loss-4.481272
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0072_step-0159500_loss-4.487369
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0072_step-0160000_loss-4.480705
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0072_step-0160500_loss-4.479623
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0072_step-0161000_loss-4.479024
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0072_step-0161500_loss-4.477001
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0072_step-0162000_loss-4.478386
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0072_step-0162500_loss-4.476463
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0072_step-0162561_loss-4.476645
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0073_step-0163000_loss-4.479999
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0073_step-0163500_loss-4.475965
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0073_step-0164000_loss-4.476168
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0073_step-0164500_loss-4.472462
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0073_step-0165000_loss-4.472948
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0073_step-0165500_loss-4.473146
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0073_step-0165871_loss-4.472222
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0074_step-0166000_loss-4.472898
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0074_step-0166500_loss-4.473690
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0074_step-0167000_loss-4.471132
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0074_step-0167500_loss-4.471076
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0074_step-0168000_loss-4.468757
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0074_step-0168500_loss-4.469265
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0074_step-0169000_loss-4.468102
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0074_step-0169181_loss-4.467987
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0075_step-0169500_loss-4.473556
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0075_step-0170000_loss-4.467968
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0075_step-0170500_loss-4.464478
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0075_step-0171000_loss-4.464408
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0075_step-0171500_loss-4.463446
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0075_step-0172000_loss-4.464943
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0075_step-0172491_loss-4.463861
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0076_step-0172500_loss-4.438140
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0076_step-0173000_loss-4.466269
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0076_step-0173500_loss-4.463439
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0076_step-0174000_loss-4.463917
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0076_step-0174500_loss-4.459429
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0076_step-0175000_loss-4.460765
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0076_step-0175500_loss-4.460143
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0076_step-0175801_loss-4.459636
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0077_step-0176000_loss-4.473841
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0077_step-0176500_loss-4.459679
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0077_step-0177000_loss-4.457966
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0077_step-0177500_loss-4.459128
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0077_step-0178000_loss-4.456002
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0077_step-0178500_loss-4.456635
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0077_step-0179000_loss-4.455430
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0077_step-0179111_loss-4.455422
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0078_step-0179500_loss-4.460796
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0078_step-0180000_loss-4.455605
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0078_step-0180500_loss-4.453477
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0078_step-0181000_loss-4.451500
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0078_step-0181500_loss-4.451624
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0078_step-0182000_loss-4.452550
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0078_step-0182421_loss-4.451168
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0079_step-0182500_loss-4.442903
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0079_step-0183000_loss-4.455928
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0079_step-0183500_loss-4.452088
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0079_step-0184000_loss-4.451758
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0079_step-0184500_loss-4.447378
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0079_step-0185000_loss-4.448549
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0079_step-0185500_loss-4.447601
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0079_step-0185731_loss-4.447483
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0080_step-0186000_loss-4.453277
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0080_step-0186500_loss-4.447798
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0080_step-0187000_loss-4.446837
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0080_step-0187500_loss-4.445572
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0080_step-0188000_loss-4.443540
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0080_step-0188500_loss-4.444649
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0080_step-0189000_loss-4.443347
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0080_step-0189041_loss-4.443567
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0081_step-0189500_loss-4.447924
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0081_step-0190000_loss-4.443196
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0081_step-0190500_loss-4.443616
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0081_step-0191000_loss-4.440258
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0081_step-0191500_loss-4.440765
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0081_step-0192000_loss-4.440730
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0081_step-0192351_loss-4.440034
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0082_step-0192500_loss-4.445773
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0082_step-0193000_loss-4.444327
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0082_step-0193500_loss-4.439963
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0082_step-0194000_loss-4.439385
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0082_step-0194500_loss-4.437139
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0082_step-0195000_loss-4.437890
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0082_step-0195500_loss-4.436711
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0082_step-0195661_loss-4.436551
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0083_step-0196000_loss-4.439500
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0083_step-0196500_loss-4.439021
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0083_step-0197000_loss-4.433927
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0083_step-0197500_loss-4.434046
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0083_step-0198000_loss-4.433476
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0083_step-0198500_loss-4.434717
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0083_step-0198971_loss-4.433349
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0084_step-0199000_loss-4.415311
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0084_step-0199500_loss-4.437742
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0084_step-0200000_loss-4.433818
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0084_step-0200500_loss-4.434513
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0084_step-0201000_loss-4.429429
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0084_step-0201500_loss-4.431238
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0084_step-0202000_loss-4.430721
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0084_step-0202281_loss-4.430236
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0085_step-0202500_loss-4.441640
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0085_step-0203000_loss-4.431918
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0085_step-0203500_loss-4.429166
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0085_step-0204000_loss-4.429710
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0085_step-0204500_loss-4.427823
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0085_step-0205000_loss-4.428639
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0085_step-0205500_loss-4.427092
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0085_step-0205591_loss-4.426939
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0086_step-0206000_loss-4.432453
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0086_step-0206500_loss-4.428453
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0086_step-0207000_loss-4.426416
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0086_step-0207500_loss-4.424151
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0086_step-0208000_loss-4.424239
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0086_step-0208500_loss-4.424555
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0086_step-0208901_loss-4.423627
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0087_step-0209000_loss-4.424354
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0087_step-0209500_loss-4.429110
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0087_step-0210000_loss-4.425016
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0087_step-0210500_loss-4.425004
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0087_step-0211000_loss-4.421572
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0087_step-0211500_loss-4.422133
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0087_step-0212000_loss-4.420677
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0087_step-0212211_loss-4.420533
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0088_step-0212500_loss-4.430169
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0088_step-0213000_loss-4.421565
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0088_step-0213500_loss-4.420259
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0088_step-0214000_loss-4.419013
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0088_step-0214500_loss-4.417120
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0088_step-0215000_loss-4.418820
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0088_step-0215500_loss-4.417356
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0088_step-0215521_loss-4.417464
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0089_step-0216000_loss-4.423817
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0089_step-0216500_loss-4.418537
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0089_step-0217000_loss-4.418506
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0089_step-0217500_loss-4.414884
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0089_step-0218000_loss-4.415758
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0089_step-0218500_loss-4.415417
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0089_step-0218831_loss-4.414613
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0090_step-0219000_loss-4.428430
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0090_step-0219500_loss-4.418640
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0090_step-0220000_loss-4.415295
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0090_step-0220500_loss-4.414611
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0090_step-0221000_loss-4.412543
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0090_step-0221500_loss-4.412754
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0090_step-0222000_loss-4.411644
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0090_step-0222141_loss-4.411600
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0091_step-0222500_loss-4.415868
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0091_step-0223000_loss-4.414639
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0091_step-0223500_loss-4.410251
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0091_step-0224000_loss-4.409905
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0091_step-0224500_loss-4.409540
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0091_step-0225000_loss-4.409713
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0091_step-0225451_loss-4.408949
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0092_step-0225500_loss-4.408208
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0092_step-0226000_loss-4.413136
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0092_step-0226500_loss-4.409737
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0092_step-0227000_loss-4.410887
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0092_step-0227500_loss-4.405862
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0092_step-0228000_loss-4.406801
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0092_step-0228500_loss-4.406681
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0092_step-0228761_loss-4.406335
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0093_step-0229000_loss-4.414335
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0093_step-0229500_loss-4.408983
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0093_step-0230000_loss-4.406713
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0093_step-0230500_loss-4.406178
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0093_step-0231000_loss-4.404164
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0093_step-0231500_loss-4.405212
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0093_step-0232000_loss-4.403502
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0093_step-0232071_loss-4.403745
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0094_step-0232500_loss-4.408995
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0094_step-0233000_loss-4.405317
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0094_step-0233500_loss-4.404744
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0094_step-0234000_loss-4.401020
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0094_step-0234500_loss-4.401472
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0094_step-0235000_loss-4.401835
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0094_step-0235381_loss-4.401095
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0095_step-0235500_loss-4.402010
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0095_step-0236000_loss-4.404503
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/lyric2song_chinese/checkpoint/epoch-0095_step-0236500_loss-4.401869

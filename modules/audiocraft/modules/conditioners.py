@@ -523,6 +523,25 @@ class T5Conditioner(TextConditioner):
         return embeds, mask
 
 # lyric2song added module
+
+class PositionalEncoding(nn.Module):
+    def __init__(self, d_model, dropout, max_len=5000):
+        super().__init__()
+
+        self.dropout = dropout
+        position = torch.arange(max_len).unsqueeze(1)
+        div_term = torch.exp(
+            torch.arange(0, d_model, 2) * (-math.log(10000.0) / d_model)
+        )
+        pe = torch.zeros(max_len, 1, d_model)
+        pe[:, 0, 0::2] = torch.sin(position * div_term)
+        pe[:, 0, 1::2] = torch.cos(position * div_term)
+        self.register_buffer("pe", pe)
+
+    def forward(self, x):
+        x = x + self.pe[: x.size(0)]
+        return F.dropout(x, self.dropout, training=self.training)
+
 class BertConditioner(TextConditioner):
     """BERT-based TextConditioner.
 
@@ -607,8 +626,7 @@ class BertConditioner(TextConditioner):
         
         # embedding from original bert tokenizer
         self.emb_token = nn.Embedding(self.bert_tokenizer.vocab_size, self.dim)
-        self.encoder = Encoder(hidden_channels=self.dim, filter_channels=self.dim, n_heads=4, n_layers=6)
-        self.output_proj_token = nn.Linear(self.dim, output_dim)
+        self.encoder = Encoder(hidden_channels=self.dim, filter_channels=self.dim, n_heads=4, n_layers=3)
     
     def tokenize(self, x: tp.List[tp.Optional[str]]) -> tp.Dict[str, torch.Tensor]:
         # if current sample doesn't have a certain attribute, replace with empty string
@@ -643,18 +661,72 @@ class BertConditioner(TextConditioner):
             embeds = self.bert(**inputs, output_hidden_states=True).hidden_states[-1]
             # print(embeds.shape)
             # print(embeds)
-        embeds = self.output_proj(embeds.to(self.output_proj.weight))
+        # embeds = self.output_proj(embeds.to(self.output_proj.weight))
         
         embeds_token = self.emb_token(inputs['input_ids']) # [B, T, D]
         # print(embeds_token.shape, mask.shape)
         embeds_transformer = self.encoder(embeds_token.transpose(1, 2), mask.unsqueeze(1)) # [B, D, T]
         # print(embeds_transformer.shape)
         embeds_token = embeds_token + embeds_transformer.transpose(1, 2)
-        embeds_token = self.output_proj_token(embeds_token)
         
         embeds = embeds + embeds_token
+        embeds = self.output_proj(embeds.to(self.output_proj.weight))
         embeds = embeds * mask.unsqueeze(-1)
         # print(embeds, mask)
+        return embeds, mask
+
+class PhonemeConditioner(TextConditioner):
+    """Phoneme-based TextConditioner.
+
+    Args:
+        n_bins (int): Number of bins.
+        dim (int): Hidden dim of the model (text-encoder/LUT).
+        output_dim (int): Output dim of the conditioner.
+        pad_idx (int, optional): Index for padding token. Defaults to 0.
+    """
+
+    def __init__(
+        self, symbol_table: str,
+        dim: int, output_dim: int, pad_idx: int = 0
+    ):
+        super().__init__(dim, output_dim)
+        from utils.symbol_table import SymbolTable
+        self.tokenizer = SymbolTable.from_file(symbol_table)
+        self.embed = nn.Embedding(len(self.tokenizer)+1, self.dim)
+        self.encoder = Encoder(hidden_channels=self.dim, filter_channels=dim, n_heads=4, n_layers=6)
+        self.pos_emb = PositionalEncoding(self.dim, 0.1)
+        self.pad_idx = pad_idx
+
+    def tokenize(
+        self, x: tp.List[tp.Optional[tp.List]]
+    ) -> tp.Tuple[torch.Tensor, torch.Tensor]:
+        """
+        input: 
+            List of ["shi2", "ke4", "ba3", "ni3", "fang4", "xin1", "di3", "\n", "bu4", "pa4", "wang3", "luo4", "de5", "xu1", "ni3", "deng3", "zhe5", "ni3", "\n", "chuan2", "da2", "ai4", "ni3", "de5", "mi4", "yu3", "\n"]
+        """
+        device = self.embed.weight.device
+        output, lengths = [], []
+        texts = deepcopy(x)
+        texts = [xi if xi is not None else [""] for xi in texts]
+        for i, text in enumerate(texts):
+            tokens = torch.Tensor([self.tokenizer.get(w) for w in text])
+            output.append(tokens)
+            lengths.append(len(text))
+
+        mask = length_to_mask(torch.IntTensor(lengths)).int()
+        padded_output = pad_sequence(output, padding_value=self.pad_idx).int().t()
+        tokens, mask = padded_output.to(device), mask.to(device)
+        return tokens, mask
+
+    def forward(self, inputs: tp.Tuple[torch.Tensor, torch.Tensor]) -> ConditionType:
+        tokens, mask = inputs
+        
+        embeds = self.embed(tokens)
+        embeds_transformer = self.encoder(embeds.transpose(1, 2), mask.unsqueeze(1))
+        embeds = embeds + embeds_transformer.transpose(1, 2)
+        embeds = self.pos_emb(embeds)
+        embeds = self.output_proj(embeds)
+        embeds = embeds * mask.unsqueeze(-1)
         return embeds, mask
 
 # Sing2Song added module

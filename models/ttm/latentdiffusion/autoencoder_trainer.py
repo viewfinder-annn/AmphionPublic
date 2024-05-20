@@ -35,6 +35,14 @@ class AutoencoderKLTrainer(BaseTrainer):
         # Only for TTM tasks
         self.task_type = "TTM"
         self.logger.info("Task type: {}".format(self.task_type))
+        
+        # TODO: resume
+        self.checkpoints_path_step = [
+            [] for _ in range(len(self.cfg.train.save_checkpoint_stride_step))
+        ]
+        self.keep_last_step = [
+            i if i > 0 else float("inf") for i in self.cfg.train.keep_last_step
+        ]
 
     def _build_dataset(self):
         return AutoencoderKLDataset, AutoencoderKLCollator
@@ -57,9 +65,46 @@ class AutoencoderKLTrainer(BaseTrainer):
         train_dataset = ConcatDataset(datasets_list)
 
         train_collate = Collator(self.cfg)
-        # DEBUG
         
-
+        # DEBUG
+        from models.ttm.latentdiffusion.audioldm_inference import AttrDict
+        from models.tta.ldm.inference_utils.vocoder import Generator
+        import torchaudio
+        import random
+        
+        config_file = os.path.join(self.cfg.model.vocoder_config_path)
+        with open(config_file) as f:
+            data = f.read()
+        json_config = json.loads(data)
+        h = AttrDict(json_config)
+        self.vocoder = Generator(h).to(self.accelerator.device)
+        checkpoint_dict = torch.load(
+            self.cfg.model.vocoder_path, map_location=self.accelerator.device
+        )
+        self.vocoder.load_state_dict(checkpoint_dict["generator"])
+        self.vocoder.eval()
+        self.vocoder.remove_weight_norm()
+        
+        debug_sample_dir = f"{self.exp_dir}/debug_train_sample"
+        shutil.rmtree(debug_sample_dir, ignore_errors=True)
+        os.makedirs(debug_sample_dir, exist_ok=True)
+        debug_infos = []
+        features_index = random.sample(range(len(train_dataset)), 8)
+        for i in features_index:
+            single_feature = train_dataset[i]
+            self_wav = single_feature["self_wav"]
+            # print(wavs.shape)
+            # print(infos)
+            # print(infos.to_condition_attributes())
+            torchaudio.save(f"{debug_sample_dir}/{i}_self.wav", self_wav, self.cfg.preprocess.sample_rate)
+            
+            melspec = single_feature["mel"][:, :624].unsqueeze(0).unsqueeze(1)
+            melspec = melspec.to(self.accelerator.device)
+            y_vocoder = self.vocoder(melspec.squeeze(0))
+            audio_vocoder = y_vocoder.squeeze()
+            audio_vocoder = audio_vocoder.cpu()
+            audio_vocoder.unsqueeze_(0)
+            torchaudio.save(f"{debug_sample_dir}/{i}_vocoder.wav", audio_vocoder, self.cfg.preprocess.sample_rate)
 
         # use batch_sampler argument instead of (sampler, shuffle, drop_last, batch_size)
         train_loader = DataLoader(
@@ -68,22 +113,20 @@ class AutoencoderKLTrainer(BaseTrainer):
             batch_size=self.cfg.train.batch_size,
             pin_memory=False,
         )
-        if not self.cfg.train.ddp or self.args.local_rank == 0:
-            datasets_list = []
-            for dataset in self.cfg.dataset:
-                subdataset = Dataset(self.cfg, dataset, is_valid=True)
-                datasets_list.append(subdataset)
-            valid_dataset = ConcatDataset(datasets_list)
-            valid_collate = Collator(self.cfg)
 
-            valid_loader = DataLoader(
-                valid_dataset,
-                collate_fn=valid_collate,
-                batch_size=self.cfg.train.batch_size,
-            )
-        else:
-            raise NotImplementedError("DDP is not supported yet.")
-            # valid_loader = None
+        datasets_list = []
+        for dataset in self.cfg.dataset:
+            subdataset = Dataset(self.cfg, dataset, is_valid=True)
+            datasets_list.append(subdataset)
+        valid_dataset = ConcatDataset(datasets_list)
+        valid_collate = Collator(self.cfg)
+
+        valid_loader = DataLoader(
+            valid_dataset,
+            collate_fn=valid_collate,
+            batch_size=self.cfg.train.batch_size,
+        )
+
         return train_loader, valid_loader
 
     # TODO: check it...
@@ -285,6 +328,58 @@ class AutoencoderKLTrainer(BaseTrainer):
                 self.step += 1
                 epoch_step += 1
 
+            if self.accelerator.is_main_process:
+                save_checkpoint = False
+                hit_dix = []
+                for i, num in enumerate(self.cfg.train.save_checkpoint_stride_step):
+                    if self.step % num == 0:
+                        save_checkpoint = True
+                        hit_dix.append(i)
+
+            self.accelerator.wait_for_everyone()
+            train_loss = epoch_sum_loss / epoch_step if epoch_step > 0 else 0.0
+            if self.accelerator.is_main_process and save_checkpoint:
+                if torch.isnan(torch.tensor(train_loss)):
+                    raise ValueError("NaN loss encountered during training, aborting.")
+                path = os.path.join(
+                    self.checkpoint_dir,
+                    "epoch-{:04d}_step-{:07d}_loss-{:.6f}".format(
+                        self.epoch, self.step, train_loss
+                    ),
+                )
+                self.tmp_checkpoint_save_path = path
+                self.accelerator.save_state(path)
+                print(f"save checkpoint in {path}")
+                json.dump(
+                    self.checkpoints_path_step,
+                    open(os.path.join(path, "ckpts.json"), "w"),
+                    ensure_ascii=False,
+                    indent=4,
+                )
+                self._save_auxiliary_states()
+
+                # Remove old checkpoints
+                to_remove = []
+                for idx in hit_dix:
+                    self.checkpoints_path_step[idx].append(path)
+                    while len(self.checkpoints_path_step[idx]) > self.keep_last_step[idx]:
+                        to_remove.append((idx, self.checkpoints_path_step[idx].pop(0)))
+
+                # Search conflicts
+                total = set()
+                for i in self.checkpoints_path_step:
+                    total |= set(i)
+                do_remove = set()
+                for idx, path in to_remove[::-1]:
+                    if path in total:
+                        self.checkpoints_path_step[idx].insert(0, path)
+                    else:
+                        do_remove.add(path)
+                
+                # Remove old checkpoints
+                for path in do_remove:
+                    shutil.rmtree(path, ignore_errors=True)
+                    self.logger.debug(f"Remove old checkpoint: {path}")
         self.accelerator.wait_for_everyone()
         return (
             epoch_sum_loss
@@ -339,7 +434,7 @@ class AutoencoderKLTrainer(BaseTrainer):
             posteriors=posterior,
             optimizer_idx=optimizer_idx,
             global_step=global_step,
-            last_layer=self.model.get_last_layer(),
+            last_layer=self.accelerator.unwrap_model(self.model).get_last_layer(),
             split="train",
         )
 

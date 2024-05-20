@@ -1,0 +1,557 @@
+Exprimental Configuration File: egs/ttm/sing2song/exp_config_source_sep.json
+Exprimental Name: sing2song_source_sep
+Start a new experiment...
+[2024-05-09 19:00:15] Sing2SongDataset.__init__()
+[2024-05-09 19:00:19] Dataset chinese_short loaded, 860768 samples
+[2024-05-09 19:00:20] Sing2SongDataset.__init__()
+[2024-05-09 19:00:29] Dataset english_short loaded, 1121849 samples
+[2024-05-09 19:00:30] Sing2SongDataset.__init__()
+[2024-05-09 19:00:30] Dataset chinese_short loaded, 20 samples
+[2024-05-09 19:00:31] Sing2SongDataset.__init__()
+[2024-05-09 19:00:31] Dataset english_short loaded, 20 samples
+[2024-05-09 19:00:40] Sing2SongDataset.__init__()
+[2024-05-09 19:00:40] Sing2SongDataset.__init__()[2024-05-09 19:00:40] Sing2SongDataset.__init__()
+[2024-05-09 19:00:40] Sing2SongDataset.__init__()
+
+[2024-05-09 19:00:40] Sing2SongDataset.__init__()
+[2024-05-09 19:00:40] Sing2SongDataset.__init__()
+[2024-05-09 19:00:43] Dataset chinese_short loaded, 860768 samples
+[2024-05-09 19:00:43] Dataset chinese_short loaded, 860768 samples
+[2024-05-09 19:00:43] Dataset chinese_short loaded, 860768 samples
+[2024-05-09 19:00:43] Dataset chinese_short loaded, 860768 samples
+[2024-05-09 19:00:43] Dataset chinese_short loaded, 860768 samples
+[2024-05-09 19:00:43] Dataset chinese_short loaded, 860768 samples
+[2024-05-09 19:00:44] Sing2SongDataset.__init__()
+[2024-05-09 19:00:44] Sing2SongDataset.__init__()
+[2024-05-09 19:00:44] Sing2SongDataset.__init__()
+[2024-05-09 19:00:44] Sing2SongDataset.__init__()
+[2024-05-09 19:00:44] Sing2SongDataset.__init__()
+[2024-05-09 19:00:44] Sing2SongDataset.__init__()
+[2024-05-09 19:00:52] Dataset english_short loaded, 1121849 samples
+[2024-05-09 19:00:52] Dataset english_short loaded, 1121849 samples
+[2024-05-09 19:00:52] Dataset english_short loaded, 1121849 samples
+[2024-05-09 19:00:52] Dataset english_short loaded, 1121849 samples
+[2024-05-09 19:00:52] Dataset english_short loaded, 1121849 samples
+[2024-05-09 19:00:52] Dataset english_short loaded, 1121849 samples
+[2024-05-09 19:00:52] Sing2SongDataset.__init__()
+[2024-05-09 19:00:52] Dataset chinese_short loaded, 20 samples
+[2024-05-09 19:00:53] Sing2SongDataset.__init__()
+[2024-05-09 19:00:53] Dataset chinese_short loaded, 20 samples
+[2024-05-09 19:00:53] Sing2SongDataset.__init__()
+[2024-05-09 19:00:53] Dataset chinese_short loaded, 20 samples
+[2024-05-09 19:00:53] Sing2SongDataset.__init__()
+[2024-05-09 19:00:53] Dataset chinese_short loaded, 20 samples
+[2024-05-09 19:00:53] Sing2SongDataset.__init__()
+[2024-05-09 19:00:53] Dataset chinese_short loaded, 20 samples
+[2024-05-09 19:00:53] Sing2SongDataset.__init__()
+[2024-05-09 19:00:53] Dataset chinese_short loaded, 20 samples
+[2024-05-09 19:00:53] Sing2SongDataset.__init__()
+[2024-05-09 19:00:53] Dataset english_short loaded, 20 samples
+[2024-05-09 19:00:54] Sing2SongDataset.__init__()
+[2024-05-09 19:00:54] Dataset english_short loaded, 20 samples
+[2024-05-09 19:00:54] Sing2SongDataset.__init__()
+[2024-05-09 19:00:54] Dataset english_short loaded, 20 samples
+[2024-05-09 19:00:54] Sing2SongDataset.__init__()
+[2024-05-09 19:00:54] Dataset english_short loaded, 20 samples
+[2024-05-09 19:00:54] Sing2SongDataset.__init__()
+[2024-05-09 19:00:54] Dataset english_short loaded, 20 samples
+[2024-05-09 19:00:54] Sing2SongDataset.__init__()
+[2024-05-09 19:00:54] Dataset english_short loaded, 20 samples
+Using GradScaler for autocast with float16Using GradScaler for autocast with float16Using GradScaler for autocast with float16Using GradScaler for autocast with float16
+
+Using GradScaler for autocast with float16
+
+
+Using GradScaler for autocast with float16
+Using GradScaler for autocast with float16
+Exprimental Configuration File: egs/ttm/sing2song/exp_config_source_sep.json
+Exprimental Name: sing2song_source_sep
+Start a new experiment...
+[2024-05-10 12:41:49] Sing2SongDataset.__init__()
+[2024-05-10 12:41:53] Dataset chinese_short loaded, 860768 samples
+[2024-05-10 12:41:54] Sing2SongDataset.__init__()
+[2024-05-10 12:42:01] Dataset english_short loaded, 1121849 samples
+[2024-05-10 12:42:02] Sing2SongDataset.__init__()
+[2024-05-10 12:42:02] Dataset chinese_short loaded, 20 samples
+[2024-05-10 12:42:03] Sing2SongDataset.__init__()
+[2024-05-10 12:42:03] Dataset english_short loaded, 20 samples
+[2024-05-10 12:42:12] Sing2SongDataset.__init__()
+[2024-05-10 12:42:12] Sing2SongDataset.__init__()
+[2024-05-10 12:42:12] Sing2SongDataset.__init__()
+[2024-05-10 12:42:12] Sing2SongDataset.__init__()
+[2024-05-10 12:42:12] Sing2SongDataset.__init__()
+[2024-05-10 12:42:12] Sing2SongDataset.__init__()
+[2024-05-10 12:42:15] Dataset chinese_short loaded, 860768 samples
+[2024-05-10 12:42:15] Dataset chinese_short loaded, 860768 samples
+[2024-05-10 12:42:15] Dataset chinese_short loaded, 860768 samples
+[2024-05-10 12:42:15] Dataset chinese_short loaded, 860768 samples
+[2024-05-10 12:42:16] Dataset chinese_short loaded, 860768 samples
+[2024-05-10 12:42:16] Dataset chinese_short loaded, 860768 samples
+[2024-05-10 12:42:16] Sing2SongDataset.__init__()
+[2024-05-10 12:42:16] Sing2SongDataset.__init__()
+[2024-05-10 12:42:16] Sing2SongDataset.__init__()
+[2024-05-10 12:42:17] Sing2SongDataset.__init__()
+[2024-05-10 12:42:17] Sing2SongDataset.__init__()
+[2024-05-10 12:42:17] Sing2SongDataset.__init__()
+[2024-05-10 12:42:24] Dataset english_short loaded, 1121849 samples
+[2024-05-10 12:42:24] Dataset english_short loaded, 1121849 samples
+[2024-05-10 12:42:24] Dataset english_short loaded, 1121849 samples
+[2024-05-10 12:42:24] Dataset english_short loaded, 1121849 samples
+[2024-05-10 12:42:24] Dataset english_short loaded, 1121849 samples
+[2024-05-10 12:42:25] Dataset english_short loaded, 1121849 samples
+[2024-05-10 12:42:25] Sing2SongDataset.__init__()
+[2024-05-10 12:42:25] Dataset chinese_short loaded, 20 samples
+[2024-05-10 12:42:25] Sing2SongDataset.__init__()
+[2024-05-10 12:42:25] Dataset chinese_short loaded, 20 samples
+[2024-05-10 12:42:25] Sing2SongDataset.__init__()
+[2024-05-10 12:42:25] Dataset chinese_short loaded, 20 samples
+[2024-05-10 12:42:25] Sing2SongDataset.__init__()
+[2024-05-10 12:42:25] Dataset chinese_short loaded, 20 samples
+[2024-05-10 12:42:25] Sing2SongDataset.__init__()
+[2024-05-10 12:42:25] Dataset chinese_short loaded, 20 samples
+[2024-05-10 12:42:26] Sing2SongDataset.__init__()
+[2024-05-10 12:42:26] Dataset chinese_short loaded, 20 samples
+[2024-05-10 12:42:26] Sing2SongDataset.__init__()
+[2024-05-10 12:42:26] Dataset english_short loaded, 20 samples
+[2024-05-10 12:42:26] Sing2SongDataset.__init__()
+[2024-05-10 12:42:26] Dataset english_short loaded, 20 samples
+[2024-05-10 12:42:26] Sing2SongDataset.__init__()
+[2024-05-10 12:42:26] Dataset english_short loaded, 20 samples
+[2024-05-10 12:42:26] Sing2SongDataset.__init__()
+[2024-05-10 12:42:26] Dataset english_short loaded, 20 samples
+[2024-05-10 12:42:26] Sing2SongDataset.__init__()
+[2024-05-10 12:42:26] Dataset english_short loaded, 20 samples
+[2024-05-10 12:42:26] Sing2SongDataset.__init__()
+[2024-05-10 12:42:26] Dataset english_short loaded, 20 samples
+Using GradScaler for autocast with float16Using GradScaler for autocast with float16Using GradScaler for autocast with float16Using GradScaler for autocast with float16
+
+
+Using GradScaler for autocast with float16
+
+Using GradScaler for autocast with float16
+Using GradScaler for autocast with float16
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/sing2song_source_sep/checkpoint/epoch-0000_step-0000200_loss-6.954833
+Exprimental Configuration File: egs/ttm/sing2song/exp_config_source_sep.json
+Exprimental Name: sing2song_source_sep
+Start a new experiment...
+[2024-05-10 13:30:59] Sing2SongDataset.__init__()
+[2024-05-10 13:31:02] Dataset chinese_short loaded, 860768 samples
+[2024-05-10 13:31:03] Sing2SongDataset.__init__()
+[2024-05-10 13:31:11] Dataset english_short loaded, 1121849 samples
+[2024-05-10 13:31:12] Sing2SongDataset.__init__()
+[2024-05-10 13:31:12] Dataset chinese_short loaded, 20 samples
+[2024-05-10 13:31:13] Sing2SongDataset.__init__()
+[2024-05-10 13:31:13] Dataset english_short loaded, 20 samples
+[2024-05-10 13:31:22] Sing2SongDataset.__init__()
+[2024-05-10 13:31:22] Sing2SongDataset.__init__()
+[2024-05-10 13:31:22] Sing2SongDataset.__init__()
+[2024-05-10 13:31:22] Sing2SongDataset.__init__()[2024-05-10 13:31:22] Sing2SongDataset.__init__()
+
+[2024-05-10 13:31:22] Sing2SongDataset.__init__()
+[2024-05-10 13:31:25] Dataset chinese_short loaded, 860768 samples
+[2024-05-10 13:31:25] Dataset chinese_short loaded, 860768 samples
+[2024-05-10 13:31:25] Dataset chinese_short loaded, 860768 samples
+[2024-05-10 13:31:25] Dataset chinese_short loaded, 860768 samples
+[2024-05-10 13:31:26] Dataset chinese_short loaded, 860768 samples
+[2024-05-10 13:31:26] Dataset chinese_short loaded, 860768 samples
+[2024-05-10 13:31:26] Sing2SongDataset.__init__()
+[2024-05-10 13:31:26] Sing2SongDataset.__init__()
+[2024-05-10 13:31:26] Sing2SongDataset.__init__()
+[2024-05-10 13:31:26] Sing2SongDataset.__init__()
+[2024-05-10 13:31:27] Sing2SongDataset.__init__()
+[2024-05-10 13:31:27] Sing2SongDataset.__init__()
+[2024-05-10 13:31:34] Dataset english_short loaded, 1121849 samples
+[2024-05-10 13:31:34] Dataset english_short loaded, 1121849 samples
+[2024-05-10 13:31:34] Dataset english_short loaded, 1121849 samples
+[2024-05-10 13:31:34] Dataset english_short loaded, 1121849 samples
+[2024-05-10 13:31:34] Dataset english_short loaded, 1121849 samples
+[2024-05-10 13:31:34] Dataset english_short loaded, 1121849 samples
+[2024-05-10 13:31:35] Sing2SongDataset.__init__()
+[2024-05-10 13:31:35] Dataset chinese_short loaded, 20 samples
+[2024-05-10 13:31:35] Sing2SongDataset.__init__()
+[2024-05-10 13:31:35] Dataset chinese_short loaded, 20 samples
+[2024-05-10 13:31:35] Sing2SongDataset.__init__()
+[2024-05-10 13:31:35] Dataset chinese_short loaded, 20 samples
+[2024-05-10 13:31:35] Sing2SongDataset.__init__()
+[2024-05-10 13:31:35] Dataset chinese_short loaded, 20 samples
+[2024-05-10 13:31:35] Sing2SongDataset.__init__()
+[2024-05-10 13:31:35] Dataset chinese_short loaded, 20 samples
+[2024-05-10 13:31:35] Sing2SongDataset.__init__()
+[2024-05-10 13:31:35] Dataset chinese_short loaded, 20 samples
+[2024-05-10 13:31:36] Sing2SongDataset.__init__()
+[2024-05-10 13:31:36] Dataset english_short loaded, 20 samples
+[2024-05-10 13:31:36] Sing2SongDataset.__init__()
+[2024-05-10 13:31:36] Dataset english_short loaded, 20 samples
+[2024-05-10 13:31:36] Sing2SongDataset.__init__()
+[2024-05-10 13:31:36] Sing2SongDataset.__init__()
+[2024-05-10 13:31:36] Dataset english_short loaded, 20 samples
+[2024-05-10 13:31:36] Dataset english_short loaded, 20 samples
+[2024-05-10 13:31:36] Sing2SongDataset.__init__()
+[2024-05-10 13:31:36] Dataset english_short loaded, 20 samples
+[2024-05-10 13:31:36] Sing2SongDataset.__init__()
+[2024-05-10 13:31:36] Dataset english_short loaded, 20 samples
+Using GradScaler for autocast with float16
+Using GradScaler for autocast with float16Using GradScaler for autocast with float16
+
+Using GradScaler for autocast with float16
+Using GradScaler for autocast with float16
+Using GradScaler for autocast with float16Using GradScaler for autocast with float16
+
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/sing2song_source_sep/checkpoint/epoch-0000_step-0000200_loss-6.954835
+Exprimental Configuration File: egs/ttm/sing2song/exp_config_source_sep.json
+Exprimental Name: sing2song_source_sep
+Start a new experiment...
+[2024-05-10 14:27:44] Sing2SongDataset.__init__()
+[2024-05-10 14:27:48] Dataset chinese_short loaded, 860768 samples
+[2024-05-10 14:27:49] Sing2SongDataset.__init__()
+[2024-05-10 14:27:56] Dataset english_short loaded, 1121849 samples
+[2024-05-10 14:27:57] Sing2SongDataset.__init__()
+[2024-05-10 14:27:57] Dataset chinese_short loaded, 20 samples
+[2024-05-10 14:27:58] Sing2SongDataset.__init__()
+[2024-05-10 14:27:58] Dataset english_short loaded, 20 samples
+[2024-05-10 14:28:07] Sing2SongDataset.__init__()
+[2024-05-10 14:28:07] Sing2SongDataset.__init__()
+[2024-05-10 14:28:07] Sing2SongDataset.__init__()
+[2024-05-10 14:28:07] Sing2SongDataset.__init__()
+[2024-05-10 14:28:07] Sing2SongDataset.__init__()[2024-05-10 14:28:07] Sing2SongDataset.__init__()
+
+[2024-05-10 14:28:11] Dataset chinese_short loaded, 860768 samples
+[2024-05-10 14:28:11] Dataset chinese_short loaded, 860768 samples
+[2024-05-10 14:28:11] Dataset chinese_short loaded, 860768 samples
+[2024-05-10 14:28:11] Dataset chinese_short loaded, 860768 samples
+[2024-05-10 14:28:11] Dataset chinese_short loaded, 860768 samples
+[2024-05-10 14:28:11] Dataset chinese_short loaded, 860768 samples
+[2024-05-10 14:28:12] Sing2SongDataset.__init__()
+[2024-05-10 14:28:12] Sing2SongDataset.__init__()
+[2024-05-10 14:28:12] Sing2SongDataset.__init__()
+[2024-05-10 14:28:12] Sing2SongDataset.__init__()
+[2024-05-10 14:28:12] Sing2SongDataset.__init__()
+[2024-05-10 14:28:12] Sing2SongDataset.__init__()
+[2024-05-10 14:28:19] Dataset english_short loaded, 1121849 samples
+[2024-05-10 14:28:19] Dataset english_short loaded, 1121849 samples
+[2024-05-10 14:28:19] Dataset english_short loaded, 1121849 samples
+[2024-05-10 14:28:19] Dataset english_short loaded, 1121849 samples
+[2024-05-10 14:28:19] Dataset english_short loaded, 1121849 samples
+[2024-05-10 14:28:20] Sing2SongDataset.__init__()
+[2024-05-10 14:28:20] Dataset chinese_short loaded, 20 samples
+[2024-05-10 14:28:20] Sing2SongDataset.__init__()
+[2024-05-10 14:28:20] Dataset chinese_short loaded, 20 samples
+[2024-05-10 14:28:20] Sing2SongDataset.__init__()
+[2024-05-10 14:28:20] Dataset chinese_short loaded, 20 samples
+[2024-05-10 14:28:20] Sing2SongDataset.__init__()
+[2024-05-10 14:28:20] Dataset chinese_short loaded, 20 samples
+[2024-05-10 14:28:20] Sing2SongDataset.__init__()
+[2024-05-10 14:28:20] Dataset chinese_short loaded, 20 samples
+[2024-05-10 14:28:20] Dataset english_short loaded, 1121849 samples
+[2024-05-10 14:28:21] Sing2SongDataset.__init__()
+[2024-05-10 14:28:21] Dataset english_short loaded, 20 samples
+[2024-05-10 14:28:21] Sing2SongDataset.__init__()
+[2024-05-10 14:28:21] Dataset english_short loaded, 20 samples
+[2024-05-10 14:28:21] Sing2SongDataset.__init__()
+[2024-05-10 14:28:21] Dataset english_short loaded, 20 samples
+[2024-05-10 14:28:21] Sing2SongDataset.__init__()
+[2024-05-10 14:28:21] Dataset english_short loaded, 20 samples
+[2024-05-10 14:28:21] Sing2SongDataset.__init__()
+[2024-05-10 14:28:21] Dataset english_short loaded, 20 samples
+[2024-05-10 14:28:21] Sing2SongDataset.__init__()
+[2024-05-10 14:28:21] Dataset chinese_short loaded, 20 samples
+[2024-05-10 14:28:22] Sing2SongDataset.__init__()
+[2024-05-10 14:28:22] Dataset english_short loaded, 20 samples
+Using GradScaler for autocast with float16
+Using GradScaler for autocast with float16
+Using GradScaler for autocast with float16
+Using GradScaler for autocast with float16
+Using GradScaler for autocast with float16
+Using GradScaler for autocast with float16
+Using GradScaler for autocast with float16
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/sing2song_source_sep/checkpoint/epoch-0000_step-0000200_loss-6.954834
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/sing2song_source_sep/checkpoint/epoch-0000_step-0000400_loss-6.808372
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/sing2song_source_sep/checkpoint/epoch-0000_step-0000600_loss-6.735158
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/sing2song_source_sep/checkpoint/epoch-0000_step-0000800_loss-6.692413
+Exprimental Configuration File: egs/ttm/sing2song/exp_config_source_sep.json
+Exprimental Name: sing2song_source_sep
+Resume from the existing experiment...
+[2024-05-10 17:16:01] Sing2SongDataset.__init__()
+[2024-05-10 17:16:05] Dataset chinese_short loaded, 860768 samples
+[2024-05-10 17:16:06] Sing2SongDataset.__init__()
+[2024-05-10 17:16:13] Dataset english_short loaded, 1121849 samples
+[2024-05-10 17:16:14] Sing2SongDataset.__init__()
+[2024-05-10 17:16:14] Dataset chinese_short loaded, 20 samples
+[2024-05-10 17:16:15] Sing2SongDataset.__init__()
+[2024-05-10 17:16:15] Dataset english_short loaded, 20 samples
+[2024-05-10 17:16:24] Sing2SongDataset.__init__()
+[2024-05-10 17:16:24] Sing2SongDataset.__init__()
+[2024-05-10 17:16:24] Sing2SongDataset.__init__()[2024-05-10 17:16:24] Sing2SongDataset.__init__()[2024-05-10 17:16:24] Sing2SongDataset.__init__()
+
+
+[2024-05-10 17:16:24] Sing2SongDataset.__init__()
+[2024-05-10 17:16:24] Sing2SongDataset.__init__()
+[2024-05-10 17:16:27] Dataset chinese_short loaded, 860768 samples[2024-05-10 17:16:27] Dataset chinese_short loaded, 860768 samples
+
+[2024-05-10 17:16:27] Dataset chinese_short loaded, 860768 samples
+[2024-05-10 17:16:27] Dataset chinese_short loaded, 860768 samples
+[2024-05-10 17:16:27] Dataset chinese_short loaded, 860768 samples
+[2024-05-10 17:16:28] Dataset chinese_short loaded, 860768 samples
+[2024-05-10 17:16:28] Dataset chinese_short loaded, 860768 samples
+[2024-05-10 17:16:28] Sing2SongDataset.__init__()
+[2024-05-10 17:16:28] Sing2SongDataset.__init__()
+[2024-05-10 17:16:28] Sing2SongDataset.__init__()
+[2024-05-10 17:16:28] Sing2SongDataset.__init__()
+[2024-05-10 17:16:28] Sing2SongDataset.__init__()
+[2024-05-10 17:16:29] Sing2SongDataset.__init__()
+[2024-05-10 17:16:29] Sing2SongDataset.__init__()
+[2024-05-10 17:16:36] Dataset english_short loaded, 1121849 samples
+[2024-05-10 17:16:36] Dataset english_short loaded, 1121849 samples
+[2024-05-10 17:16:36] Dataset english_short loaded, 1121849 samples
+[2024-05-10 17:16:36] Dataset english_short loaded, 1121849 samples
+[2024-05-10 17:16:36] Dataset english_short loaded, 1121849 samples
+[2024-05-10 17:16:36] Dataset english_short loaded, 1121849 samples
+[2024-05-10 17:16:36] Dataset english_short loaded, 1121849 samples
+[2024-05-10 17:16:37] Sing2SongDataset.__init__()
+[2024-05-10 17:16:37] Dataset chinese_short loaded, 20 samples
+[2024-05-10 17:16:37] Sing2SongDataset.__init__()
+[2024-05-10 17:16:37] Dataset chinese_short loaded, 20 samples
+[2024-05-10 17:16:37] Sing2SongDataset.__init__()
+[2024-05-10 17:16:37] Dataset chinese_short loaded, 20 samples
+[2024-05-10 17:16:37] Sing2SongDataset.__init__()
+[2024-05-10 17:16:37] Dataset chinese_short loaded, 20 samples
+[2024-05-10 17:16:37] Sing2SongDataset.__init__()
+[2024-05-10 17:16:37] Dataset chinese_short loaded, 20 samples
+[2024-05-10 17:16:37] Sing2SongDataset.__init__()
+[2024-05-10 17:16:37] Dataset chinese_short loaded, 20 samples
+[2024-05-10 17:16:37] Sing2SongDataset.__init__()
+[2024-05-10 17:16:37] Dataset chinese_short loaded, 20 samples
+[2024-05-10 17:16:38] Sing2SongDataset.__init__()
+[2024-05-10 17:16:38] Dataset english_short loaded, 20 samples
+[2024-05-10 17:16:38] Sing2SongDataset.__init__()
+[2024-05-10 17:16:38] Dataset english_short loaded, 20 samples
+[2024-05-10 17:16:38] Sing2SongDataset.__init__()
+[2024-05-10 17:16:38] Dataset english_short loaded, 20 samples
+[2024-05-10 17:16:38] Sing2SongDataset.__init__()
+[2024-05-10 17:16:38] Dataset english_short loaded, 20 samples
+[2024-05-10 17:16:38] Sing2SongDataset.__init__()
+[2024-05-10 17:16:38] Dataset english_short loaded, 20 samples
+[2024-05-10 17:16:38] Sing2SongDataset.__init__()
+[2024-05-10 17:16:38] Dataset english_short loaded, 20 samples
+[2024-05-10 17:16:38] Sing2SongDataset.__init__()
+[2024-05-10 17:16:38] Dataset english_short loaded, 20 samples
+Using GradScaler for autocast with float16
+Using GradScaler for autocast with float16
+Using GradScaler for autocast with float16
+Using GradScaler for autocast with float16
+Using GradScaler for autocast with float16
+Using GradScaler for autocast with float16
+Using GradScaler for autocast with float16
+Using GradScaler for autocast with float16
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/sing2song_source_sep/checkpoint/epoch-0001_step-0001000_loss-6.535918
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/sing2song_source_sep/checkpoint/epoch-0001_step-0001200_loss-6.520567
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/sing2song_source_sep/checkpoint/epoch-0001_step-0001400_loss-6.523624
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/sing2song_source_sep/checkpoint/epoch-0001_step-0001600_loss-6.511889
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/sing2song_source_sep/checkpoint/epoch-0001_step-0001800_loss-6.503806
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/sing2song_source_sep/checkpoint/epoch-0001_step-0002000_loss-6.493842
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/sing2song_source_sep/checkpoint/epoch-0001_step-0002200_loss-6.485685
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/sing2song_source_sep/checkpoint/epoch-0001_step-0002400_loss-6.475099
+Exprimental Configuration File: egs/ttm/sing2song/exp_config_source_sep.json
+Exprimental Name: sing2song_source_sep
+Resume from the existing experiment...
+[2024-05-11 00:00:21] Sing2SongDataset.__init__()
+[2024-05-11 00:00:24] Dataset chinese_short loaded, 860768 samples
+[2024-05-11 00:00:25] Sing2SongDataset.__init__()
+[2024-05-11 00:00:33] Dataset english_short loaded, 1121849 samples
+[2024-05-11 00:00:34] Sing2SongDataset.__init__()
+[2024-05-11 00:00:34] Dataset chinese_short loaded, 20 samples
+[2024-05-11 00:00:35] Sing2SongDataset.__init__()
+[2024-05-11 00:00:35] Dataset english_short loaded, 20 samples
+[2024-05-11 00:00:44] Sing2SongDataset.__init__()[2024-05-11 00:00:44] Sing2SongDataset.__init__()
+
+[2024-05-11 00:00:44] Sing2SongDataset.__init__()
+[2024-05-11 00:00:44] Sing2SongDataset.__init__()
+[2024-05-11 00:00:44] Sing2SongDataset.__init__()
+[2024-05-11 00:00:44] Sing2SongDataset.__init__()
+[2024-05-11 00:00:44] Sing2SongDataset.__init__()
+[2024-05-11 00:00:48] Dataset chinese_short loaded, 860768 samples
+[2024-05-11 00:00:48] Dataset chinese_short loaded, 860768 samples
+[2024-05-11 00:00:48] Dataset chinese_short loaded, 860768 samples
+[2024-05-11 00:00:48] Dataset chinese_short loaded, 860768 samples
+[2024-05-11 00:00:48] Dataset chinese_short loaded, 860768 samples
+[2024-05-11 00:00:48] Dataset chinese_short loaded, 860768 samples
+[2024-05-11 00:00:48] Dataset chinese_short loaded, 860768 samples
+[2024-05-11 00:00:49] Sing2SongDataset.__init__()
+[2024-05-11 00:00:49] Sing2SongDataset.__init__()
+[2024-05-11 00:00:49] Sing2SongDataset.__init__()
+[2024-05-11 00:00:49] Sing2SongDataset.__init__()
+[2024-05-11 00:00:49] Sing2SongDataset.__init__()
+[2024-05-11 00:00:49] Sing2SongDataset.__init__()
+[2024-05-11 00:00:49] Sing2SongDataset.__init__()
+[2024-05-11 00:00:56] Dataset english_short loaded, 1121849 samples
+[2024-05-11 00:00:56] Dataset english_short loaded, 1121849 samples
+[2024-05-11 00:00:56] Dataset english_short loaded, 1121849 samples
+[2024-05-11 00:00:56] Dataset english_short loaded, 1121849 samples
+[2024-05-11 00:00:56] Dataset english_short loaded, 1121849 samples
+[2024-05-11 00:00:56] Dataset english_short loaded, 1121849 samples
+[2024-05-11 00:00:56] Dataset english_short loaded, 1121849 samples
+[2024-05-11 00:00:57] Sing2SongDataset.__init__()
+[2024-05-11 00:00:57] Dataset chinese_short loaded, 20 samples
+[2024-05-11 00:00:57] Sing2SongDataset.__init__()
+[2024-05-11 00:00:57] Dataset chinese_short loaded, 20 samples
+[2024-05-11 00:00:57] Sing2SongDataset.__init__()
+[2024-05-11 00:00:57] Dataset chinese_short loaded, 20 samples
+[2024-05-11 00:00:57] Sing2SongDataset.__init__()
+[2024-05-11 00:00:57] Dataset chinese_short loaded, 20 samples
+[2024-05-11 00:00:57] Sing2SongDataset.__init__()
+[2024-05-11 00:00:57] Dataset chinese_short loaded, 20 samples
+[2024-05-11 00:00:57] Sing2SongDataset.__init__()
+[2024-05-11 00:00:57] Dataset chinese_short loaded, 20 samples
+[2024-05-11 00:00:57] Sing2SongDataset.__init__()
+[2024-05-11 00:00:57] Dataset chinese_short loaded, 20 samples
+[2024-05-11 00:00:58] Sing2SongDataset.__init__()
+[2024-05-11 00:00:58] Dataset english_short loaded, 20 samples
+[2024-05-11 00:00:58] Sing2SongDataset.__init__()
+[2024-05-11 00:00:58] Dataset english_short loaded, 20 samples
+[2024-05-11 00:00:58] Sing2SongDataset.__init__()
+[2024-05-11 00:00:58] Dataset english_short loaded, 20 samples
+[2024-05-11 00:00:58] Sing2SongDataset.__init__()
+[2024-05-11 00:00:58] Dataset english_short loaded, 20 samples
+[2024-05-11 00:00:58] Sing2SongDataset.__init__()
+[2024-05-11 00:00:58] Dataset english_short loaded, 20 samples
+[2024-05-11 00:00:58] Sing2SongDataset.__init__()
+[2024-05-11 00:00:58] Dataset english_short loaded, 20 samples
+[2024-05-11 00:00:58] Sing2SongDataset.__init__()
+[2024-05-11 00:00:58] Dataset english_short loaded, 20 samples
+Using GradScaler for autocast with float16
+Using GradScaler for autocast with float16
+Using GradScaler for autocast with float16
+Using GradScaler for autocast with float16
+Using GradScaler for autocast with float16
+Using GradScaler for autocast with float16
+Using GradScaler for autocast with float16
+Using GradScaler for autocast with float16
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/sing2song_source_sep/checkpoint/epoch-0002_step-0002600_loss-6.393090
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/sing2song_source_sep/checkpoint/epoch-0002_step-0002800_loss-6.387095
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/sing2song_source_sep/checkpoint/epoch-0002_step-0003000_loss-6.389092
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/sing2song_source_sep/checkpoint/epoch-0002_step-0003200_loss-6.378648
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/sing2song_source_sep/checkpoint/epoch-0002_step-0003400_loss-6.369839
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/sing2song_source_sep/checkpoint/epoch-0002_step-0003600_loss-6.361256
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/sing2song_source_sep/checkpoint/epoch-0002_step-0003800_loss-6.353840
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/sing2song_source_sep/checkpoint/epoch-0002_step-0004000_loss-6.341300
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/sing2song_source_sep/checkpoint/epoch-0002_step-0004200_loss-6.331774
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/sing2song_source_sep/checkpoint/epoch-0002_step-0004400_loss-6.319111
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/sing2song_source_sep/checkpoint/epoch-0002_step-0004600_loss-6.304412
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/sing2song_source_sep/checkpoint/epoch-0002_step-0004800_loss-6.292858
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/sing2song_source_sep/checkpoint/epoch-0002_step-0005000_loss-6.279477
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/sing2song_source_sep/checkpoint/epoch-0002_step-0005200_loss-6.266020
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/sing2song_source_sep/checkpoint/epoch-0002_step-0005400_loss-6.254300
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/sing2song_source_sep/checkpoint/epoch-0002_step-0005600_loss-6.242133
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/sing2song_source_sep/checkpoint/epoch-0002_step-0005800_loss-6.229140
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/sing2song_source_sep/checkpoint/epoch-0002_step-0006000_loss-6.219766
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/sing2song_source_sep/checkpoint/epoch-0002_step-0006200_loss-6.209688
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/sing2song_source_sep/checkpoint/epoch-0002_step-0006400_loss-6.198601
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/sing2song_source_sep/checkpoint/epoch-0002_step-0006600_loss-6.185199
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/sing2song_source_sep/checkpoint/epoch-0002_step-0006800_loss-6.174230
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/sing2song_source_sep/checkpoint/epoch-0002_step-0007000_loss-6.162257
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/sing2song_source_sep/checkpoint/epoch-0002_step-0007200_loss-6.152328
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/sing2song_source_sep/checkpoint/epoch-0002_step-0007400_loss-6.141437
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/sing2song_source_sep/checkpoint/epoch-0002_step-0007600_loss-6.131119
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/sing2song_source_sep/checkpoint/epoch-0002_step-0007800_loss-6.121586
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/sing2song_source_sep/checkpoint/epoch-0002_step-0008000_loss-6.111910
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/sing2song_source_sep/checkpoint/epoch-0002_step-0008200_loss-6.102615
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/sing2song_source_sep/checkpoint/epoch-0002_step-0008400_loss-6.093460
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/sing2song_source_sep/checkpoint/epoch-0002_step-0008600_loss-6.085164
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/sing2song_source_sep/checkpoint/epoch-0002_step-0008800_loss-6.077036
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/sing2song_source_sep/checkpoint/epoch-0002_step-0009000_loss-6.068665
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/sing2song_source_sep/checkpoint/epoch-0002_step-0009200_loss-6.059642
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/sing2song_source_sep/checkpoint/epoch-0002_step-0009400_loss-6.051636
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/sing2song_source_sep/checkpoint/epoch-0002_step-0009600_loss-6.044463
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/sing2song_source_sep/checkpoint/epoch-0002_step-0009800_loss-6.036289
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/sing2song_source_sep/checkpoint/epoch-0002_step-0010000_loss-6.029013
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/sing2song_source_sep/checkpoint/epoch-0002_step-0010200_loss-6.020897
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/sing2song_source_sep/checkpoint/epoch-0002_step-0010400_loss-6.012743
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/sing2song_source_sep/checkpoint/epoch-0002_step-0010600_loss-6.005672
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/sing2song_source_sep/checkpoint/epoch-0002_step-0010800_loss-5.999197
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/sing2song_source_sep/checkpoint/epoch-0002_step-0011000_loss-5.993062
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/sing2song_source_sep/checkpoint/epoch-0002_step-0011200_loss-5.986644
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/sing2song_source_sep/checkpoint/epoch-0002_step-0011400_loss-5.981421
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/sing2song_source_sep/checkpoint/epoch-0002_step-0011600_loss-5.975220
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/sing2song_source_sep/checkpoint/epoch-0002_step-0011800_loss-5.969728
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/sing2song_source_sep/checkpoint/epoch-0002_step-0012000_loss-5.963681
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/sing2song_source_sep/checkpoint/epoch-0002_step-0012200_loss-5.958160
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/sing2song_source_sep/checkpoint/epoch-0002_step-0012400_loss-5.951941
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/sing2song_source_sep/checkpoint/epoch-0002_step-0012600_loss-5.945190
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/sing2song_source_sep/checkpoint/epoch-0002_step-0012800_loss-5.939090
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/sing2song_source_sep/checkpoint/epoch-0002_step-0013000_loss-5.932956
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/sing2song_source_sep/checkpoint/epoch-0002_step-0013200_loss-5.927558
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/sing2song_source_sep/checkpoint/epoch-0002_step-0013400_loss-5.922657
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/sing2song_source_sep/checkpoint/epoch-0002_step-0013600_loss-5.916791
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/sing2song_source_sep/checkpoint/epoch-0002_step-0013800_loss-5.911388
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/sing2song_source_sep/checkpoint/epoch-0002_step-0014000_loss-5.905975
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/sing2song_source_sep/checkpoint/epoch-0002_step-0014200_loss-5.900857
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/sing2song_source_sep/checkpoint/epoch-0002_step-0014400_loss-5.895714
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/sing2song_source_sep/checkpoint/epoch-0002_step-0014600_loss-5.890949
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/sing2song_source_sep/checkpoint/epoch-0002_step-0014800_loss-5.885365
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/sing2song_source_sep/checkpoint/epoch-0002_step-0015000_loss-5.879928
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/sing2song_source_sep/checkpoint/epoch-0002_step-0015200_loss-5.874483
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/sing2song_source_sep/checkpoint/epoch-0002_step-0015400_loss-5.869529
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/sing2song_source_sep/checkpoint/epoch-0002_step-0015600_loss-5.864965
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/sing2song_source_sep/checkpoint/epoch-0002_step-0015800_loss-5.859903
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/sing2song_source_sep/checkpoint/epoch-0002_step-0016000_loss-5.855053
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/sing2song_source_sep/checkpoint/epoch-0002_step-0016200_loss-5.850374
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/sing2song_source_sep/checkpoint/epoch-0002_step-0016400_loss-5.846081
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/sing2song_source_sep/checkpoint/epoch-0002_step-0016600_loss-5.841005
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/sing2song_source_sep/checkpoint/epoch-0002_step-0016800_loss-5.836551
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/sing2song_source_sep/checkpoint/epoch-0002_step-0017000_loss-5.831751
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/sing2song_source_sep/checkpoint/epoch-0002_step-0017200_loss-5.827402
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/sing2song_source_sep/checkpoint/epoch-0002_step-0017400_loss-5.822816
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/sing2song_source_sep/checkpoint/epoch-0002_step-0017600_loss-5.818480
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/sing2song_source_sep/checkpoint/epoch-0002_step-0017800_loss-5.813992
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/sing2song_source_sep/checkpoint/epoch-0002_step-0017891_loss-5.811759
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/sing2song_source_sep/checkpoint/epoch-0003_step-0018000_loss-5.475554
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/sing2song_source_sep/checkpoint/epoch-0003_step-0018200_loss-5.457747
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/sing2song_source_sep/checkpoint/epoch-0003_step-0018400_loss-5.455297
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/sing2song_source_sep/checkpoint/epoch-0003_step-0018600_loss-5.456633
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/sing2song_source_sep/checkpoint/epoch-0003_step-0018800_loss-5.450210
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/sing2song_source_sep/checkpoint/epoch-0003_step-0019000_loss-5.444074
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/sing2song_source_sep/checkpoint/epoch-0003_step-0019200_loss-5.441634
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/sing2song_source_sep/checkpoint/epoch-0003_step-0019400_loss-5.440741
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/sing2song_source_sep/checkpoint/epoch-0003_step-0019600_loss-5.435560
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/sing2song_source_sep/checkpoint/epoch-0003_step-0019800_loss-5.433011
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/sing2song_source_sep/checkpoint/epoch-0003_step-0020000_loss-5.427568
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/sing2song_source_sep/checkpoint/epoch-0003_step-0020200_loss-5.423702
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/sing2song_source_sep/checkpoint/epoch-0003_step-0020400_loss-5.420560
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/sing2song_source_sep/checkpoint/epoch-0003_step-0020600_loss-5.415697
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/sing2song_source_sep/checkpoint/epoch-0003_step-0020800_loss-5.413161
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/sing2song_source_sep/checkpoint/epoch-0003_step-0021000_loss-5.409806
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/sing2song_source_sep/checkpoint/epoch-0003_step-0021200_loss-5.406628
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/sing2song_source_sep/checkpoint/epoch-0003_step-0021400_loss-5.404598
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/sing2song_source_sep/checkpoint/epoch-0003_step-0021600_loss-5.404196
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/sing2song_source_sep/checkpoint/epoch-0003_step-0021800_loss-5.402071
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/sing2song_source_sep/checkpoint/epoch-0003_step-0022000_loss-5.398888
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/sing2song_source_sep/checkpoint/epoch-0003_step-0022200_loss-5.394138
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/sing2song_source_sep/checkpoint/epoch-0003_step-0022400_loss-5.390569
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/sing2song_source_sep/checkpoint/epoch-0003_step-0022600_loss-5.387742
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/sing2song_source_sep/checkpoint/epoch-0003_step-0022800_loss-5.385468
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/sing2song_source_sep/checkpoint/epoch-0003_step-0023000_loss-5.381877
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/sing2song_source_sep/checkpoint/epoch-0003_step-0023200_loss-5.378349
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/sing2song_source_sep/checkpoint/epoch-0003_step-0023400_loss-5.375340
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/sing2song_source_sep/checkpoint/epoch-0003_step-0023600_loss-5.371419
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/sing2song_source_sep/checkpoint/epoch-0003_step-0023800_loss-5.368305
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/sing2song_source_sep/checkpoint/epoch-0003_step-0024000_loss-5.365089
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/sing2song_source_sep/checkpoint/epoch-0003_step-0024200_loss-5.362381
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/sing2song_source_sep/checkpoint/epoch-0003_step-0024400_loss-5.359122
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/sing2song_source_sep/checkpoint/epoch-0003_step-0024600_loss-5.355488
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/sing2song_source_sep/checkpoint/epoch-0003_step-0024800_loss-5.351474
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/sing2song_source_sep/checkpoint/epoch-0003_step-0025000_loss-5.349256
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/sing2song_source_sep/checkpoint/epoch-0003_step-0025200_loss-5.345819
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/sing2song_source_sep/checkpoint/epoch-0003_step-0025400_loss-5.342927
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/sing2song_source_sep/checkpoint/epoch-0003_step-0025600_loss-5.339067
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/sing2song_source_sep/checkpoint/epoch-0003_step-0025800_loss-5.335008
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/sing2song_source_sep/checkpoint/epoch-0003_step-0026000_loss-5.330911
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/sing2song_source_sep/checkpoint/epoch-0003_step-0026200_loss-5.328031
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/sing2song_source_sep/checkpoint/epoch-0003_step-0026400_loss-5.325101
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/sing2song_source_sep/checkpoint/epoch-0003_step-0026600_loss-5.321806
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/sing2song_source_sep/checkpoint/epoch-0003_step-0026800_loss-5.319430
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/sing2song_source_sep/checkpoint/epoch-0003_step-0027000_loss-5.316972
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/sing2song_source_sep/checkpoint/epoch-0003_step-0027200_loss-5.313930
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/sing2song_source_sep/checkpoint/epoch-0003_step-0027400_loss-5.311052
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/sing2song_source_sep/checkpoint/epoch-0003_step-0027600_loss-5.307982
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/sing2song_source_sep/checkpoint/epoch-0003_step-0027800_loss-5.304159
+save checkpoint in /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/sing2song_source_sep/checkpoint/epoch-0003_step-0028000_loss-5.300543

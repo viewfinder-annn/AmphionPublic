@@ -1,0 +1,290 @@
+{
+        // amphion-related
+        "model_type": "MusicGen",
+        // Specify the output root path to save model ckpts and logs
+        "log_dir": "ckpts/ttm",
+        "dataset": [
+                "english"
+        ],
+        "dataset_path": {
+                // TODO: Fill in your dataset path
+                // "musiccaps": "/home/wangyuancheng.p/zja/music/MusicCaps",
+                // "msd": "/mnt/data2/zhangxueyao/million-song-dataset",
+        },
+        "use_custom_dataset": [],
+        "preprocess": {
+                // Specify the output root path to save the processed data 
+                "processed_dir": "/nvme/data/zja/netease/dataset",
+                // Audio / FFT info
+                "sample_rate": 32000,
+                "audio_channels": 1,
+                "segment_duration": 20,
+                "n_mel": 512,
+                "n_fft": 2048,
+                "win_size": 2048,
+                "hop_size": 512,
+                "fmin": 0,
+                "fmax": 16000,
+                "use_caption": false,
+                "use_ref_wav": false,
+                "use_lyric": true,
+                "train_file": "train.json",
+                "valid_file": "test.json",
+        },
+        "train": {
+                "ddp": true,
+                "use_audiocraft_dataset": false,
+                // -1 means no limit
+                "train_num_samples": 100000,
+                // -1 means no limit
+                "valid_num_samples": 8,
+                "batch_size": 24,
+                "gradient_accumulation_step": 1,
+                "tracker": [
+                        "tensorboard"
+                ],
+                "random_seed": 970227,
+                // -1 means no limit
+                "max_epoch": -1,
+                // for step-based checkpoint
+                "save_checkpoint_stride_step": [
+                        500,
+                ],
+                "keep_last_step": [
+                        1,
+                ],
+                "save_checkpoint_stride": [
+                        1,
+                ],
+                // unit is epoch
+                "keep_last": [
+                        2,
+                ],
+                // -1 means infinite, if one number will broadcast
+                "run_eval": [
+                        false,
+                        true
+                ],
+                // TODO: EMA
+                "optimizer": "AdamW",
+                "adamw": {
+                        "lr": 4e-4,
+                        "betas": [
+                                0.9,
+                                0.95,
+                        ],
+                },
+                "scheduler": "None",
+                "warmup_steps": 5000,
+                "total_training_steps": 10000000,
+                "grad_clip_thresh": 1.0,
+        },
+        "inference": {
+                "batch_size": 1,
+        },
+        // original
+        "audiocraft": {
+                "device": "cuda",
+                "dtype": "float32",
+                "autocast": true,
+                "autocast_dtype": "float16",
+                "seed": 10086,
+                "show": false,
+                "continue_from": null,
+                "execute_only": null,
+                "execute_inplace": false,
+                // "benchmark_no_load": false,
+                "efficient_attention_backend": "torch",
+                "datasource": {
+                        "max_sample_rate": 32000,
+                        "max_channels": 2,
+                        "train": "/home/wangyuancheng.p/zja/audiocraft/egs/musiccaps/train",
+                        "valid": "/home/wangyuancheng.p/zja/audiocraft/egs/musiccaps/val",
+                        "evaluate": "/home/wangyuancheng.p/zja/audiocraft/egs/musiccaps/val",
+                        "generate": "/home/wangyuancheng.p/zja/audiocraft/egs/musiccaps/val"
+                },
+                "fsdp": {
+                        "use": false,
+                        "param_dtype": "float16",
+                        "reduce_dtype": "float32",
+                        "buffer_dtype": "float32",
+                        "sharding_strategy": "shard_grad_op",
+                        "per_block": true
+                },
+                "dataset": {
+                        "batch_size": 4,
+                        "num_workers": 1,
+                        "segment_duration": 20,
+                        "num_samples": null,
+                        "return_info": true,
+                        "shuffle": false,
+                        "sample_on_duration": false,
+                        "sample_on_weight": false,
+                        "min_segment_ratio": 0.8,
+                        "train": {
+                                "num_samples": 5417,
+                                "shuffle": true,
+                                "shuffle_seed": 0,
+                                "permutation_on_files": false,
+                                "merge_text_p": 0.1,
+                                "drop_desc_p": 0.1,
+                                "drop_other_p": 0.1
+                        },
+                        "valid": {
+                                "num_samples": 20
+                        },
+                        "evaluate": {
+                                "num_samples": 10000
+                        },
+                        "generate": {
+                                "num_samples": 50,
+                                "return_info": true
+                        }
+                },
+                "classifier_free_guidance": {
+                        "training_dropout": 0.3,
+                        "inference_coef": 3.0
+                },
+                "attribute_dropout": {},
+                "fuser": {
+                        "cross_attention_pos_emb": false,
+                        "cross_attention_pos_emb_scale": 1,
+                        "sum": [],
+                        "prepend": [],
+                        "cross": [
+                                "lyric"
+                        ],
+                        "input_interpolate": []
+                },
+                "conditioners": {
+                        "lyric": {
+                                "model": "bert",
+                                "bert": {
+                                        "name": "bert-base-uncased",
+                                        "finetune": false,
+                                        "word_dropout": 0.2,
+                                        "normalize_text": false
+                                }
+                        }
+                },
+                "sample_rate": 32000,
+                "channels": 1,
+                "compression_model_checkpoint": "//pretrained/facebook/encodec_32khz",
+                "compression_model_n_q": null,
+                "tokens": {
+                        "padding_with_special_token": false
+                },
+                "interleave_stereo_codebooks": {
+                        "use": false,
+                        "per_timestep": false
+                },
+                "metrics": {
+                        "fad": {
+                                "use_gt": false,
+                                "model": "tf",
+                                "tf": {
+                                        "bin": null,
+                                        "model_path": "//reference/fad/vggish_model.ckpt"
+                                }
+                        },
+                        "kld": {
+                                "use_gt": false,
+                                "model": "passt",
+                                "passt": {
+                                        "pretrained_length": 20
+                                }
+                        },
+                        "text_consistency": {
+                                "use_gt": false,
+                                "model": "clap",
+                                "clap": {
+                                        "model_path": "//reference/clap/music_audioset_epoch_15_esc_90.14.pt",
+                                        "model_arch": "HTSAT-base",
+                                        "enable_fusion": false
+                                }
+                        },
+                        "chroma_cosine": {
+                                "use_gt": false,
+                                "model": "chroma_base",
+                                "chroma_base": {
+                                        "sample_rate": 32000,
+                                        "n_chroma": 12,
+                                        "radix2_exp": 14,
+                                        "argmax": true
+                                }
+                        }
+                },
+                "lm_model": "transformer_lm",
+                "codebooks_pattern": {
+                        "modeling": "delay",
+                        "delay": {
+                                "delays": [
+                                        0,
+                                        1,
+                                        2,
+                                        3
+                                ],
+                                "flatten_first": 0,
+                                "empty_initial": 0
+                        },
+                        "unroll": {
+                                "flattening": [
+                                        0,
+                                        1,
+                                        2,
+                                        3
+                                ],
+                                "delays": [
+                                        0,
+                                        0,
+                                        0,
+                                        0
+                                ]
+                        },
+                        "music_lm": {
+                                "group_by": 2
+                        },
+                        "coarse_first": {
+                                "delays": [
+                                        0,
+                                        0,
+                                        0
+                                ]
+                        }
+                },
+                "transformer_lm": {
+                        "dim": 1024,
+                        "num_heads": 16,
+                        "num_layers": 12,
+                        "hidden_scale": 4,
+                        "n_q": 4,
+                        "card": 2048,
+                        "dropout": 0.0,
+                        "emb_lr": null,
+                        "activation": "gelu",
+                        "norm_first": true,
+                        "bias_ff": false,
+                        "bias_attn": false,
+                        "bias_proj": false,
+                        "past_context": null,
+                        "causal": true,
+                        "custom": false,
+                        "memory_efficient": true,
+                        "attention_as_float32": false,
+                        "layer_scale": null,
+                        "positional_embedding": "sin",
+                        "xpos": false,
+                        "checkpointing": "none",
+                        "weight_init": "gaussian",
+                        "depthwise_init": "current",
+                        "zero_bias_init": true,
+                        "norm": "layer_norm",
+                        "cross_attention": false,
+                        "qk_layer_norm": false,
+                        "qk_layer_norm_cross": false,
+                        "attention_dropout": null,
+                        "kv_repeat": 1,
+                        "two_step_cfg": false
+                }
+        }
+}

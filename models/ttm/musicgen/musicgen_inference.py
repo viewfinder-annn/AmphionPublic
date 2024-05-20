@@ -365,9 +365,16 @@ class MusicGenInference:
             if len(texts) > 1:
                 for i in tqdm(range(0, len(texts), self.cfg.inference.batch_size), desc="Generating"):
                     batch_text = texts[i:i+self.cfg.inference.batch_size]
-                    audios.extend(self.generate(batch_text, waveforms))
+                    # audios.extend(self.generate(batch_text, waveforms))
+                    for idx, audio in enumerate(self.generate(batch_text, waveforms)):
+                        file = os.path.join(target_dir, f"{i+idx}.wav")
+                        torchaudio.save(file, audio.cpu(), self.sample_rate)
+                        with open(file.replace(".wav", ".txt"), "w") as f:
+                            f.write(batch_text[idx])
             else:
                 audios = self.generate(texts, waveforms)
-            for i, audio in enumerate(audios):
-                file = os.path.join(target_dir, f"{texts[i][:100]}.wav")
-                torchaudio.save(file, audio.cpu(), self.sample_rate)
+                for i, audio in enumerate(self.generate(texts, waveforms)):
+                    file = os.path.join(target_dir, f"{i}.wav")
+                    torchaudio.save(file, audio.cpu(), self.sample_rate)
+                    with open(file.replace(".wav", ".txt"), "w") as f:
+                        f.write(batch_text[i])

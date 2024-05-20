@@ -25,10 +25,6 @@ from modules.audiocraft.modules.conditioners import (
 
 from modules.audiocraft.data.audio import audio_read
 from modules.audiocraft.data.audio_utils import convert_audio
-import time
-
-from demucs import pretrained
-from demucs.apply import apply_model
 
 class ConditionInfo:
     def __init__(self, text, wav, wav_path, device, sample_rate):
@@ -49,7 +45,7 @@ class ConditionInfo:
 class Sing2SongDataset:
     def __init__(self, cfg, dataset, is_valid=False):
         # BaseOnlineDataset.__init__(self, cfg, dataset, is_valid=is_valid)
-        print(f"[{time.strftime('%Y-%m-%d %H:%M:%S', time.localtime())}] Sing2SongDataset.__init__()")
+
         self.cfg = cfg
         self.device = self.cfg.audiocraft.device
         self.sample_rate = self.cfg.preprocess.sample_rate
@@ -72,51 +68,6 @@ class Sing2SongDataset:
             self_wav(str): self wav path(for example accompaniment, music want to generate)
         """
 
-        print(f"[{time.strftime('%Y-%m-%d %H:%M:%S', time.localtime())}] Dataset {dataset} loaded, {len(self.metadata)} samples")
-        self.metadata_order_by_song = None
-        if "lyric" in self.metadata[0]:
-            self.demucs = pretrained.get_model('htdemucs')
-    
-    def load_next_song(self):
-        if self.current_song_index < len(self.metadata_order_by_song):
-            self.current_song_samples = self.process_song(list(self.metadata_order_by_song.keys())[self.current_song_index])
-            self.current_song_index += 1
-        else:
-            self.current_song_samples = None
-    
-    # Added logic for stem dataset
-    '''
-        {
-            "dataset": "moisesdb",
-            "action": "remove",
-            "category": "vocal_lead",
-            "ref_wav": [
-                "vocal_lead",
-                "drum"
-            ],
-            "self_wav": [
-                "drum"
-            ],
-            "stem_dir": "/nvme/data/zja/stem_v1/wav/Sunny SIde Up_Ding Dong Bell",
-            "start": 32.0
-        }
-    '''
-    def process_song(self, song):
-        song_stems = {}
-        for wav in os.listdir(song):
-            print(f"[{time.strftime('%Y-%m-%d %H:%M:%S', time.localtime())}] Processing {wav} in {song}")
-            if wav.endswith(".wav"):
-                self_wav_path = os.path.join(song, wav)
-                self_wav, sr = audio_read(self_wav_path)
-                self_wav = convert_audio(self_wav, sr, self.sample_rate, self.cfg.preprocess.audio_channels)
-                song_stems[wav[:-4]] = self_wav
-        self.song_stems = song_stems
-        song_metas = self.metadata_order_by_song[song]
-        return song_metas
-
-    def __len__(self):
-        return len(self.metadata)
-
     def get_metadata(self):
         with open(self.metafile_path, "r", encoding="utf-8") as f:
             metadata = json.load(f)
@@ -124,39 +75,47 @@ class Sing2SongDataset:
         return metadata
 
     def __getitem__(self, index):
-        if self.metadata_order_by_song is not None:
-            # print(index, self.passed_index, len(self.current_song_samples))
-            if index - self.passed_index >= len(self.current_song_samples):
-                self.passed_index += len(self.current_song_samples)
-                self.load_next_song()
-                return self.__getitem__(index)
-            utt_info = self.current_song_samples[index - self.passed_index]
-        else:
-            utt_info = self.metadata[index]
+        utt_info = self.metadata[index]
 
         text_condition = {}
         wav_condition = {}
         wav_path = {}
         
+
+        # Added logic for stem dataset
+        '''
+            {
+                "dataset": "moisesdb",
+                "action": "remove",
+                "category": "vocal_lead",
+                "ref_wav": [
+                    "vocal_lead",
+                    "drum"
+                ],
+                "self_wav": [
+                    "drum"
+                ],
+                "stem_dir": "/nvme/data/zja/stem_v1/wav/Sunny SIde Up_Ding Dong Bell",
+                "start": 32.0
+            }
+        '''
         if "stem_dir" in utt_info:
             # ref_wav
             ref_wav = None
             for ref_wav_name in utt_info["ref_wav"]:
-                ref_wav_tmp = self.song_stems[ref_wav_name][:, int(utt_info["start"] * self.sample_rate):int((utt_info["start"] + self.cfg.preprocess.segment_duration) * self.sample_rate)]
-                if ref_wav_tmp.shape[-1] < self.cfg.preprocess.segment_duration * self.sample_rate:
-                    ref_wav_tmp = torch.cat([ref_wav_tmp, torch.zeros([self.cfg.preprocess.audio_channels, self.cfg.preprocess.segment_duration * self.sample_rate - ref_wav_tmp.shape[-1]], dtype=ref_wav_tmp.dtype, device=ref_wav_tmp.device)], dim=-1)
+                ref_wav_path = os.path.join(utt_info["stem_dir"], ref_wav_name + ".wav")
+                ref_wav_tmp, sr = audio_read(ref_wav_path, seek_time=utt_info["start"], duration=self.cfg.preprocess.segment_duration, pad=True)
                 ref_wav = ref_wav_tmp if ref_wav is None else ref_wav + ref_wav_tmp
-            ref_wav.to(self.device)
+            ref_wav = convert_audio(ref_wav, sr, self.sample_rate, self.cfg.preprocess.audio_channels)
             wav_condition["ref_wav"] = ref_wav
             wav_path["ref_wav"] = utt_info["stem_dir"]
             # self_wav
             self_wav = None
             for self_wav_name in utt_info["self_wav"]:
-                self_wav_tmp = self.song_stems[self_wav_name][:, int(utt_info["start"] * self.sample_rate):int((utt_info["start"] + self.cfg.preprocess.segment_duration) * self.sample_rate)]
-                if self_wav_tmp.shape[-1] < self.cfg.preprocess.segment_duration * self.sample_rate:
-                    self_wav_tmp = torch.cat([self_wav_tmp, torch.zeros([self.cfg.preprocess.audio_channels, self.cfg.preprocess.segment_duration * self.sample_rate - self_wav_tmp.shape[-1]], dtype=self_wav_tmp.dtype, device=self_wav_tmp.device)], dim=-1)
+                self_wav_path = os.path.join(utt_info["stem_dir"], self_wav_name + ".wav")
+                self_wav_tmp, sr = audio_read(self_wav_path, seek_time=utt_info["start"], duration=self.cfg.preprocess.segment_duration, pad=True)
                 self_wav = self_wav_tmp if self_wav is None else self_wav + self_wav_tmp
-            self_wav.to(self.device)
+            self_wav = convert_audio(self_wav, sr, self.sample_rate, self.cfg.preprocess.audio_channels)
             wav_condition["self_wav"] = self_wav
             wav_path["self_wav"] = utt_info["stem_dir"]
             # TODO: preprocess
@@ -166,32 +125,6 @@ class Sing2SongDataset:
             text_condition["category"] = category
             condition_info = ConditionInfo(text_condition, wav_condition, wav_path, self.device, self.sample_rate)
             return self_wav, ref_wav, condition_info
-        
-        if "lyric" in utt_info:
-            self_wav, sr = audio_read(utt_info["self_wav"], seek_time=utt_info["start"], duration=self.cfg.preprocess.segment_duration, pad=True)
-            if self_wav.dim() == 1:
-                self_wav = self_wav.unsqueeze(0)
-            res = apply_model(self.demucs, self_wav.unsqueeze(0), device=self.device) # [1,4,2,duration*sr] 
-            res.squeeze_(0)
-            ref_wav = res[-1]
-            ref_wav = convert_audio(ref_wav, sr, self.sample_rate, self.cfg.preprocess.audio_channels)
-            wav_condition["ref_wav"] = ref_wav
-            wav_path["ref_wav"] = utt_info["self_wav"]
-            self_wav = res[:-1].sum(0)
-            self_wav = convert_audio(self_wav, sr, self.sample_rate, self.cfg.preprocess.audio_channels)
-            
-            # add noise to ref_wav(vocal)
-            noise = torch.randn_like(self_wav)
-            # -45dB
-            noise = noise * 10**(-45/20)
-            ref_wav = ref_wav + noise
-            
-            wav_condition["self_wav"] = self_wav
-            wav_path["self_wav"] = utt_info["self_wav"]
-            text_condition["lyric"] = utt_info["lyric"]
-            condition_info = ConditionInfo(text_condition, wav_condition, wav_path, self.device, self.sample_rate)
-            return self_wav, ref_wav, condition_info
-        
         # self_wav
         self_wav, sr = audio_read(utt_info["self_wav"])
         self_wav = convert_audio(self_wav, sr, self.sample_rate, self.cfg.preprocess.audio_channels)

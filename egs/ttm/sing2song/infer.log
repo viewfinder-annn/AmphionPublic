@@ -1,0 +1,185 @@
+Exprimental Configuration File: egs/ttm/sing2song/exp_config_chinese.json
+egs/ttm/sing2song/run.sh: line 126: waveform: command not found
+The following values were not passed to `accelerate launch` and had defaults used instead:
+	`--num_processes` was set to a value of `1`
+	`--num_machines` was set to a value of `1`
+	`--mixed_precision` was set to a value of `'no'`
+	`--dynamo_backend` was set to a value of `'no'`
+To avoid this warning pass in values for each of the problematic parameters or run `accelerate config`.
+2024-05-09 18:38:26,670 : ==========================New Starting Here==============================
+2024-05-09 18:38:32,550 : Compression model has 4 codebooks with 2048 cardinality, and a framerate of 50
+2024-05-09 18:38:33,139 : Initializing accelerate...
+Detected kernel version 3.10.0, which is below the recommended minimum of 5.5.0; this can cause the process to hang. It is recommended to upgrade the kernel to the minimum version or higher.
+2024-05-09 18:38:33,146 : Initializing accelerate done in 7.528ms
+2024-05-09 18:38:33,146 : Loading checkpoint...
+2024-05-09 18:38:33,853 : Load checkpoint from ckpts/ttm/sing2song_chinese_debug/checkpoint/epoch-0053_step-0000540_loss-1.930860
+2024-05-09 18:38:33,853 : Loading checkpoint done in 706.656ms
+args:  Namespace(config='egs/ttm/sing2song/exp_config_chinese.json', text='/home/wangyuancheng.p/zja/Amphion/ckpts/ttm/sing2song_chinese_debug/debug_train_sample/info.json', waveform='', infer_expt_dir='ckpts/ttm/sing2song_chinese_debug', output_dir='ckpts/ttm/sing2song_chinese_debug/result', file_list=True, mix=False, local_rank=device(type='cuda'))
+Traceback (most recent call last):
+  File "/home/wangyuancheng.p/zja/Amphion/bins/ttm/inference.py", line 98, in <module>
+    main()
+  File "/home/wangyuancheng.p/zja/Amphion/bins/ttm/inference.py", line 91, in main
+    inferencer = build_inference(args, cfg, cfg_path=args.config)
+  File "/home/wangyuancheng.p/zja/Amphion/bins/ttm/inference.py", line 26, in build_inference
+    inference = inference_class(args, cfg, cfg_path=cfg_path)
+  File "/home/wangyuancheng.p/zja/Amphion/models/ttm/sing2song/sing2song_inference.py", line 78, in __init__
+    self.generation_params = self.cfg.inference.generation_params
+AttributeError: 'JsonHParams' object has no attribute 'generation_params'
+Traceback (most recent call last):
+  File "/home/wangyuancheng.p/miniconda3/envs/amphion_music/bin/accelerate", line 8, in <module>
+    sys.exit(main())
+  File "/home/wangyuancheng.p/miniconda3/envs/amphion_music/lib/python3.9/site-packages/accelerate/commands/accelerate_cli.py", line 47, in main
+    args.func(args)
+  File "/home/wangyuancheng.p/miniconda3/envs/amphion_music/lib/python3.9/site-packages/accelerate/commands/launch.py", line 994, in launch_command
+    simple_launcher(args)
+  File "/home/wangyuancheng.p/miniconda3/envs/amphion_music/lib/python3.9/site-packages/accelerate/commands/launch.py", line 636, in simple_launcher
+    raise subprocess.CalledProcessError(returncode=process.returncode, cmd=cmd)
+subprocess.CalledProcessError: Command '['/home/wangyuancheng.p/miniconda3/envs/amphion_music/bin/python', '/home/wangyuancheng.p/zja/Amphion/bins/ttm/inference.py', '--config', 'egs/ttm/sing2song/exp_config_chinese.json', '--infer_expt_dir', 'ckpts/ttm/sing2song_chinese_debug', '--output_dir', 'ckpts/ttm/sing2song_chinese_debug/result', '--text=/home/wangyuancheng.p/zja/Amphion/ckpts/ttm/sing2song_chinese_debug/debug_train_sample/info.json', '--waveform=', '--file_list']' returned non-zero exit status 1.
+Exprimental Configuration File: egs/ttm/sing2song/exp_config_chinese.json
+egs/ttm/sing2song/run.sh: line 126: waveform: command not found
+The following values were not passed to `accelerate launch` and had defaults used instead:
+	`--num_processes` was set to a value of `1`
+	`--num_machines` was set to a value of `1`
+	`--mixed_precision` was set to a value of `'no'`
+	`--dynamo_backend` was set to a value of `'no'`
+To avoid this warning pass in values for each of the problematic parameters or run `accelerate config`.
+2024-05-09 18:41:00,205 : ==========================New Starting Here==============================
+2024-05-09 18:41:06,477 : Compression model has 4 codebooks with 2048 cardinality, and a framerate of 50
+2024-05-09 18:41:07,047 : Initializing accelerate...
+Detected kernel version 3.10.0, which is below the recommended minimum of 5.5.0; this can cause the process to hang. It is recommended to upgrade the kernel to the minimum version or higher.
+2024-05-09 18:41:07,055 : Initializing accelerate done in 7.802ms
+2024-05-09 18:41:07,055 : Loading checkpoint...
+2024-05-09 18:41:07,804 : Load checkpoint from ckpts/ttm/sing2song_chinese_debug/checkpoint/epoch-0065_step-0000660_loss-1.606404
+2024-05-09 18:41:07,804 : Loading checkpoint done in 749.475ms
+args:  Namespace(config='egs/ttm/sing2song/exp_config_chinese.json', text='/home/wangyuancheng.p/zja/Amphion/ckpts/ttm/sing2song_chinese_debug/debug_train_sample/info.json', waveform='', infer_expt_dir='ckpts/ttm/sing2song_chinese_debug', output_dir='ckpts/ttm/sing2song_chinese_debug/result', file_list=True, mix=False, local_rank=device(type='cuda'))
+Generating:   0%|          | 0/8 [00:00<?, ?it/s]Generating:   0%|          | 0/8 [00:14<?, ?it/s]
+Traceback (most recent call last):
+  File "/home/wangyuancheng.p/zja/Amphion/bins/ttm/inference.py", line 98, in <module>
+    main()
+  File "/home/wangyuancheng.p/zja/Amphion/bins/ttm/inference.py", line 94, in main
+    inferencer.inference()
+  File "/home/wangyuancheng.p/zja/Amphion/models/ttm/sing2song/sing2song_inference.py", line 317, in inference
+    mix = prompt_audio.cpu() + audio.cpu()
+RuntimeError: The size of tensor a (320000) must match the size of tensor b (640000) at non-singleton dimension 1
+Traceback (most recent call last):
+  File "/home/wangyuancheng.p/miniconda3/envs/amphion_music/bin/accelerate", line 8, in <module>
+    sys.exit(main())
+  File "/home/wangyuancheng.p/miniconda3/envs/amphion_music/lib/python3.9/site-packages/accelerate/commands/accelerate_cli.py", line 47, in main
+    args.func(args)
+  File "/home/wangyuancheng.p/miniconda3/envs/amphion_music/lib/python3.9/site-packages/accelerate/commands/launch.py", line 994, in launch_command
+    simple_launcher(args)
+  File "/home/wangyuancheng.p/miniconda3/envs/amphion_music/lib/python3.9/site-packages/accelerate/commands/launch.py", line 636, in simple_launcher
+    raise subprocess.CalledProcessError(returncode=process.returncode, cmd=cmd)
+subprocess.CalledProcessError: Command '['/home/wangyuancheng.p/miniconda3/envs/amphion_music/bin/python', '/home/wangyuancheng.p/zja/Amphion/bins/ttm/inference.py', '--config', 'egs/ttm/sing2song/exp_config_chinese.json', '--infer_expt_dir', 'ckpts/ttm/sing2song_chinese_debug', '--output_dir', 'ckpts/ttm/sing2song_chinese_debug/result', '--text=/home/wangyuancheng.p/zja/Amphion/ckpts/ttm/sing2song_chinese_debug/debug_train_sample/info.json', '--waveform=', '--file_list']' returned non-zero exit status 1.
+Exprimental Configuration File: egs/ttm/sing2song/exp_config_chinese.json
+egs/ttm/sing2song/run.sh: line 126: waveform: command not found
+The following values were not passed to `accelerate launch` and had defaults used instead:
+	`--num_processes` was set to a value of `1`
+	`--num_machines` was set to a value of `1`
+	`--mixed_precision` was set to a value of `'no'`
+	`--dynamo_backend` was set to a value of `'no'`
+To avoid this warning pass in values for each of the problematic parameters or run `accelerate config`.
+2024-05-09 18:48:49,282 : ==========================New Starting Here==============================
+2024-05-09 18:48:55,151 : Compression model has 4 codebooks with 2048 cardinality, and a framerate of 50
+args:  Namespace(config='egs/ttm/sing2song/exp_config_chinese.json', text='/home/wangyuancheng.p/zja/Amphion/ckpts/ttm/sing2song_chinese_debug/debug_train_sample/info.json', waveform='', infer_expt_dir='ckpts/ttm/sing2song_chinese_debug', output_dir='ckpts/ttm/sing2song_chinese_debug/result', file_list=True, mix=False, local_rank=device(type='cuda'))
+Traceback (most recent call last):
+  File "/home/wangyuancheng.p/zja/Amphion/bins/ttm/inference.py", line 98, in <module>
+    main()
+  File "/home/wangyuancheng.p/zja/Amphion/bins/ttm/inference.py", line 91, in main
+    inferencer = build_inference(args, cfg, cfg_path=args.config)
+  File "/home/wangyuancheng.p/zja/Amphion/bins/ttm/inference.py", line 26, in build_inference
+    inference = inference_class(args, cfg, cfg_path=cfg_path)
+  File "/home/wangyuancheng.p/zja/Amphion/models/ttm/sing2song/sing2song_inference.py", line 53, in __init__
+    max_duration = self.preprocess.segment_duration  # type: ignore
+AttributeError: 'Sing2SongInference' object has no attribute 'preprocess'
+Traceback (most recent call last):
+  File "/home/wangyuancheng.p/miniconda3/envs/amphion_music/bin/accelerate", line 8, in <module>
+    sys.exit(main())
+  File "/home/wangyuancheng.p/miniconda3/envs/amphion_music/lib/python3.9/site-packages/accelerate/commands/accelerate_cli.py", line 47, in main
+    args.func(args)
+  File "/home/wangyuancheng.p/miniconda3/envs/amphion_music/lib/python3.9/site-packages/accelerate/commands/launch.py", line 994, in launch_command
+    simple_launcher(args)
+  File "/home/wangyuancheng.p/miniconda3/envs/amphion_music/lib/python3.9/site-packages/accelerate/commands/launch.py", line 636, in simple_launcher
+    raise subprocess.CalledProcessError(returncode=process.returncode, cmd=cmd)
+subprocess.CalledProcessError: Command '['/home/wangyuancheng.p/miniconda3/envs/amphion_music/bin/python', '/home/wangyuancheng.p/zja/Amphion/bins/ttm/inference.py', '--config', 'egs/ttm/sing2song/exp_config_chinese.json', '--infer_expt_dir', 'ckpts/ttm/sing2song_chinese_debug', '--output_dir', 'ckpts/ttm/sing2song_chinese_debug/result', '--text=/home/wangyuancheng.p/zja/Amphion/ckpts/ttm/sing2song_chinese_debug/debug_train_sample/info.json', '--waveform=', '--file_list']' returned non-zero exit status 1.
+Exprimental Configuration File: egs/ttm/sing2song/exp_config_chinese.json
+egs/ttm/sing2song/run.sh: line 126: waveform: command not found
+The following values were not passed to `accelerate launch` and had defaults used instead:
+	`--num_processes` was set to a value of `1`
+	`--num_machines` was set to a value of `1`
+	`--mixed_precision` was set to a value of `'no'`
+	`--dynamo_backend` was set to a value of `'no'`
+To avoid this warning pass in values for each of the problematic parameters or run `accelerate config`.
+2024-05-09 18:49:27,336 : ==========================New Starting Here==============================
+2024-05-09 18:49:33,099 : Compression model has 4 codebooks with 2048 cardinality, and a framerate of 50
+2024-05-09 18:49:33,673 : Initializing accelerate...
+Detected kernel version 3.10.0, which is below the recommended minimum of 5.5.0; this can cause the process to hang. It is recommended to upgrade the kernel to the minimum version or higher.
+2024-05-09 18:49:33,681 : Initializing accelerate done in 7.990ms
+2024-05-09 18:49:33,681 : Loading checkpoint...
+args:  Namespace(config='egs/ttm/sing2song/exp_config_chinese.json', text='/home/wangyuancheng.p/zja/Amphion/ckpts/ttm/sing2song_chinese_debug/debug_train_sample/info.json', waveform='', infer_expt_dir='ckpts/ttm/sing2song_chinese_debug', output_dir='ckpts/ttm/sing2song_chinese_debug/result', file_list=True, mix=False, local_rank=device(type='cuda'))
+Traceback (most recent call last):
+  File "/home/wangyuancheng.p/zja/Amphion/bins/ttm/inference.py", line 98, in <module>
+    main()
+  File "/home/wangyuancheng.p/zja/Amphion/bins/ttm/inference.py", line 91, in main
+    inferencer = build_inference(args, cfg, cfg_path=args.config)
+  File "/home/wangyuancheng.p/zja/Amphion/bins/ttm/inference.py", line 26, in build_inference
+    inference = inference_class(args, cfg, cfg_path=cfg_path)
+  File "/home/wangyuancheng.p/zja/Amphion/models/ttm/sing2song/sing2song_inference.py", line 71, in __init__
+    self.checkpoint_path = self.__load_model(os.path.join(self.args.infer_expt_dir, "checkpoint"))
+  File "/home/wangyuancheng.p/zja/Amphion/models/ttm/sing2song/sing2song_inference.py", line 132, in __load_model
+    self.accelerator.load_state(str(checkpoint_path))
+  File "/home/wangyuancheng.p/miniconda3/envs/amphion_music/lib/python3.9/site-packages/accelerate/accelerator.py", line 2962, in load_state
+    load_accelerator_state(
+  File "/home/wangyuancheng.p/miniconda3/envs/amphion_music/lib/python3.9/site-packages/accelerate/checkpointing.py", line 181, in load_accelerator_state
+    models[i].load_state_dict(torch.load(input_model_file, map_location=map_location), **load_model_func_kwargs)
+  File "/home/wangyuancheng.p/miniconda3/envs/amphion_music/lib/python3.9/site-packages/torch/serialization.py", line 797, in load
+    with _open_zipfile_reader(opened_file) as opened_zipfile:
+  File "/home/wangyuancheng.p/miniconda3/envs/amphion_music/lib/python3.9/site-packages/torch/serialization.py", line 283, in __init__
+    super().__init__(torch._C.PyTorchFileReader(name_or_buffer))
+RuntimeError: PytorchStreamReader failed reading zip archive: failed finding central directory
+Traceback (most recent call last):
+  File "/home/wangyuancheng.p/miniconda3/envs/amphion_music/bin/accelerate", line 8, in <module>
+    sys.exit(main())
+  File "/home/wangyuancheng.p/miniconda3/envs/amphion_music/lib/python3.9/site-packages/accelerate/commands/accelerate_cli.py", line 47, in main
+    args.func(args)
+  File "/home/wangyuancheng.p/miniconda3/envs/amphion_music/lib/python3.9/site-packages/accelerate/commands/launch.py", line 994, in launch_command
+    simple_launcher(args)
+  File "/home/wangyuancheng.p/miniconda3/envs/amphion_music/lib/python3.9/site-packages/accelerate/commands/launch.py", line 636, in simple_launcher
+    raise subprocess.CalledProcessError(returncode=process.returncode, cmd=cmd)
+subprocess.CalledProcessError: Command '['/home/wangyuancheng.p/miniconda3/envs/amphion_music/bin/python', '/home/wangyuancheng.p/zja/Amphion/bins/ttm/inference.py', '--config', 'egs/ttm/sing2song/exp_config_chinese.json', '--infer_expt_dir', 'ckpts/ttm/sing2song_chinese_debug', '--output_dir', 'ckpts/ttm/sing2song_chinese_debug/result', '--text=/home/wangyuancheng.p/zja/Amphion/ckpts/ttm/sing2song_chinese_debug/debug_train_sample/info.json', '--waveform=', '--file_list']' returned non-zero exit status 1.
+Exprimental Configuration File: egs/ttm/sing2song/exp_config_chinese.json
+egs/ttm/sing2song/run.sh: line 126: waveform: command not found
+The following values were not passed to `accelerate launch` and had defaults used instead:
+	`--num_processes` was set to a value of `1`
+	`--num_machines` was set to a value of `1`
+	`--mixed_precision` was set to a value of `'no'`
+	`--dynamo_backend` was set to a value of `'no'`
+To avoid this warning pass in values for each of the problematic parameters or run `accelerate config`.
+2024-05-09 18:50:25,167 : ==========================New Starting Here==============================
+2024-05-09 18:50:31,474 : Compression model has 4 codebooks with 2048 cardinality, and a framerate of 50
+2024-05-09 18:50:32,065 : Initializing accelerate...
+Detected kernel version 3.10.0, which is below the recommended minimum of 5.5.0; this can cause the process to hang. It is recommended to upgrade the kernel to the minimum version or higher.
+2024-05-09 18:50:32,073 : Initializing accelerate done in 7.959ms
+2024-05-09 18:50:32,074 : Loading checkpoint...
+2024-05-09 18:50:33,013 : Load checkpoint from ckpts/ttm/sing2song_chinese_debug/checkpoint/epoch-0109_step-0001100_loss-1.062917
+2024-05-09 18:50:33,013 : Loading checkpoint done in 939.106ms
+args:  Namespace(config='egs/ttm/sing2song/exp_config_chinese.json', text='/home/wangyuancheng.p/zja/Amphion/ckpts/ttm/sing2song_chinese_debug/debug_train_sample/info.json', waveform='', infer_expt_dir='ckpts/ttm/sing2song_chinese_debug', output_dir='ckpts/ttm/sing2song_chinese_debug/result', file_list=True, mix=False, local_rank=device(type='cuda'))
+Generating:   0%|          | 0/8 [00:00<?, ?it/s]Generating:  12%|█▎        | 1/8 [00:07<00:52,  7.56s/it]Generating:  25%|██▌       | 2/8 [00:13<00:40,  6.67s/it]Generating:  38%|███▊      | 3/8 [00:19<00:32,  6.43s/it]Generating:  50%|█████     | 4/8 [00:25<00:25,  6.28s/it]Generating:  62%|██████▎   | 5/8 [00:31<00:18,  6.20s/it]Generating:  75%|███████▌  | 6/8 [00:37<00:12,  6.15s/it]Generating:  88%|████████▊ | 7/8 [00:43<00:06,  6.12s/it]Generating: 100%|██████████| 8/8 [00:50<00:00,  6.11s/it]Generating: 100%|██████████| 8/8 [00:50<00:00,  6.26s/it]
+Exprimental Configuration File: egs/ttm/sing2song/exp_config_source_sep.json
+egs/ttm/sing2song/run.sh: line 126: waveform: command not found
+The following values were not passed to `accelerate launch` and had defaults used instead:
+	`--num_processes` was set to a value of `1`
+	`--num_machines` was set to a value of `1`
+	`--mixed_precision` was set to a value of `'no'`
+	`--dynamo_backend` was set to a value of `'no'`
+To avoid this warning pass in values for each of the problematic parameters or run `accelerate config`.
+2024-05-13 11:45:57,010 : ==========================New Starting Here==============================
+2024-05-13 11:46:06,542 : Compression model has 4 codebooks with 2048 cardinality, and a framerate of 50
+2024-05-13 11:46:07,189 : Initializing accelerate...
+Detected kernel version 3.10.0, which is below the recommended minimum of 5.5.0; this can cause the process to hang. It is recommended to upgrade the kernel to the minimum version or higher.
+2024-05-13 11:46:07,202 : Initializing accelerate done in 12.339ms
+2024-05-13 11:46:07,202 : Loading checkpoint...
+2024-05-13 11:46:08,775 : Load checkpoint from ckpts/ttm/sing2song_source_sep/checkpoint/epoch-0003_step-0019800_loss-5.433011
+2024-05-13 11:46:08,775 : Loading checkpoint done in 1573.050ms
+args:  Namespace(config='egs/ttm/sing2song/exp_config_source_sep.json', text='/home/wangyuancheng.p/zja/Amphion/ckpts/ttm/sing2song_source_sep/debug_train_sample/info.json', waveform='', infer_expt_dir='ckpts/ttm/sing2song_source_sep', output_dir='ckpts/ttm/sing2song_source_sep/result', file_list=True, mix=False, local_rank=device(type='cuda'))
+Generating:   0%|          | 0/8 [00:00<?, ?it/s]Generating:  12%|█▎        | 1/8 [00:15<01:47, 15.38s/it]Generating:  25%|██▌       | 2/8 [00:27<01:21, 13.61s/it]Generating:  38%|███▊      | 3/8 [00:40<01:04, 12.99s/it]Generating:  50%|█████     | 4/8 [00:52<00:50, 12.66s/it]Generating:  62%|██████▎   | 5/8 [01:03<00:36, 12.26s/it]Generating:  75%|███████▌  | 6/8 [01:16<00:24, 12.31s/it]Generating:  88%|████████▊ | 7/8 [01:28<00:12, 12.20s/it]Generating: 100%|██████████| 8/8 [01:40<00:00, 12.22s/it]Generating: 100%|██████████| 8/8 [01:40<00:00, 12.55s/it]

@@ -1,0 +1,20 @@
+sh egs/metrics/run.sh \
+	--reference_folder /nvme/data/zja/bachelor_thesis/add_drum/stem/gt \
+	--generated_folder /nvme/data/zja/bachelor_thesis/add_drum/stem/output \
+	--dump_folder /nvme/data/zja/bachelor_thesis/result/stem_drum \
+	--metrics "fad"
+sh egs/metrics/run.sh \
+	--reference_folder /nvme/data/zja/bachelor_thesis/add_drum/stem/gt_mix \
+	--generated_folder /nvme/data/zja/bachelor_thesis/add_drum/stem/output_mix \
+	--dump_folder /nvme/data/zja/bachelor_thesis/result/stem_mix \
+	--metrics "fad"
+sh egs/metrics/run.sh \
+	--reference_folder /nvme/data/zja/bachelor_thesis/add_drum/strict/gt \
+	--generated_folder /nvme/data/zja/bachelor_thesis/add_drum/strict/output \
+	--dump_folder /nvme/data/zja/bachelor_thesis/result/strict_drum \
+	--metrics "fad"
+sh egs/metrics/run.sh \
+	--reference_folder /nvme/data/zja/bachelor_thesis/add_drum/strict/gt_mix \
+	--generated_folder /nvme/data/zja/bachelor_thesis/add_drum/strict/output_mix \
+	--dump_folder /nvme/data/zja/bachelor_thesis/result/strict_mix \
+	--metrics "fad"

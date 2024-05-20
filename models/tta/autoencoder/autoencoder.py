@@ -59,13 +59,13 @@ class Downsample2d(nn.Module):
         else:
             self.avg_pool = nn.AvgPool2d(kernel_size=2, stride=2)
 
-    def forward(self, x):
+    def forward(self, x): # [B, in_channels, H, W]
         if self.with_conv:  # bp: check self.avgpool and self.pad
             x = torch.nn.functional.pad(x, self.pad, mode="constant", value=0)
             x = self.conv(x)
         else:
             x = self.avg_pool(x)
-        return x
+        return x # [B, in_channels, H//2, W//2]
 
 
 class Downsample1d(Downsample2d):
@@ -111,15 +111,15 @@ class ResnetBlock(nn.Module):
                 )
 
     def forward(self, x):
-        h = x
+        h = x # [B, in_channels, H, W]
         h = self.norm1(h)
         h = nonlinearity(h)
-        h = self.conv1(h)
+        h = self.conv1(h) # [B, out_channels, H, W]
 
         h = self.norm2(h)
         h = nonlinearity(h)
         h = self.dropout(h)
-        h = self.conv2(h)
+        h = self.conv2(h) # [B, out_channels, H, W]
 
         if self.in_channels != self.out_channels:
             if self.use_conv_shortcut:
@@ -127,7 +127,7 @@ class ResnetBlock(nn.Module):
             else:
                 x = self.nin_shortcut(x)
 
-        return x + h
+        return x + h # [B, out_channels, H, W]
 
 
 class ResnetBlock1d(ResnetBlock):
@@ -227,25 +227,25 @@ class Encoder2d(nn.Module):
             padding=1,
         )
 
-    def forward(self, x):
+    def forward(self, x): # [B, in_channels, H, W]
         # downsampling
-        hs = [self.conv_in(x)]
+        hs = [self.conv_in(x)] # [B, self.ch, H, W]
         for i_level in range(self.num_resolutions):
             for i_block in range(self.num_res_blocks):
-                h = self.down[i_level].block[i_block](hs[-1])
+                h = self.down[i_level].block[i_block](hs[-1]) # [B, ch*ch_mult[i_level], hs[-1].shape[2], hs[-1].shape[3]]
                 hs.append(h)
             if i_level != self.num_resolutions - 1:
-                hs.append(self.down[i_level].downsample(hs[-1]))
+                hs.append(self.down[i_level].downsample(hs[-1])) # [B, ch*ch_mult[i_level+1], hs[-1].shape[2]//2, hs[-1].shape[3]//2]
 
         # middle
-        h = hs[-1]
+        h = hs[-1] # [B, ch*ch_mult[-1], H//2^(num_resolutions-1), W//2^(num_resolutions-1)]
         h = self.mid.block_1(h)
-        h = self.mid.block_2(h)
+        h = self.mid.block_2(h) # [B, ch*ch_mult[-1], H//2, W//2]
 
         # end
         h = self.norm_out(h)
         h = nonlinearity(h)
-        h = self.conv_out(h)
+        h = self.conv_out(h) # [B, 2*z_channels, H//2, W//2] or [B, z_channels, H//2, W//2]
         return h
 
 

@@ -12,3 +12,18 @@ nohup sh egs/ttm/sing2song/run.sh --stage 3 --config egs/ttm/sing2song/exp_confi
     --text /home/wangyuancheng.p/zja/Amphion/egs/ttm/sing2song/infer_file.json\
     --file_list true \
     >> /home/wangyuancheng.p/zja/Amphion/egs/ttm/sing2song/infer.log &
+
+# 0509
+nohup sh egs/ttm/sing2song/run.sh --stage 2 --config egs/ttm/sing2song/exp_config_chinese.json --name sing2song_chinese_debug --gpu "4" >> /home/wangyuancheng.p/zja/Amphion/egs/ttm/sing2song/train_debug.log &
+nohup sh egs/ttm/sing2song/run.sh --stage 3 --config egs/ttm/sing2song/exp_config_chinese.json --gpu "4" \
+    --infer_expt_dir "ckpts/ttm/sing2song_chinese_debug" \
+    --text /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/sing2song_chinese_debug/debug_train_sample/info.json\
+    --file_list true \
+    >> /home/wangyuancheng.p/zja/Amphion/egs/ttm/sing2song/infer.log &
+
+sh egs/ttm/sing2song/run.sh --stage 2 --config egs/ttm/sing2song/exp_config_source_sep.json --name sing2song_source_sep --gpu "0,1,2,3,4,5,6,7" --resume true >> /home/wangyuancheng.p/zja/Amphion/egs/ttm/sing2song/sing2song_source_sep.log
+nohup sh egs/ttm/sing2song/run.sh --stage 3 --config egs/ttm/sing2song/exp_config_source_sep.json --gpu "4" \
+    --infer_expt_dir "ckpts/ttm/sing2song_source_sep" \
+    --text /home/wangyuancheng.p/zja/Amphion/ckpts/ttm/sing2song_source_sep/debug_train_sample/info.json\
+    --file_list true \
+    >> /home/wangyuancheng.p/zja/Amphion/egs/ttm/sing2song/infer.log &
