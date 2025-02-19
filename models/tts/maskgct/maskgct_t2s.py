@@ -28,7 +28,9 @@ def gumbel_noise(t):
     return -log(-log(noise))
 
 
-def gumbel_sample(t, temperature=1.0, dim=-1):
+def gumbel_sample(t, temperature=1.0, dim=-1, force_not_gumbel=False):
+    if force_not_gumbel:
+        return t.argmax(dim=dim)
     return ((t / max(temperature, 1e-10)) + gumbel_noise(t)).argmax(dim=dim)
 
 
@@ -220,10 +222,14 @@ class MaskGCT_T2S(nn.Module):
         phone_id,
         prompt_mask=None,
         temp=0.9,
+        choice_temp=1.0,
         filter_thres=0.98,
         n_timesteps=40,
         cfg=1.0,
         rescale_cfg=1.0,
+        force_not_gumbel=False,
+        return_mask_indices=False,
+        preschedule_mask_indices=None,
     ):
         # prompt: (B, T)
         phone_embedding = self.phone_emb(phone_id)
@@ -247,9 +253,12 @@ class MaskGCT_T2S(nn.Module):
 
         bsz, seq_len, _ = cum.shape
 
-        choice_temp = 1.0
+        # choice_temp = 1.0
         start_temp = temp  # temperature for sampling
         start_choice_temp = choice_temp  # temperature for choicing mask tokens
+
+        if force_not_gumbel:
+            start_choice_temp = 0.0
 
         xt = torch.LongTensor(bsz, seq_len).to(x_mask.device)
 
@@ -267,6 +276,9 @@ class MaskGCT_T2S(nn.Module):
 
         t_list = [1.0 - i * h for i in range(steps)]
         t_list.append(0.0)
+        
+        mask_indices_list = []
+        
         for i in range(steps):
             t = t_list[i] * torch.ones(bsz).to(x_mask.device)
             token = cond_emb(seq)  # (B, T, hidden_size)
@@ -312,13 +324,13 @@ class MaskGCT_T2S(nn.Module):
                 # greedy
                 if steps == 1:
                     temp = 0.2
-                    sampled_ids = gumbel_sample(logits, temperature=max(temp, 1e-3))
+                    sampled_ids = gumbel_sample(logits, temperature=max(temp, 1e-3), force_not_gumbel=force_not_gumbel)
                 else:
                     sampled_ids = logits.argmax(dim=-1)
 
             else:
                 # sampling
-                sampled_ids = gumbel_sample(logits, temperature=max(temp, 1e-3))
+                sampled_ids = gumbel_sample(logits, temperature=max(temp, 1e-3), force_not_gumbel=force_not_gumbel)
 
             seq = torch.where(mask.squeeze(-1), sampled_ids, seq)
 
@@ -338,8 +350,17 @@ class MaskGCT_T2S(nn.Module):
             scores = scores.masked_fill(
                 ~mask.squeeze(-1), -torch.finfo(scores.dtype).max
             )
+            # print(f"next_mask_num: {next_mask_num}")
 
-            mask_indices = scores.topk(next_mask_num, dim=-1).indices
+            if preschedule_mask_indices is not None:
+                mask_indices = torch.LongTensor(preschedule_mask_indices[:next_mask_num]).to(x_mask.device) # [len]
+                # repeat to [batch, len]
+                mask_indices = mask_indices.unsqueeze(0).repeat(x_mask.size(0), 1)  # [batch, len]
+            else:
+                mask_indices = scores.topk(next_mask_num, dim=-1).indices
+            
+            mask_indices_list.append(mask_indices.cpu().numpy())
+            
             mask = torch.zeros_like(scores, dtype=torch.bool).scatter(
                 1, mask_indices, True
             )
@@ -349,6 +370,9 @@ class MaskGCT_T2S(nn.Module):
 
         cum = cum + cond_emb(seq)
         xt = seq
+        
+        if return_mask_indices:
+            return xt, mask_indices_list
 
         return xt
 
